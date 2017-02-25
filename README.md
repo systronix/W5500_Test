@@ -2,16 +2,16 @@
 Applies to all boards and modules which use the WIZnet W5500 chip: WIZ850io, W5500 Shield, etc.
 
 ## Hardware used
- - Teensy 3.2 [Teensy 3.2](https://www.pjrc.com/store/teensy32.html) with ARM Cortex M4
- - PRJC [WIZ820io & Micro SD Card Adaptor](https://www.pjrc.com/store/wiz820_sd_adaptor.html) which also works with the WIZ850io module (850io and 820io are pin-compatible). To use this with Ethernet, the CS and DC signals need remapping with cuts on the board. @TODO: add photos of the hacks
+- Teensy 3.2 [Teensy 3.2](https://www.pjrc.com/store/teensy32.html) with ARM Cortex M4
+- PRJC [WIZ820io & Micro SD Card Adaptor](https://www.pjrc.com/store/wiz820_sd_adaptor.html) which also works with the WIZ850io module (850io and 820io are pin-compatible). To use this with Ethernet, the CS and DC signals need remapping with cuts on the board. @TODO: add photos of the hacks
   - TFT_CS moves from default 10 to 20
   - TFT_DC moves from default 9 to 21
- - WIZnet [WIZ850io](http://www.wiznet.co.kr/product-item/wiz850io/) - about USD $17; this module uses the W5500 chip, will also work with WIZ820io which uses the W5200
- - eBay [WIZ850io clones](http://www.ebay.com/itm/201560299414?_trksid=p2057872.m2749.l2649&ssPageName=STRK%3AMEBIDX%3AIT) - about USD $9; ignore the misleading name in the listing. Five ordered 2017 Feb 25 for testing. These have been tested by PJRC. These are reporterdly the real W5500 cheap on a cheaper Chinese module with other Chinese components. It ain't rocket science so there's no reason these have to be crap.
- - Adafruit [M0 Pro](https://www.adafruit.com/products/2417) which appears to be identical to the Arduino.org M0Pro with SAMD21 ARM Cortex M0
- - Arduino.org [M0 Pro](http://www.arduino.org/products/boards/arduino-m0-pro)
- - WIZnet [W5500 Shield](http://www.wiznet.co.kr/product-item/w5500-ethernet-shield/) which uses the W5500 chip in the Arduino board form factor. I bought this combo to have an official, blessed-by-WIZnet board set which should work out of the box. This turned out to be mostly true thanks to Adafruit Ethernet2
- - note: these M0 Pros are *not* identical to the Arduino.cc Zero boards. They are very *close*. Apparently pins #2 and #4 are swapped (see Adafruit M0 page)
+- WIZnet [WIZ850io](http://www.wiznet.co.kr/product-item/wiz850io/) - about USD $17; this module uses the W5500 chip, will also work with WIZ820io which uses the W5200
+- eBay [WIZ850io clones](http://www.ebay.com/itm/201560299414?_trksid=p2057872.m2749.l2649&ssPageName=STRK%3AMEBIDX%3AIT) - about USD $9; ignore the misleading name in the listing. Five ordered 2017 Feb 25 for testing. These have been tested by PJRC. These are reporterdly the real W5500 cheap on a cheaper Chinese module with other Chinese components. It ain't rocket science so there's no reason these have to be crap.
+- Adafruit [M0 Pro](https://www.adafruit.com/products/2417) which appears to be identical to the Arduino.org M0Pro with SAMD21 ARM Cortex M0
+- Arduino.org [M0 Pro](http://www.arduino.org/products/boards/arduino-m0-pro)
+- WIZnet [W5500 Shield](http://www.wiznet.co.kr/product-item/w5500-ethernet-shield/) which uses the W5500 chip in the Arduino board form factor. I bought this combo to have an official, blessed-by-WIZnet board set which should work out of the box. This turned out to be mostly true thanks to Adafruit Ethernet2
+- note: these M0 Pros are *not* identical to the Arduino.cc Zero boards. They are very *close*. Apparently pins #2 and #4 are swapped (see Adafruit M0 page)
 
 ## Software and Libraries
  - Remember the schism between Arduino.cc and Arduino.org? Now (2016 Oct 01) they have promised to [kiss and make up](https://blog.arduino.cc/2016/10/01/two-arduinos-become-one-2/) but the unification has not occurred yet and affects these efforts... why can't we all just get along? Oh yeah... that human nature thing.
@@ -53,8 +53,8 @@ Applies to all boards and modules which use the WIZnet W5500 chip: WIZ850io, W55
  - just as it sounds, to use Network Time Protocol. Based on Arduino Ethernet example UdpNtpClient with mods for Teensy and W5500. 
  - Typical output:
 '''
-	Seconds since Jan 1 1900 = 3697051697
-	Unix time = 1488062897
-	The UTC time is 22:48:17
+Seconds since Jan 1 1900 = 3697051697
+Unix time = 1488062897
+The UTC time is 22:48:17
 '''
  - M0Pro version does not work and I don't know why.
