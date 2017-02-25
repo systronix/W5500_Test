@@ -4,8 +4,8 @@ Applies to all boards and modules which use the WIZnet W5500 chip: WIZ850io, W55
 ## Hardware used
  - Teensy 3.2 [Teensy 3.2](https://www.pjrc.com/store/teensy32.html) with ARM Cortex M4
  - PRJC [WIZ820io & Micro SD Card Adaptor](https://www.pjrc.com/store/wiz820_sd_adaptor.html) which also works with the WIZ850io module (850io and 820io are pin-compatible). To use this with Ethernet, the CS and DC signals need remapping with cuts on the board. @TODO: add photos of the hacks
- -- TFT_CS moves from default 10 to 20
- -- TFT_DC moves from default 9 to 21
+  - TFT_CS moves from default 10 to 20
+  - TFT_DC moves from default 9 to 21
  - WIZnet [WIZ850io](http://www.wiznet.co.kr/product-item/wiz850io/) - about USD $17; this module uses the W5500 chip, will also work with WIZ820io which uses the W5200
  - eBay [WIZ850io clones](http://www.ebay.com/itm/201560299414?_trksid=p2057872.m2749.l2649&ssPageName=STRK%3AMEBIDX%3AIT) - about USD $9; ignore the misleading name in the listing. Five ordered 2017 Feb 25 for testing. These have been tested by PJRC. These are reporterdly the real W5500 cheap on a cheaper Chinese module with other Chinese components. It ain't rocket science so there's no reason these have to be crap.
  - Adafruit [M0 Pro](https://www.adafruit.com/products/2417) which appears to be identical to the Arduino.org M0Pro with SAMD21 ARM Cortex M0
@@ -26,14 +26,14 @@ Applies to all boards and modules which use the WIZnet W5500 chip: WIZ850io, W55
  - All programs use default SPI pins D10,11,12,13 for Ethernet connection. These pins can now be changed (within limits) since TD 1.3.2
  - I set my DHCP server to the minimum lease time of 120 seconds. This is a stress test so I want the lease to renew as often as possible.
  - Arduino M0 Pro plugs under the W5500 shield and is programmed with Arduino.org 1.7.11, selecting:
- -- Select Tools > board "Arduino M0 Pro (Programming Port)"" and connect USB cable to the port closest to the M0 power jack
- -- Selection of programmer doesn't seem to matter but it should be "Atmel EDBG ..." since that's what it really is
- -- For the Serial Monitor to work the baud rate must match what is used in the code, 115 kbaud. It's USB... go figure.
+  - Select Tools > board "Arduino M0 Pro (Programming Port)"" and connect USB cable to the port closest to the M0 power jack
+  - Selection of programmer doesn't seem to matter but it should be "Atmel EDBG ..." since that's what it really is
+  - For the Serial Monitor to work the baud rate must match what is used in the code, 115 kbaud. It's USB... go figure.
  - Teensy 3.2 connects to WIZ850io and is programmed with Arduino.cc 1.8.11 with Teensyduino 1.35
- -- Teensy 3.2 connects to WIZ850io using the PJRC WIZ820io adapter, a custom board, or wires
- -- Select Tools > board "Teensy 3.2/3.1" and I used 48 MHz.
- -- Programmer selection is not critical, default is "AVR ISP". The TeensyDuino extension will pop up and do the actual programming.
- -- Serial monitor baud rate doesn't matter. It's really serial over USB... Why is Arduino.org 1.7.11 different?
+  - Teensy 3.2 connects to WIZ850io using the PJRC WIZ820io adapter, a custom board, or wires
+  - Select Tools > board "Teensy 3.2/3.1" and I used 48 MHz.
+  - Programmer selection is not critical, default is "AVR ISP". The TeensyDuino extension will pop up and do the actual programming.
+  - Serial monitor baud rate doesn't matter. It's really serial over USB... Why is Arduino.org 1.7.11 different?
 
 ## Programs
 ### DhcpStressTest
@@ -52,7 +52,9 @@ Applies to all boards and modules which use the WIZnet W5500 chip: WIZ850io, W55
 ### NtpTest
  - just as it sounds, to use Network Time Protocol. Based on Arduino Ethernet example UdpNtpClient with mods for Teensy and W5500. 
  - Typical output:
- 	Seconds since Jan 1 1900 = 3697051697
- 	Unix time = 1488062897
- 	The UTC time is 22:48:17
+'''
+	Seconds since Jan 1 1900 = 3697051697
+	Unix time = 1488062897
+	The UTC time is 22:48:17
+'''
  - M0Pro version does not work and I don't know why.
