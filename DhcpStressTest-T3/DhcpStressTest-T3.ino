@@ -33,16 +33,30 @@
  *
  */
 
+/*
+https://www.pjrc.com/teensy/td_libs_Ethernet.html
+http://www.epyon.be/2016/12/06/test-cheap-chinese-wiz850io-ethernet-board/
+https://github.com/PaulStoffregen/Ethernet
+https://www.arduino.cc/en/reference/ethernet
+
+*/
+
+
 
 #include <SPI.h>
 // W550 needs Ethernet2 library
-#include <Ethernet2.h>
+#include <Ethernet.h>
 #include <T3Mac.h>
+
+#define CS_PIN  8   // resistive touch controller XPT2406 uses SPI
+
+#define TFT_CS 20    // 10 is default, different on ethernet/touch combo
+#define TFT_DC 21    // 9 is default, different on ethernet/touch combo
 
 // Enter a MAC address for your controller below.
 // Newer Ethernet shields have a MAC address printed on a sticker on the shield
 uint8_t ext_mac[] = {
-  0x00, 0xAA, 0xBB, 0xCC, 0xDE, 0x33 };
+  0x00, 0xAA, 0xBB, 0xCC, 0xDE, 0x44 };
 
 // Initialize the Ethernet client library
 // with the IP address and port of the server 
@@ -91,7 +105,12 @@ void setup() {
 	 */
 	pinMode(4, INPUT_PULLUP);
 	pinMode(10, INPUT_PULLUP);
-	delay(1);  // allow time for both pins to reach 3.3V
+	pinMode (CS_PIN, INPUT_PULLUP);  // disable resistive touch controller
+
+	pinMode (TFT_CS, INPUT_PULLUP);    // disable LCD display
+	pinMode (TFT_DC, INPUT_PULLUP);    // 
+
+	delay(1);  // allow time for pins to reach 3.3V
 
 	// Open serial communications and wait for port to open:
 	Serial.begin(115200);
@@ -100,10 +119,14 @@ void setup() {
 
 	// Wait here for up to 10 seconds to see if we will use Serial Monitor, so output is not lost
 	while((!Serial) && (millis()<10000));    // wait until serial monitor is open or timeout,
-	Serial.print(millis());
-	Serial.println(" msec to start serial");
 
-	Serial.println("DHCP Stress Test - 2016 Oct 28");
+	new_millis = millis();
+
+
+	Serial.println("DHCP Stress Test - 2017 Feb 25");
+	Serial.printf("\r\n%u msec to start serial", new_millis);
+	// Serial.print(millis());
+	// Serial.println(" msec to start serial");
 
 	char ID[32];
 	sprintf(ID, "%08lX %08lX %08lX %08lX", SIM_UIDH, SIM_UIDMH, SIM_UIDML, SIM_UIDL);

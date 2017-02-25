@@ -36,7 +36,9 @@
 
 
 #include <SPI.h>
-// W550 needs Ethernet2 library
+// M0Pro needs Ethernet2 library. Doesn't work with 
+// arduino-1.8.1-TD1v35\libraries\Ethernet
+// and can't work with the Teensy-optimized libraries from PJRC
 #include <Ethernet2.h>
 
 // Enter a MAC address for your controller below.

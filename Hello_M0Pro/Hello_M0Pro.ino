@@ -57,8 +57,6 @@ void setup() {
 	// Open serial communications and wait for port to open:
 	Serial.begin(115200);
 
-	//  Serial1.begin(9600);  // TX1, RX1 on Teensy pins 3 and 2, not the USB serial output!
-
 	// Wait here for up to 10 seconds to see if we will use Serial Monitor, so output is not lost
 	while((!Serial) && (millis()<10000));    // wait until serial monitor is open or timeout,
 	Serial.print(millis());
