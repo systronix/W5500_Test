@@ -52,9 +52,9 @@ Applies to all boards and modules which use the WIZnet W5500 chip: WIZ850io, W55
 ### NtpTest
  - just as it sounds, to use Network Time Protocol. Based on Arduino Ethernet example UdpNtpClient with mods for Teensy and W5500. 
  - Typical output:
-'''
+```
 Seconds since Jan 1 1900 = 3697051697
 Unix time = 1488062897
 The UTC time is 22:48:17
-'''
+```
  - M0Pro version does not work and I don't know why.
