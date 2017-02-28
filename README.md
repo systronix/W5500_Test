@@ -20,9 +20,12 @@ Applies to all boards and modules which use the WIZnet W5500 chip: WIZ850io, W55
    - Paul has added many optimizations, see [WIZ850io and W5500 discussion thread at PJRC forum](https://forum.pjrc.com/threads/28642-Wiznet-W5500-support/page2?highlight=Wiz850io)
    - Wiznet chip version is autodetected
    - Support reportedly baked in since TD 1.32, here the [PJRC Github Teensy Ethernet repo](https://github.com/PaulStoffregen/Ethernet)
- - PJRC T3Mac library to access the MAC address baked in to Teensy 3.2. 
+ - Some way to read out the MAC address baked into Teensy 3.0 and later. 
    - [Read about Teensy MAC address here](https://forum.pjrc.com/threads/91-teensy-3-MAC-address)
-   - [Frank B's T3MAC library](https://github.com/FrankBoesing/TeensyMAC.git)
+   - [defragster's T3Mac library in post #43](https://forum.pjrc.com/attachment.php?attachmentid=7074&d=1462266657) which does disable interrupts and also reads the processor CHIP_ID (T3 and LC), and 128-bit Teensy serial number. 
+   - [FrankB's TeensyMAC library](\) which does disable interrupts when accessing flash
+   - [sstaub's TeensyID library](https://github.com/sstaub/TeensyID) which is frankb's code extended with pointers and strings for MAC, USB#, Serial# and ChipID, and UUID [RFC4122](https://tools.ietf.org/html/rfc4122) and also [UUID at Wikipedia](https://en.wikipedia.org/wiki/Universally_unique_identifier) but at thje moment only tested with 64-bit memory of Teensy 3.5 and 3.6
+   - [johnnyfp's T3Mac library in post #14](https://forum.pjrc.com/attachment.php?attachmentid=2083&d=1401162864) an arduino IDE library, which does not disable interrupts when accessing flash (but should)
  - Adafruit [Ethernet2 library 1v2](https://github.com/adafruit/Ethernet2) which is required for the W5500 shield. This Adafruit library is actually based on WIZnet code of Soohwan Kim which has not seen any change in 2+ years. The default "Ethernet" library supports only W5100 and W5200 chips.
  - Arduino.org [Arduino 1.7.11](http://www.arduino.org/downloads), or at least a version 1.7.5 or later. Arduino.org 1.7.X *must* be used with the .org M0 Pro, or now with Arduino.cc 1.8.11 I can build the DHCP stress test program for M0Pro. Don't add TeensyDuino to this Arduino.org installation.
  - WIZnet advises you go to [wizwiki.net](wizwiki.net) where you can find [W5500 Ethernet Shield Docs](http://wizwiki.net/wiki/doku.php?id=osh:w5500_ethernet_shield:start) and this [W5500 getting started](http://wizwiki.net/wiki/doku.php?id=osh:w5500_ethernet_shield_getting_started) which refers to [WIZ_Ethernet_Library](https://github.com/Wiznet/WIZ_Ethernet_Library) which has not seen a commit since two years ago. So instead I used the Adafruit Ethernet2 library.

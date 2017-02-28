@@ -12,6 +12,12 @@
 		},
 		{
 			"path": "C:\\Users\\BAB\\Documents\\code\\Arduino\\libraries\\Ethernet2"
+		},
+		{
+			"path": "C:\\Users\\BAB\\Documents\\code\\Arduino\\libraries\\TeensyMAC"
+		},
+		{
+			"path": "C:\\Users\\BAB\\Documents\\code\\Arduino\\libraries\\TeensyID"
 		}
 	]
 }
