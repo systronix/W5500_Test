@@ -44,9 +44,10 @@ https://www.arduino.cc/en/reference/ethernet
 
 
 #include <SPI.h>
-// W550 needs Ethernet2 library
+
 #include <Ethernet.h>
-#include <T3Mac.h>
+#include <TeensyID.h>
+//#include <T3Mac.h>
 
 #define CS_PIN  8   // resistive touch controller XPT2406 uses SPI
 
@@ -57,6 +58,13 @@ https://www.arduino.cc/en/reference/ethernet
 // Newer Ethernet shields have a MAC address printed on a sticker on the shield
 uint8_t ext_mac[] = {
   0x00, 0xAA, 0xBB, 0xCC, 0xDE, 0x44 };
+
+uint8_t t_mac[6];	// hold internal MAC from Teensy 
+
+uint32_t teensy_usb_sernum;
+uint32_t uid[4];
+
+  
 
 // Initialize the Ethernet client library
 // with the IP address and port of the server 
@@ -124,24 +132,27 @@ void setup() {
 
 
 	Serial.println("DHCP Stress Test - 2017 Feb 25");
-	Serial.printf("\r\n%u msec to start serial", new_millis);
+	Serial.printf("%u msec to start serial\r\n", new_millis);
 	// Serial.print(millis());
 	// Serial.println(" msec to start serial");
 
 	char ID[32];
 	sprintf(ID, "%08lX %08lX %08lX %08lX", SIM_UIDH, SIM_UIDMH, SIM_UIDML, SIM_UIDL);
-	Serial.print("Teensy3 128-bit UniqueID: ");
+	Serial.print("Teensy3 128-bit UniqueID char array: ");
 	Serial.println(ID);
+
+	kinetisUID(uid);
+	Serial.printf("Teensy3 128-bit UniqueID int array: %08X-%08X-%08X-%08X\n", uid[0], uid[1], uid[2], uid[3]);
 
 	//  pinMode(12, INPUT);   // help make sure MISO is input to Teensy
 
-	delay(1000);
+	teensy_usb_sernum = teensyUsbSN();
+	Serial.printf("USB Serialnumber: %u \n", teensyUsbSN());
 
+	teensyMAC(t_mac);
+	Serial.printf("Teensy MAC Address: %02X:%02X:%02X:%02X:%02X:%02X \n", t_mac[0], t_mac[1], t_mac[2], t_mac[3], t_mac[4], t_mac[5]);
+	
 
-	Serial.print("MAC from Teensy: ");
-	read_mac();
-	print_mac();
-	Serial.println();
 
 	uint8_t tries=1;
 
@@ -151,7 +162,7 @@ void setup() {
 		Serial.print("Try ");
 		Serial.print(tries);
 		Serial.print(":");
-		flag = ethernet_start(mac, true);	// 0 if failed
+		flag = ethernet_start(t_mac, true);	// 0 if failed
 		Serial.print(flag);
 		Serial.print(" ");
 		}
@@ -238,7 +249,7 @@ void loop()
 			Serial.print (" Error! IP address: ");
 			Serial.print (Ethernet.localIP());
 			Serial.print(" Try restart:");
-			flag = ethernet_start(mac, true);	// 0 if failed
+			flag = ethernet_start(t_mac, true);	// 0 if failed
 			if (0 == flag)
 			{
 				restart_fail_count++;
@@ -281,7 +292,7 @@ void loop()
 			case 3:		// rebind failed
 				rebind_fail_count++;
 				Serial.print("Rebind Failed! Try restsart:");
-				flag = ethernet_start(mac, true);	// 0 if failed
+				flag = ethernet_start(t_mac, true);	// 0 if failed
 				if (0 == flag)
 				{
 					restart_fail_count++;
