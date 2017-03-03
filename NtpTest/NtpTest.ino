@@ -18,6 +18,16 @@
 
  */
 
+/** Revisions
+
+2017Mar02 bboyes  Testing on Teensy 3.2 and W5500
+
+
+**** TODO ****
+Output sometimes stops after some hours. Why? How to recover? Etnernet.maintain() doesn't?
+
+*/
+
 #include <SPI.h>
 #include <Ethernet.h>    // Ethernet 2 for W5500
 #include <EthernetUdp.h>
@@ -73,7 +83,7 @@ void setup() {
   new_millis = millis();
 
   Serial.println();
-  Serial.println("NTP Test for Teensy 3 - 2017 Feb 25");
+  Serial.println("NTP Test for Teensy 3 - 2017 Mar 02");
 
   Serial.printf("%u msec to start serial\r\n", new_millis);
 
@@ -104,6 +114,7 @@ void setup() {
 
 void loop() {
   sendNTPpacket(timeServer); // send an NTP packet to a time server
+  Serial.printf("@%u ask for time from %s\r\n", millis(), timeServer);
 
   // wait to see if a reply is available
   delay(1000);
@@ -151,6 +162,8 @@ void loop() {
   }
   // wait ten seconds before asking for the time again
   delay(10000);
+
+
   Ethernet.maintain();
 }
 
