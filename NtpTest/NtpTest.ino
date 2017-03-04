@@ -46,7 +46,9 @@ uint8_t ext_mac[] = {
 
 unsigned int localPort = 8888;       // local port to listen for UDP packets
 
-char timeServer[] = "time.nist.gov"; // time.nist.gov NTP server
+//char timeServer[] = "time.nist.gov"; // time.nist.gov NTP server
+char timeServer[] = "pool.ntp.org"; // ntp project pool of servers http://www.pool.ntp.org/zone/us
+
 
 const int NTP_PACKET_SIZE = 48; // NTP time stamp is in the first 48 bytes of the message
 
@@ -56,6 +58,8 @@ byte packetBuffer[ NTP_PACKET_SIZE]; //buffer to hold incoming and outgoing pack
 EthernetUDP Udp;
 
 uint32_t new_millis=0;
+
+uint32_t server_too_busy;
 
 void setup() {
   /*
@@ -118,7 +122,7 @@ void loop() {
 
   // wait to see if a reply is available
   delay(1000);
-  if (Udp.parsePacket()) {
+  if (Udp.parsePacket()) { 
     // We've received a packet, read the data from it
     Udp.read(packetBuffer, NTP_PACKET_SIZE); // read the packet into the buffer
 
@@ -159,6 +163,11 @@ void loop() {
     }
     Serial.println(epoch % 60); // print the second
     Serial.println();
+  }
+  else
+  {
+    server_too_busy++;
+    Serial.printf("%s too busy: %u", timeServer, server_too_busy);
   }
   // wait ten seconds before asking for the time again
   delay(10000);
