@@ -179,14 +179,6 @@
 			}
 		},
 		{
-			"file": "README.md",
-			"settings":
-			{
-				"buffer_size": 7386,
-				"line_ending": "Windows"
-			}
-		},
-		{
 			"file": "/C/Users/BAB/Documents/code/Arduino/libraries/TeensyID/TeensyID.h",
 			"settings":
 			{
@@ -260,11 +252,13 @@
 	[
 		"/C/Users/BAB/Documents/code/Arduino/W5500_Test",
 		"/C/Users/BAB/Documents/code/Arduino/W5500_Test/NtpTest",
-		"/C/Users/BAB/Documents/code/Arduino/libraries/T3Mac/example",
-		"/C/Users/BAB/Documents/code/Arduino/libraries/T3Mac/example/T3_readmac"
+		"/C/Users/BAB/Documents/code/Arduino/libraries/Systronix_LCM300",
+		"/C/Users/BAB/Documents/code/Arduino/libraries/Systronix_LCM300/examples",
+		"/C/Users/BAB/Documents/code/Arduino/libraries/Systronix_LCM300/examples/LCM300Q_CmdAsciiRead"
 	],
 	"file_history":
 	[
+		"/C/Users/BAB/Documents/code/Arduino/W5500_Test/README.md",
 		"/C/Users/BAB/Documents/code/Arduino/libraries/T3Mac/README.md",
 		"/C/Users/BAB/Documents/code/Arduino/libraries/T3Mac/example/T3_readmac/T3_readmac.ino",
 		"/C/Users/BAB/Documents/code/Arduino/libraries/T3Mac/T3Mac.h",
@@ -391,8 +385,7 @@
 		"/C/Users/BAB/Documents/code/Arduino/libraries/SALT_menu/scraps.cpp.txt",
 		"/C/Users/BAB/Documents/code/Arduino/libraries/SALT_UI/examples/UI_SerialEventTest/UI_SerialEventTest.ino",
 		"/C/Users/BAB/Documents/workspace_old_c/GTE/c_source_files/ACTIONS.C",
-		"/C/Users/BAB/Documents/workspace_old_c/GTE/c_source_files/MENACT.C",
-		"/C/Users/BAB/Documents/workspace_old_c/GTE/c_source_files/SDM650_A.C"
+		"/C/Users/BAB/Documents/workspace_old_c/GTE/c_source_files/MENACT.C"
 	],
 	"find":
 	{
@@ -703,7 +696,7 @@
 						"translation.y": 714.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
@@ -749,19 +742,19 @@
 						"selection":
 						[
 							[
-								5544,
-								5544
+								2653,
+								2653
 							]
 						],
 						"settings":
 						{
-							"function_name_status_row": 169,
+							"function_name_status_row": -1,
 							"syntax": "Packages/C++/C++.sublime-syntax",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1857.0,
+						"translation.y": 840.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
@@ -769,37 +762,6 @@
 				},
 				{
 					"buffer": 3,
-					"file": "README.md",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 7386,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								6825,
-								6234
-							]
-						],
-						"settings":
-						{
-							"function_name_status_row": 45,
-							"syntax": "Packages/Markdown/Markdown.sublime-syntax",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 504.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 5,
-					"type": "text"
-				},
-				{
-					"buffer": 4,
 					"file": "/C/Users/BAB/Documents/code/Arduino/libraries/TeensyID/TeensyID.h",
 					"semi_transient": false,
 					"settings":
@@ -830,7 +792,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 5,
+					"buffer": 4,
 					"file": "/C/Users/BAB/Documents/code/Arduino/libraries/TeensyID/TeensyID.cpp",
 					"semi_transient": false,
 					"settings":
@@ -860,7 +822,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 6,
+					"buffer": 5,
 					"file": "/C/Users/BAB/Documents/code/Arduino/libraries/TeensyID/examples/ReadAll/ReadAll.ino",
 					"semi_transient": false,
 					"settings":
