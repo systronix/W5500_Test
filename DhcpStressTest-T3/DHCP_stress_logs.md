@@ -1,5 +1,20 @@
 #DhcpStressTest_T3 
 
+### 2017 Apr 03 after running over 2 weeks
+```
+	Renew_F/S Bind_F/S Restart_F/S = 3/25705 0/0 0/19
+	@1528630 192.168.1.213
+	@1528640 maintain()=2  Renew_F/S Bind_F/S Restart_F/S = 3/25706 0/0 0/19 192.168.1.213
+	@1528650 192.168.1.213
+	@1528660 192.168.1.213
+	@1528670 192.168.1.213
+	@1528680 192.168.1.213
+	Renew_F/S Bind_F/S Restart_F/S = 3/25706 0/0 0/19
+	@1528690 192.168.1.213
+	@1528700 maintain()=2  Renew_F/S Bind_F/S Restart_F/S = 3/25707 0/0 0/19 192.168.1.213
+	@1528710 192.168.1.213
+```
+
 ### 2017 Mar 19 after running for a long time
 ```
 	@28720 192.168.1.213
