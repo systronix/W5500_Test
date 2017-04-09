@@ -972,6 +972,10 @@
 	{
 		"height": 94.0
 	},
+	"output.stino_panel":
+	{
+		"height": 0.0
+	},
 	"output.unsaved_changes":
 	{
 		"height": 153.0
