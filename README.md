@@ -65,4 +65,9 @@ Seconds since Jan 1 1900 = 3697051697
 Unix time = 1488062897
 The UTC time is 22:48:17
 ```
- - M0Pro version does not work and I don't know why.
+M0Pro version does not work and I don't know why.
+
+### TODO
+NTP test code frequently stops outputting serial data, so I can't tell what it is doing: hung somewhere? 
+Waiting for NTP pool, or can't reach it?
+No idea why this would be the case. Find this and fix it.
