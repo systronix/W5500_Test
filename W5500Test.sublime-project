@@ -2,9 +2,6 @@
 	"folders":
 	[
 		{
-			"path": "C:\\Users\\BAB\\Documents\\code\\Arduino\\WIZ820io_Test\\ILI9341_WIZ820_Test"
-		},
-		{
 			"path": "."
 		},
 		{
@@ -24,6 +21,9 @@
 		},
 		{
 			"path": "C:\\Users\\BAB\\Documents\\code\\Arduino\\libraries\\Systronix_LCM300"
+		},
+		{
+			"path": "C:\\Users\\BAB\\Documents\\code\\Arduino\\WIZ820io_Test"
 		}
 	]
 }

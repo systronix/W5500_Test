@@ -50,9 +50,11 @@ Applies to all boards and modules which use the WIZnet W5500 chip: WIZ850io, W55
 - This enables 24 * 60, or 1440 DHCP renewals in 24 hrs vs a more typical one or two. This compresses one or two years of DHCP renewal into 24 hours.
 - Versions for Teensy3 with WIZ850io and the Arduino.org (not the same as Arduino.cc) M0 Pro with WIZnet W5500 Shield
 
-### ILI9341_WIZ820_Test
-- use of Ethernet and the ILI9341 touchscreen at same time
-- moves the ILI9341 to alternate SPI pins: 
+### ILI9341_Test
+ - Copied from WIZ820io_test repo 2017 Apr 23.
+ - Existence of Ethernet and the ILI9341 touchscreen at same time: resets Ethernet and then ignores it, while testing the LCD and touchscreen.
+ - the point is to show that Ethernet chip doesn't clash on the SPI lines.
+ - Binaries saved in the bin subfolder 
 
 ### EthernetKeypadLCD (on my wish list)
 - the Arduino Ethernet Shield example adapted to the Teensy and WIZ820io hardware
