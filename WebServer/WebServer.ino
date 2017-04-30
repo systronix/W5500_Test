@@ -153,6 +153,7 @@ void loop() {
     stat = tmp102_48.readRegister (&rawtemp);
     temp = tmp102_48.raw13ToC(rawtemp);
 
+    uint8_t update = 10;
 
 
     // an http request ends with a blank line
@@ -169,19 +170,22 @@ void loop() {
           client.println("HTTP/1.1 200 OK");
           client.println("Content-Type: text/html");
           client.println("Connection: close");  // the connection will be closed after completion of the response
-          client.println("Refresh: 5");  // refresh the page automatically every 5 sec
+          client.print("Refresh: ");
+          client.println(update);  // refresh the page automatically every X sec
           client.println();
           client.println("<!DOCTYPE HTML>");
           client.println("<html>");
 
 
-          client.print("SALT 2.1<br />");
+          client.print("<b>SALT 2.1</b> - Updates approx every ");
+          client.print(update);
+          client.print(" seconds<br />");
           client.print("@");
           client.print(millis()/1000);
           client.println(" sec<br />");
           client.print("Ambient Temp is ");
-          client.print(temp, 4);
-          client.println("<br />");
+          client.print(temp, 2);
+          client.println(" deg C <br />");
 
           // // output the value of each analog input pin
           // for (int analogChannel = 0; analogChannel < 6; analogChannel++) {
