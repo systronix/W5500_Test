@@ -1,4 +1,20 @@
-#DhcpStressTest_T3 
+# DhcpStressTest_T3 
+
+### 2017 Apr 20
+Running on SALT 2.1 #3, after 144 hours (reset I didn't expect?), one renewal per minute
+```
+	@519740 maintain()=2  Renew_F/S Bind_F/S Restart_F/S = 0/8748 0/0 0/0 192.168.1.254
+	@519750 192.168.1.254
+```
+
+Running on PJRC WIZnet adapter, and color touchscreen carrier, USB supply.
+369 hours, 22352 DHCP renewals, 6 DHCP restarts needed - all successful, one renew failed, still going
+```
+	@1328630 192.168.1.214
+	@1328640 maintain()=2  Renew_F/S Bind_F/S Restart_F/S = 1/22352 0/0 0/6 192.168.1.214
+	Renew_F/S Bind_F/S Restart_F/S = 1/22352 0/0 0/6
+	@1328650 192.168.1.214
+```
 
 ### 2017 Apr 23 
 after 222 hours

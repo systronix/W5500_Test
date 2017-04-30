@@ -1,6 +1,22 @@
 # NtpTest Logs
 
 ## Teensy 3.2 with WIZ850io and 2.8" touchscreen on PJRC adapter, USB power
+### 2017 Apr 29
+This test now running for 146.48 hours. 
+It's surprising how often the NTP pool is either not responding or couldn't be reached.
+Test should be improved to try to determine which is the case. I'd guess the issue is reaching it.
+```
+	pool.ntp.org too busy: 1658@527195231 ask for time from pool.ntp.org
+	The UTC time is 0:16:07
+
+	pool.ntp.org too busy: 1659@527239491 ask for time from pool.ntp.org
+	The UTC time is 0:16:51
+
+	@527316908 ask for time from pool.ntp.org
+	Seconds since Jan 1 1900 = 3702500289
+	Unix time = 1493511489
+	The UTC time is 0:18:09
+```
 
 ### 2017 Apr 09, Sunday afternoon. 
 Can't reach pool.ntp.org, no Internet access in office. Why?
