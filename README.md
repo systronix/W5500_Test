@@ -51,10 +51,17 @@ Applies to all boards and modules which use the WIZnet W5500 chip: WIZ850io, W55
 - Versions for Teensy3 with WIZ850io and the Arduino.org (not the same as Arduino.cc) M0 Pro with WIZnet W5500 Shield
 
 ### ILI9341_Test
- - Copied from WIZ820io_test repo 2017 Apr 23.
- - Existence of Ethernet and the ILI9341 touchscreen at same time: resets Ethernet and then ignores it, while testing the LCD and touchscreen.
- - the point is to show that Ethernet chip doesn't clash on the SPI lines.
- - Binaries saved in the bin subfolder 
+- Copied from WIZ820io_test repo 2017 Apr 23.
+- Existence of Ethernet and the ILI9341 touchscreen at same time: resets Ethernet and then ignores it, while testing the LCD and touchscreen.
+- the point is to show that Ethernet chip doesn't clash on the SPI lines.
+- Binaries saved in the bin subfolder 
+
+### TempServer
+- Simple Server which displays TMP102 temperature from onboard SALT temp sensor, or from a TMP102 breakout
+- Intended to be a proof of concept for a highly reliable, secure (not hackable or crashable) Teensy/WIZ850io data server
+- Uses a DDNS service and Port Forwarding to operate behind a firewall 
+- First version stopped responding after some few thousand seconds
+- Is getting probed from all over the world almost immediately after coming online
 
 ### EthernetKeypadLCD (on my wish list)
 - the Arduino Ethernet Shield example adapted to the Teensy and WIZ820io hardware

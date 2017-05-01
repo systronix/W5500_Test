@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"uint",
+				"uint8_t"
+			],
+			[
 				"serv",
 				"timeServer"
 			],
@@ -155,7 +159,7 @@
 			"file": "NtpTest/NtpTest_logs.md",
 			"settings":
 			{
-				"buffer_size": 1782,
+				"buffer_size": 2357,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -164,16 +168,8 @@
 			"file": "README.md",
 			"settings":
 			{
-				"buffer_size": 7793,
+				"buffer_size": 7800,
 				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "/C/Users/BAB/Documents/code/Arduino/WIZ820io_Test/README.md",
-			"settings":
-			{
-				"buffer_size": 2505,
 				"line_ending": "Windows"
 			}
 		},
@@ -192,6 +188,33 @@
 			{
 				"buffer_size": 6553,
 				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "WebServer/WebServer.ino",
+			"settings":
+			{
+				"buffer_size": 7393,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "WebServer/logs/TeensyLog_2017Apr30.md",
+			"settings":
+			{
+				"buffer_size": 175432,
+				"encoding": "UTF-8",
+				"line_ending": "Windows",
+				"name": "client disconnected"
+			}
+		},
+		{
+			"file": "WebServer/logs/2017Apr30_syslog.txt",
+			"settings":
+			{
+				"buffer_size": 478787,
 				"line_ending": "Unix"
 			}
 		}
@@ -242,17 +265,24 @@
 	"expanded_folders":
 	[
 		"/C/Users/BAB/Documents/code/Arduino/W5500_Test",
+		"/C/Users/BAB/Documents/code/Arduino/W5500_Test/DhcpStressTest-T3",
+		"/C/Users/BAB/Documents/code/Arduino/W5500_Test/WebServer",
+		"/C/Users/BAB/Documents/code/Arduino/W5500_Test/WebServer/logs",
 		"/C/Users/BAB/Documents/code/Arduino/libraries/Systronix_LCM300",
 		"/C/Users/BAB/Documents/code/Arduino/libraries/Systronix_LCM300/examples",
 		"/C/Users/BAB/Documents/code/Arduino/libraries/Systronix_LCM300/examples/LCM300Q_CmdAsciiRead",
 		"/C/Users/BAB/Documents/code/Arduino/WIZ820io_Test",
-		"/C/Users/BAB/Documents/code/Arduino/WIZ820io_Test/ILI9341_WIZ820_Test"
+		"/C/Users/BAB/Documents/code/Arduino/WIZ820io_Test/ILI9341_WIZ820_Test",
+		"/C/Users/BAB/Documents/code/Arduino/libraries/Systronix_TMP102",
+		"/C/Users/BAB/Documents/code/Arduino/libraries/Systronix_TMP102/examples",
+		"/C/Users/BAB/Documents/code/Arduino/libraries/Systronix_TMP102/examples/TMP102_LibraryTest"
 	],
 	"file_history":
 	[
+		"/C/Users/BAB/Documents/code/Arduino/libraries/Systronix_TMP102/examples/TMP102_LibraryTest/TMP102_LibraryTest.ino",
+		"/C/Users/BAB/Documents/code/Arduino/W5500_Test/DhcpStressTest-T3/DHCP_stress_logs.md",
 		"/C/Users/BAB/Documents/code/Arduino/WIZ820io_Test/README.md",
 		"/C/Users/BAB/Documents/code/Arduino/WIZ820io_Test/ILI9341_WIZ820_Test/ILI9341_WIZ820_Test.ino",
-		"/C/Users/BAB/Documents/code/Arduino/W5500_Test/DhcpStressTest-T3/DHCP_stress_logs.md",
 		"/C/Users/BAB/Documents/code/Arduino/libraries/TeensyID/examples/ReadAll/ReadAll.ino",
 		"/C/Users/BAB/Documents/code/Arduino/libraries/TeensyID/TeensyID.cpp",
 		"/C/Users/BAB/Documents/code/Arduino/libraries/TeensyID/TeensyID.h",
@@ -362,7 +392,6 @@
 		"/C/Users/BAB/AppData/Roaming/Sublime Text 3/Packages/User/C++.sublime-settings",
 		"/C/Users/BAB/Documents/code/Arduino/libraries/SALT_settings/SALT_settings.cpp",
 		"/C/Users/BAB/Documents/code/Arduino/libraries/Systronix_MB85RC256V/examples/fram_test/fram_test.ino",
-		"/C/Users/BAB/Documents/code/Arduino/libraries/Systronix_TMP102/examples/TMP102_LibraryTest/TMP102_LibraryTest.ino",
 		"/C/Users/BAB/Documents/code/Arduino/libraries/Systronix_MB85RC256V/examples/rcv_ini_file/'SALT_INI_File_Issues'",
 		"/C/Users/BAB/Documents/code/Arduino/SALT_CodeUpdates/sswec.ini",
 		"/C/Users/BAB/Documents/code/Arduino/SALT_CodeUpdates/b2bwec_NoComments_20160805.ini",
@@ -395,6 +424,8 @@
 		"case_sensitive": true,
 		"find_history":
 		[
+			"stat",
+			"temp",
 			"mac",
 			"teensy_mac",
 			"getTeensySerial",
@@ -520,9 +551,7 @@
 			"printf",
 			"key_data",
 			"(menu_obj* menu_ptr)",
-			"(menu_obj*)",
-			"(menu_obj*",
-			"ON"
+			"(menu_obj*)"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -657,7 +686,7 @@
 	"groups":
 	[
 		{
-			"selected": 1,
+			"selected": 4,
 			"sheets":
 			[
 				{
@@ -666,20 +695,20 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1782,
+						"buffer_size": 2357,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								92,
-								92
+								335,
+								335
 							]
 						],
 						"settings":
 						{
-							"function_name_status_row": 3,
+							"function_name_status_row": 6,
 							"syntax": "Packages/Markdown/Markdown.sublime-syntax",
 							"translate_tabs_to_spaces": false
 						},
@@ -687,7 +716,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 6,
 					"type": "text"
 				},
 				{
@@ -696,62 +725,33 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 7793,
+						"buffer_size": 7800,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								7148,
-								7148
+								7155,
+								7155
 							]
 						],
 						"settings":
 						{
-							"function_name_status_row": 0,
+							"function_name_status_row": 58,
 							"syntax": "Packages/Markdown/Markdown.sublime-syntax",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 462.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "/C/Users/BAB/Documents/code/Arduino/WIZ820io_Test/README.md",
-					"semi_transient": true,
-					"settings":
-					{
-						"buffer_size": 2505,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								549,
-								549
-							]
-						],
-						"settings":
-						{
-							"function_name_status_row": 8,
-							"syntax": "Packages/Markdown/Markdown.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 490.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 1,
 					"type": "text"
 				},
 				{
-					"buffer": 3,
+					"buffer": 2,
 					"file": "DhcpStressTest-T3/DhcpStressTest-T3.ino",
 					"semi_transient": false,
 					"settings":
@@ -763,26 +763,26 @@
 						"selection":
 						[
 							[
-								10250,
-								10279
+								4319,
+								4319
 							]
 						],
 						"settings":
 						{
 							"color_scheme": "Packages/User/Color Highlighter/themes/Cobalt.tmTheme",
-							"function_name_status_row": 377,
+							"function_name_status_row": 125,
 							"syntax": "Packages/C++/C++.sublime-syntax",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 336.0,
+						"translation.y": 1512.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
-					"buffer": 4,
+					"buffer": 3,
 					"file": "NtpTest/NtpTest.ino",
 					"semi_transient": false,
 					"settings":
@@ -794,20 +794,110 @@
 						"selection":
 						[
 							[
-								1704,
-								1704
+								2849,
+								2849
 							]
 						],
 						"settings":
 						{
 							"color_scheme": "Packages/User/Color Highlighter/themes/Cobalt.tmTheme",
-							"function_name_status_row": 64,
+							"function_name_status_row": 89,
 							"syntax": "Packages/C++/C++.sublime-syntax",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 546.0,
+						"translation.y": 798.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "WebServer/WebServer.ino",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 7393,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								6148,
+								6148
+							]
+						],
+						"settings":
+						{
+							"function_name_status_row": -1,
+							"syntax": "Packages/C++/C++.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 2268.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "WebServer/logs/TeensyLog_2017Apr30.md",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 175432,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								175432,
+								175432
+							]
+						],
+						"settings":
+						{
+							"auto_name": "client disconnected",
+							"function_name_status_row": 4579,
+							"syntax": "Packages/Markdown/Markdown.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 59217.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "WebServer/logs/2017Apr30_syslog.txt",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 478787,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"function_name_status_row": 0,
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 3,

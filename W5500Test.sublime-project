@@ -26,10 +26,13 @@
 			"path": "C:\\Users\\BAB\\Documents\\code\\Arduino\\WIZ820io_Test"
 		},
 		{
-			"path": "WebServer"
+			"path": "C:\\Users\\BAB\\Documents\\code\\Arduino\\libraries\\Systronix_TMP102"
 		},
 		{
-			"path": "C:\\Users\\BAB\\Documents\\code\\Arduino\\libraries\\Systronix_TMP102"
+			"path": "TempServer"
+		},
+		{
+			"path": "WebServer"
 		}
 	]
 }

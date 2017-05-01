@@ -50,6 +50,7 @@ https://www.arduino.cc/en/reference/ethernet
 //#include <T3Mac.h>
 
 #define CS_PIN  8   // resistive touch controller XPT2406 uses SPI
+#define ETH_RST 9	// ethernet reset pin
 
 #define TFT_CS 20    // 10 is default, different on ethernet/touch combo
 #define TFT_DC 21    // 9 is default, different on ethernet/touch combo
