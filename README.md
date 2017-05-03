@@ -57,11 +57,12 @@ Applies to all boards and modules which use the WIZnet W5500 chip: WIZ850io, W55
 - Binaries saved in the bin subfolder 
 
 ### TempServer
-- Simple Server which displays TMP102 temperature from onboard SALT temp sensor, or from a TMP102 breakout
+- Simple temperature server which displays TMP102 temperature from onboard SALT temp sensor, or from a TMP102 breakout
 - Intended to be a proof of concept for a highly reliable, secure (not hackable or crashable) Teensy/WIZ850io data server
-- Uses a DDNS service and Port Forwarding to operate behind a firewall 
-- First version stopped responding after some few thousand seconds
-- Is getting probed from all over the world almost immediately after coming online
+- Uses a DDNS service and Port Forwarding to operate behind a router/firewall 
+- First version stopped responding after some few thousand seconds. Turns out code optimization SMALLEST CODE breaks when printf is used just after client.stop() in Line 335
+- you can try the example at [this IP address](http://systronix.hopto.org:8080/)
+- some documentation about this apparent optimizer-related bug in [this google drive file](https://docs.google.com/document/d/1ZbH-lGuzJ1XOtw04R_Ga4RLg5KANeHKZRIIN780brBo/edit?usp=sharing), anyone can enter comments
 
 ### EthernetKeypadLCD (on my wish list)
 - the Arduino Ethernet Shield example adapted to the Teensy and WIZ820io hardware

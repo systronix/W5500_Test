@@ -67,7 +67,7 @@ void loop() {
           client.println("HTTP/1.1 200 OK");
           client.println("Content-Type: text/html");
           client.println("Connection: close");  // the connection will be closed after completion of the response
-          client.println("Refresh: 5");  // refresh the page automatically every 5 sec
+          client.println("Refresh: 10");  // refresh the page automatically every XX sec
           client.println();
           client.println("<!DOCTYPE HTML>");
           client.println("<html>");
@@ -100,6 +100,8 @@ void loop() {
     // close the connection:
     client.stop();
     Serial.println("client disconnected");
+    Serial.printf("A serial printf at %u millis\r\n", millis());
+    Serial.printf("Another printf with just text\r\n");
   }
 }
 

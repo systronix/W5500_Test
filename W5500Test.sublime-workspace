@@ -4,15 +4,31 @@
 		"selected_items":
 		[
 			[
+				"max",
+				"max_without_client"
+			],
+			[
+				"seconds",
+				"seconds_without_client"
+			],
+			[
+				"time",
+				"timeout_http_count"
+			],
+			[
+				"start",
+				"start_millis"
+			],
+			[
+				"new",
+				"new_millis"
+			],
+			[
 				"uint",
 				"uint8_t"
 			],
 			[
 				"serv",
-				"timeServer"
-			],
-			[
-				"time",
 				"timeServer"
 			],
 			[
@@ -168,16 +184,61 @@
 			"file": "README.md",
 			"settings":
 			{
-				"buffer_size": 7800,
+				"buffer_size": 8256,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "TempServer/TempServer.ino",
+			"settings":
+			{
+				"buffer_size": 13094,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "WebServer/WebServer.ino",
+			"settings":
+			{
+				"buffer_size": 3285,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/C/Users/BAB/Documents/code/Arduino/libraries/Systronix_TMP102/Systronix_TMP102.h",
+			"settings":
+			{
+				"buffer_size": 9642,
+				"encoding": "Western (Windows 1252)",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/Users/BAB/Documents/code/Arduino/SALT_reptile/SALT_reptile.ino",
+			"settings":
+			{
+				"buffer_size": 31849,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "TempServer/TempServerLogs.md",
+			"settings":
+			{
+				"buffer_size": 3309,
+				"encoding": "UTF-8",
+				"line_ending": "Windows",
+				"name": "## TempServer is locking up"
 			}
 		},
 		{
 			"file": "DhcpStressTest-T3/DhcpStressTest-T3.ino",
 			"settings":
 			{
-				"buffer_size": 11019,
+				"buffer_size": 11059,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -188,33 +249,6 @@
 			{
 				"buffer_size": 6553,
 				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "WebServer/WebServer.ino",
-			"settings":
-			{
-				"buffer_size": 7393,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "WebServer/logs/TeensyLog_2017Apr30.md",
-			"settings":
-			{
-				"buffer_size": 175432,
-				"encoding": "UTF-8",
-				"line_ending": "Windows",
-				"name": "client disconnected"
-			}
-		},
-		{
-			"file": "WebServer/logs/2017Apr30_syslog.txt",
-			"settings":
-			{
-				"buffer_size": 478787,
 				"line_ending": "Unix"
 			}
 		}
@@ -266,8 +300,10 @@
 	[
 		"/C/Users/BAB/Documents/code/Arduino/W5500_Test",
 		"/C/Users/BAB/Documents/code/Arduino/W5500_Test/DhcpStressTest-T3",
+		"/C/Users/BAB/Documents/code/Arduino/W5500_Test/ILI9341_Test",
+		"/C/Users/BAB/Documents/code/Arduino/W5500_Test/TempServer",
+		"/C/Users/BAB/Documents/code/Arduino/W5500_Test/TempServer/logs",
 		"/C/Users/BAB/Documents/code/Arduino/W5500_Test/WebServer",
-		"/C/Users/BAB/Documents/code/Arduino/W5500_Test/WebServer/logs",
 		"/C/Users/BAB/Documents/code/Arduino/libraries/Systronix_LCM300",
 		"/C/Users/BAB/Documents/code/Arduino/libraries/Systronix_LCM300/examples",
 		"/C/Users/BAB/Documents/code/Arduino/libraries/Systronix_LCM300/examples/LCM300Q_CmdAsciiRead",
@@ -279,6 +315,12 @@
 	],
 	"file_history":
 	[
+		"/C/Users/BAB/AppData/Local/Temp/TyQt-1275060-Teensy-3.txt",
+		"/C/Users/BAB/Documents/code/Arduino/W5500_Test/TempServer/logs/TyQt-1275060-Teensy-3.txt",
+		"/C/Users/BAB/Documents/code/Arduino/W5500_Test/TempServer/WebServer.ino",
+		"/C/Users/BAB/Documents/code/Arduino/W5500_Test/README.md",
+		"/C/Users/BAB/Documents/code/Arduino/W5500_Test/WebServer/logs/TeensyLog_2017Apr30.md",
+		"/C/Users/BAB/Documents/code/Arduino/W5500_Test/WebServer/WebServer.ino",
 		"/C/Users/BAB/Documents/code/Arduino/libraries/Systronix_TMP102/examples/TMP102_LibraryTest/TMP102_LibraryTest.ino",
 		"/C/Users/BAB/Documents/code/Arduino/W5500_Test/DhcpStressTest-T3/DHCP_stress_logs.md",
 		"/C/Users/BAB/Documents/code/Arduino/WIZ820io_Test/README.md",
@@ -287,7 +329,6 @@
 		"/C/Users/BAB/Documents/code/Arduino/libraries/TeensyID/TeensyID.cpp",
 		"/C/Users/BAB/Documents/code/Arduino/libraries/TeensyID/TeensyID.h",
 		"/C/Users/BAB/Documents/code/Arduino/W5500_Test/NtpTest/NtpTest_logs.md",
-		"/C/Users/BAB/Documents/code/Arduino/W5500_Test/README.md",
 		"/C/Users/BAB/Documents/code/Arduino/libraries/T3Mac/README.md",
 		"/C/Users/BAB/Documents/code/Arduino/libraries/T3Mac/example/T3_readmac/T3_readmac.ino",
 		"/C/Users/BAB/Documents/code/Arduino/libraries/T3Mac/T3Mac.h",
@@ -401,12 +442,7 @@
 		"/C/Users/BAB/Documents/code/Arduino/Teensy_PC_Tools/readme.md",
 		"/C/Users/BAB/Documents/code/Arduino/SALT_CodeUpdates/readme.md",
 		"/C/Users/BAB/Documents/code/Arduino/SALT_Tools/readme.md",
-		"/C/Users/BAB/Documents/code/Arduino/SALT_tools/readme.md",
-		"/C/Users/BAB/AppData/Local/Temp/build87e93bcedc5abcaee1f2a933be31f475.tmp/sketch/rcv_ini_file.ino.cpp.o",
-		"/C/Users/BAB/Documents/code/Arduino/libraries/Systronix_MB85RC256V/examples/rcv_ini_file/rcv_ini_file.ino",
-		"/C/Users/BAB/AppData/Roaming/Sublime Text 3/Local/Session.sublime_session",
-		"/C/Users/BAB/AppData/Roaming/Sublime Text 3/Packages/User/Preferences.sublime-settings",
-		"/C/Users/BAB/AppData/Roaming/Sublime Text 3/Packages/User/Default (Windows).sublime-keymap"
+		"/C/Users/BAB/Documents/code/Arduino/SALT_tools/readme.md"
 	],
 	"find":
 	{
@@ -424,6 +460,10 @@
 		"case_sensitive": true,
 		"find_history":
 		[
+			"reset",
+			"log_message",
+			"new_elapsed_seconds",
+			"led",
 			"stat",
 			"temp",
 			"mac",
@@ -547,11 +587,7 @@
 			"utils.task_time_reset(",
 			"change_display_tick",
 			"menu_factory_autocycle",
-			"act_ptr",
-			"printf",
-			"key_data",
-			"(menu_obj* menu_ptr)",
-			"(menu_obj*)"
+			"act_ptr"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -686,7 +722,7 @@
 	"groups":
 	[
 		{
-			"selected": 4,
+			"selected": 2,
 			"sheets":
 			[
 				{
@@ -708,9 +744,199 @@
 						],
 						"settings":
 						{
+							"color_scheme": "Packages/User/Color Highlighter/themes/Cobalt.tmTheme",
 							"function_name_status_row": 6,
 							"syntax": "Packages/Markdown/Markdown.sublime-syntax",
 							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "README.md",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 8256,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								7528,
+								7528
+							]
+						],
+						"settings":
+						{
+							"color_scheme": "Packages/User/Color Highlighter/themes/Cobalt.tmTheme",
+							"function_name_status_row": 62,
+							"syntax": "Packages/Markdown/Markdown.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 336.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "TempServer/TempServer.ino",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 13094,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								11670,
+								11670
+							]
+						],
+						"settings":
+						{
+							"color_scheme": "Packages/User/Color Highlighter/themes/Cobalt.tmTheme",
+							"function_name_status_row": 325,
+							"syntax": "Packages/C++/C++.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 4450.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "WebServer/WebServer.ino",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3285,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3065,
+								3065
+							]
+						],
+						"settings":
+						{
+							"color_scheme": "Packages/User/Color Highlighter/themes/Cobalt.tmTheme",
+							"function_name_status_row": 98,
+							"syntax": "Packages/C++/C++.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 641.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "/C/Users/BAB/Documents/code/Arduino/libraries/Systronix_TMP102/Systronix_TMP102.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 9642,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								6399,
+								6399
+							]
+						],
+						"settings":
+						{
+							"color_scheme": "Packages/User/Color Highlighter/themes/Cobalt.tmTheme",
+							"function_name_status_row": 159,
+							"syntax": "Packages/C++/C++.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1961.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "/C/Users/BAB/Documents/code/Arduino/SALT_reptile/SALT_reptile.ino",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 31849,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								18837,
+								18837
+							]
+						],
+						"settings":
+						{
+							"color_scheme": "Packages/User/Color Highlighter/themes/Cobalt.tmTheme",
+							"function_name_status_row": 501,
+							"syntax": "Packages/C++/C++.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": -0.0,
+						"translation.y": 6631.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "TempServer/TempServerLogs.md",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3309,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								285,
+								285
+							]
+						],
+						"settings":
+						{
+							"auto_name": "## TempServer is locking up",
+							"color_scheme": "Packages/User/Color Highlighter/themes/Cobalt.tmTheme",
+							"function_name_status_row": 9,
+							"syntax": "Packages/Markdown/Markdown.sublime-syntax"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -720,69 +946,38 @@
 					"type": "text"
 				},
 				{
-					"buffer": 1,
-					"file": "README.md",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 7800,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								7155,
-								7155
-							]
-						],
-						"settings":
-						{
-							"function_name_status_row": 58,
-							"syntax": "Packages/Markdown/Markdown.sublime-syntax",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 490.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
+					"buffer": 7,
 					"file": "DhcpStressTest-T3/DhcpStressTest-T3.ino",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 11019,
+						"buffer_size": 11059,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4319,
-								4319
+								4970,
+								4970
 							]
 						],
 						"settings":
 						{
 							"color_scheme": "Packages/User/Color Highlighter/themes/Cobalt.tmTheme",
-							"function_name_status_row": 125,
+							"function_name_status_row": 142,
 							"syntax": "Packages/C++/C++.sublime-syntax",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1512.0,
+						"translation.y": 3276.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 4,
 					"type": "text"
 				},
 				{
-					"buffer": 3,
+					"buffer": 8,
 					"file": "NtpTest/NtpTest.ino",
 					"semi_transient": false,
 					"settings":
@@ -807,100 +1002,10 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 798.0,
+						"translation.y": 1134.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 5,
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "WebServer/WebServer.ino",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 7393,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								6148,
-								6148
-							]
-						],
-						"settings":
-						{
-							"function_name_status_row": -1,
-							"syntax": "Packages/C++/C++.sublime-syntax",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 2268.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "WebServer/logs/TeensyLog_2017Apr30.md",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 175432,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								175432,
-								175432
-							]
-						],
-						"settings":
-						{
-							"auto_name": "client disconnected",
-							"function_name_status_row": 4579,
-							"syntax": "Packages/Markdown/Markdown.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 59217.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 6,
-					"file": "WebServer/logs/2017Apr30_syslog.txt",
-					"semi_transient": true,
-					"settings":
-					{
-						"buffer_size": 478787,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"function_name_status_row": 0,
-							"syntax": "Packages/Text/Plain text.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 3,
 					"type": "text"
 				}
 			]

@@ -54,6 +54,9 @@ boolean seconds_five_tick = false;
 boolean seconds_ten_tick = false;
 boolean minute_tick = false;
 
+uint32_t seconds_without_client = 0;
+uint32_t max_without_client = 0;
+
 uint16_t rawtemp;
 
 float temp = 0.0;
@@ -174,182 +177,194 @@ void setup() {
   Serial.println();
 }
 
-uint8_t update = 10;
+uint8_t update = 5;
 
 void loop() 
 {
 
-  /**
-   * Are we at a 1-second tick?
-   * This relates only to time count
-   */
-  new_millis = millis();
-  if (new_millis > (old_millis + 100UL))  // 100 msec or more has passed, so check for seconds tick
-  {
-    old_millis = new_millis;
-
-    new_elapsed_seconds = new_millis/1000UL;
-    if (new_elapsed_seconds > total_elapsed_seconds)
+    /**
+     * Are we at a 1-second tick?
+     * This relates only to time count
+     */
+    new_millis = millis();
+    if (new_millis > (old_millis + 100UL))  // 100 msec or more has passed, so check for seconds tick
     {
-      // seconds tick
-      total_elapsed_seconds = new_elapsed_seconds;
-      old_sec_millis = new_millis;
-      seconds_tick = true;
-    }
-  }
+      old_millis = new_millis;
 
-  /**
-   * Do whatever needs to happen every second
-   * such as update other slower counters
-   */
-  if (seconds_tick)
-  {
-    seconds_tick = false; // we've used it up
-    Serial.print(".");
-
-    // read the temperature to have it ready for any clients
-    configOptions |= TMP102_CFG_OS;        // start One Shot conversion
-    stat = tmp102_48.writeRegister (TMP102_CONF_REG_PTR, configOptions);
-
-    // pointer set to read temperature
-    stat = tmp102_48.writePointer(TMP102_TEMP_REG_PTR);     
-    // read two bytes of temperature
-    stat = tmp102_48.readRegister (&rawtemp);
-    temp = tmp102_48.raw13ToC(rawtemp);
-
-    if (0 == (total_elapsed_seconds % 10))
-    {
-      seconds_ten_tick = true;
-    }
-
-    if (0 == (total_elapsed_seconds % 60))
-    {
-      minute_tick = true;
-    }
-  }
-
-
-  // listen for incoming clients
-  EthernetClient client = server.available();
-  if (client) 
-  {
-    start_millis = new_millis;  // for timeout check
-    // Serial.printf("new client at %u sec\r\n", new_elapsed_seconds);
-
-    // an http request ends with a blank line
-    boolean currentLineIsBlank = true;
-
-    // seems like this while could last forever as long as client is connected 
-    while (client.connected()) 
-    {
-      if (client.available()) 
+      new_elapsed_seconds = new_millis/1000UL;
+      if (new_elapsed_seconds > total_elapsed_seconds)
       {
-        char c = client.read();
-        Serial.write(c);
-        // if you've gotten to the end of the line (received a newline
-        // character) and the line is blank, the http request has ended,
-        // so you can send a reply
-        if (c == '\n' && currentLineIsBlank) 
+        // seconds tick
+        total_elapsed_seconds = new_elapsed_seconds;
+        old_sec_millis = new_millis;
+        seconds_tick = true;
+      }
+    }
+
+    /**
+     * Do whatever needs to happen every second
+     * such as update other slower counters
+     */
+    if (seconds_tick)
+    {
+        seconds_tick = false; // we've used it up
+        seconds_without_client++; // increment, it will be cleared if there is a client
+        if (seconds_without_client > max_without_client) max_without_client = seconds_without_client;
+        Serial.print(".");
+
+        // read the temperature to have it ready for any clients
+        configOptions |= TMP102_CFG_OS;        // start One Shot conversion
+        stat = tmp102_48.writeRegister (TMP102_CONF_REG_PTR, configOptions);
+
+        // pointer set to read temperature
+        stat = tmp102_48.writePointer(TMP102_TEMP_REG_PTR);     
+        // read two bytes of temperature
+        stat = tmp102_48.readRegister (&rawtemp);
+        temp = tmp102_48.raw13ToC(rawtemp);
+
+        if (0 == (total_elapsed_seconds % 10))
         {
-          // we could be here if we get a request consisting of one blank line, in theory
-          // send a standard http response header
-          Serial.print("Sending Response...");
-
-          client.println("HTTP/1.1 200 OK");
-          client.println("Content-Type: text/html");
-          client.println("Connection: close");  // the connection will be closed after completion of the response
-          client.println("Refresh: 10");        // changing this to a print vs println breaks it
-          // client.println(update);  // refresh the page automatically every X sec
-          client.println();
-          // client.print("<meta name=\"robots\" content=\"noindex\" />");
-          client.println("<!DOCTYPE HTML>");
-          client.println("<html>");
-
-            client.println("<b>SALT 2.1 TMP102 Temperature Server</b> <br />");
-            client.print(log_message);
-            client.println("<br />");
-            client.print("Updates approx every ");
-            client.print(update);
-            client.println(" seconds<br />");
-            client.print("@");
-            client.print(new_elapsed_seconds);
-            client.println(" sec<br />");
-            client.print("Ambient Temp is ");
-            client.print(temp, 2);
-            client.println(" deg C <br />");
-            client.print("Served ");
-            client.print(http_request_count);
-            client.print(" http requests, ");
-            client.print(timeout_http_count);
-            client.println(" timeouts");
-            client.println("<br />");
-
-          client.println("</html>");
-
-          Serial.println("done");
-          http_request_count++;
-          break;    // out of the while
+            seconds_ten_tick = true;
         }
-        if (c == '\n') 
+
+        if (0 == (total_elapsed_seconds % 60))
         {
-          // So we are here upon receipt of every newline char if current line is NOT blank
-          // you're starting a new line
-          currentLineIsBlank = true;
-          // Serial.println("Got a newline");
+            minute_tick = true;
+        }
+    }
+
+
+    // listen for incoming clients
+    EthernetClient client = server.available();
+    if (client) 
+    {
+        start_millis = new_millis;  // for timeout check
+        // Serial.printf("new client at %u sec\r\n", new_elapsed_seconds);
+
+        // an http request ends with a blank line
+        boolean currentLineIsBlank = true;
+
+        // seems like this while could last forever as long as client is connected 
+        while (client.connected()) 
+        {
+            if (client.available()) 
+            {
+                char c = client.read();
+                Serial.write(c);
+                // if you've gotten to the end of the line (received a newline
+                // character) and the line is blank, the http request has ended,
+                // so you can send a reply
+                if (c == '\n' && currentLineIsBlank) 
+                {
+                    // we could be here if we get a request consisting of one blank line, in theory
+                    // send a standard http response header
+                    Serial.print("Sending Response...");
+
+                    client.println("HTTP/1.1 200 OK");
+                    client.println("Content-Type: text/html");
+                    client.println("Connection: close");  // the connection will be closed after completion of the response
+                    client.println("Refresh: 5");        // changing this to a print vs println breaks it
+                    // client.println(update);  // refresh the page automatically every X sec
+                    client.println();
+                    // client.print("<meta name=\"robots\" content=\"noindex\" />");
+                    client.println("<!DOCTYPE HTML>");
+                    client.println("<html>");
+
+                        client.println("<b>SALT 2.1 TMP102 Temperature Server</b> <br />");
+                        client.print(log_message);
+                        client.println("<br />");
+                        client.print("Updates approx every ");
+                        client.print(update);
+                        client.println(" seconds<br />");
+                        client.print("@");
+                        client.print(new_elapsed_seconds);
+                        client.println(" sec<br />");
+                        client.print("Ambient Temp is ");
+                        client.print(temp, 2);
+                        client.println(" deg C <br />");
+                        client.print(http_request_count);
+                        client.print(" http requests, ");
+                        client.print(timeout_http_count);
+                        client.println(" timeouts, ");
+                        client.print(max_without_client);
+                        client.println(" sec w/o client");
+                        client.println("<br />");
+
+                    client.println("</html>");
+
+                    Serial.println("done");
+                    http_request_count++;
+                    seconds_without_client = 0; // reset to zero
+                    break;    // out of the while
+                }   // end of responding to complete request
+                if (c == '\n') 
+                {
+                    // So we are here upon receipt of every newline char if current line is NOT blank
+                    // you're starting a new line
+                    currentLineIsBlank = true;
+                    // Serial.println("Got a newline");
+                } 
+                else if (c != '\r') 
+                {
+                    // here if char was not a newline and not a carriage return
+                    // you've gotten a character on the current line
+                    currentLineIsBlank = false;
+                  }
+            }   // end of if client available
+            else
+            {
+                // client connected but nothing available, don't wait forever!
+                // 1000 msec seems like a good timeout
+                Serial.print("!");
+                if (millis() > (start_millis + 1000UL))
+                {
+                    // waited too long for finish of request
+                    Serial.println("Error! Break out of waiting for request to finish");
+                    timeout_http_count++;
+                    break;  // get out of while
+                }
+            }
+        }   // end of while-connected
+
+        // client no longer connected, or request was ended
+        // give the web browser time to receive the data
+        delay(1);    // 1 msec seemed not enough, make it 10? 
+        // Serial.println("Will stop client");
+        Serial.println("Out of while...");
+        // close the connection:
+        client.stop();
+        Serial.println("client disconnected");
+        // These serial.printf cause SPI to WIZnet 850io to halt in Ard1.8.1/TD1.35 or temp never printed in Ard1.8.2/TD1.36!!
+        Serial.printf("Temp %f C\r\n", temp);
+        Serial.printf("Timeout count=%u\r\n", timeout_http_count);
+        // Serial.flush();
+
+        Serial.print("Temp is ");
+        Serial.print(temp,2);
+        Serial.print("C, ");
+        Serial.print(timeout_http_count);
+        Serial.print(" timeouts, ");
+        Serial.print(http_request_count);
+        Serial.print(" http requests, ");
+        Serial.print(max_without_client);
+        Serial.println(" sec max w/o client");
+        Serial.println();
+
+    }   // end of if-client
+    else
+    {
+        // no client exists this time through loop
+        if (seconds_ten_tick)
+        {
+          seconds_ten_tick = false; // we've used it up
+          Serial.print("'");
         } 
-        else if (c != '\r') 
+        if (minute_tick)
         {
-          // here if char was not a newline and not a carriage return
-          // you've gotten a character on the current line
-          currentLineIsBlank = false;
-        }
-      }
-      else
-      {
-        // client connected but nothing available, don't wait forever!
-        Serial.print("!");
-        if (millis() > (start_millis + 1000UL))
-        {
-          // waited too long for finish of request
-          Serial.println("Error! Break out of waiting for request to finish");
-          timeout_http_count++;
-          break;  // get out of while
-        }
-      }
-    }   // end of while
+          minute_tick = false;  // we've used it up
+          Serial.println();     // keep periods from piling up on one line
+        }  
+    }
 
-    // client no longer connected, or request was ended
-    // give the web browser time to receive the data
-    delay(1);    // 1 msec seemed not enough, make it 10 -bboyes
-    // Serial.println("Will stop client");
-    // close the connection:
-    client.stop();
-    Serial.println("client disconnected");
-    // These serial.printf cause SPI to WIZnet 850io to halt!!
-    // Serial.printf("Temp %f C\r\n", temp);
-    // Serial.printf("Timeout count=%u\r\n", timeout_http_count);
-    Serial.print("Temp is ");
-    Serial.print(temp,4);
-    Serial.print("C, Timeout count=");
-    Serial.print(timeout_http_count);
-    Serial.print(", ");
-    Serial.print(http_request_count);
-    Serial.println(" http requests served");
-    Serial.println();
-  }
-  else
-  {
-    // no client exists this time through loop
-    if (seconds_ten_tick)
-    {
-      seconds_ten_tick = false; // we've used it up
-      Serial.print("'");
-    } 
-    if (minute_tick)
-    {
-      minute_tick = false;  // we've used it up
-      Serial.println();     // keep periods from piling up on one line
-    }  
-  }
 }
 
