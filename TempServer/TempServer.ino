@@ -106,22 +106,22 @@ void setup() {
  
   strcpy (log_message, "Build time: ");
   strcat (log_message, __TIME__);
-  strcat (log_message, " ");
+  strcat (log_message, " MDT, ");
   strcat (log_message, __DATE__);  
-  // strcat (log_message, 0x00);
+  strcat (log_message, 0x00);
 
   // Wait here for up to 10 seconds to see if we will use Serial Monitor, so output is not lost
   while((!Serial) && (millis()<10000));    // wait until serial monitor is open or timeout,
 
   new_millis = millis();
-  Serial.println("Teensy Web Server");
+  Serial.println("Teensy Temperature Server");
 
   Serial.printf("Build %s %s\r\n", __TIME__, __DATE__);
   Serial.println(log_message);
 
   Serial.printf("%u msec to start serial\r\n", new_millis);
 
-  char ID[32];
+  char ID[36];    // was 32! Buffer overun!
   sprintf(ID, "%08lX %08lX %08lX %08lX", SIM_UIDH, SIM_UIDMH, SIM_UIDML, SIM_UIDL);
   Serial.print("Teensy3 128-bit UniqueID char array: ");
   Serial.println(ID);
@@ -259,6 +259,7 @@ void loop()
                     // we could be here if we get a request consisting of one blank line, in theory
                     // send a standard http response header
                     Serial.print("Sending Response...");
+                    http_request_count++;
 
                     client.println("HTTP/1.1 200 OK");
                     client.println("Content-Type: text/html");
@@ -278,12 +279,15 @@ void loop()
                         client.println(" seconds<br />");
                         client.print("@");
                         client.print(new_elapsed_seconds);
-                        client.println(" sec<br />");
-                        client.print("Ambient Temp is ");
+                        client.println(" sec: ");
+                        client.print("Temp is ");
                         client.print(temp, 2);
-                        client.println(" deg C <br />");
+                        client.print(" deg C <br />");
                         client.print(http_request_count);
                         client.print(" http requests, ");
+                        client.print((float)http_request_count/(float)new_elapsed_seconds);
+                        client.print(" per sec");
+                        client.print("<br />");
                         client.print(timeout_http_count);
                         client.println(" timeouts, ");
                         client.print(max_without_client);
@@ -293,7 +297,7 @@ void loop()
                     client.println("</html>");
 
                     Serial.println("done");
-                    http_request_count++;
+                    
                     seconds_without_client = 0; // reset to zero
                     break;    // out of the while
                 }   // end of responding to complete request

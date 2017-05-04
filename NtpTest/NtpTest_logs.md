@@ -1,6 +1,15 @@
 # NtpTest Logs
 
 ## Teensy 3.2 with WIZ850io and 2.8" touchscreen on PJRC adapter, USB power
+### 2017 May 04
+Now running for 16 hours
+```
+@61117054 ask for time from pool.ntp.org
+Seconds since Jan 1 1900 = 3702904219
+Unix time = 1493915419
+The UTC time is 16:30:19
+```
+
 ### 2017 Apr 29
 This test now running for 146.48 hours. 
 It's surprising how often the NTP pool is either not responding or couldn't be reached.

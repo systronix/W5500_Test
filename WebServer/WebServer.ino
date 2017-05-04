@@ -32,13 +32,24 @@ IPAddress ip(192, 168, 1, 10);
 // (port 80 is default for HTTP):
 EthernetServer server(8080);
 
+uint8_t update = 5;
+char log_message[128];
+
 void setup() {
   // Open serial communications and wait for port to open:
-  Serial.begin(9600);
-  while (!Serial) {
-    ; // wait for serial port to connect. Needed for native USB port only
-  }
+  Serial.begin(115200);
+  // Wait here for up to 10 seconds to see if we will use Serial Monitor, so output is not lost
+  while((!Serial) && (millis()<10000));    // wait until serial monitor is open or timeout,
 
+  strcpy (log_message, "Build: ");
+  strcat (log_message, __TIME__);
+  strcat (log_message, " MDT, ");
+  strcat (log_message, __DATE__);  
+  strcat (log_message, 0x00);
+
+  Serial.println("Simple Webserver Example");
+
+  Serial.println(log_message);
 
   // start the Ethernet connection and the server:
   Ethernet.begin(mac, ip);
@@ -67,22 +78,24 @@ void loop() {
           client.println("HTTP/1.1 200 OK");
           client.println("Content-Type: text/html");
           client.println("Connection: close");  // the connection will be closed after completion of the response
-          client.println("Refresh: 10");  // refresh the page automatically every XX sec
-          client.println();
+          client.print("Refresh: ");  // refresh the page automatically every XX sec
+          client.println(update);
+          client.println();   // must have this blank line or browser won't display anything!
           client.println("<!DOCTYPE HTML>");
           client.println("<html>");
 
-          client.print("Some Text");
-          client.println("<br />");
-          // output the value of each analog input pin
-          // for (int analogChannel = 0; analogChannel < 6; analogChannel++) {
-          //   int sensorReading = analogRead(analogChannel);
-          //   client.print("analog input ");
-          //   client.print(analogChannel);
-          //   client.print(" is ");
-          //   client.print(sensorReading);
-          //   client.println("<br />");
-          // }
+
+            client.print("Simple Webserver Test <br />");
+            client.println("<br />");
+            client.println(log_message);
+            client.println("<br />");
+            client.print("Updates approx every ");
+            client.print(update);
+            client.println(" seconds<br />");
+            client.print("msec: ");
+            client.print(millis());
+            client.println("<br />");
+
           client.println("</html>");
           break;
         }

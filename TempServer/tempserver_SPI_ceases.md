@@ -1,6 +1,9 @@
 ## TempServer is locking up
 
 Here it locked up with Ethernet SPI SCK low, MOSI high, MISO low, CS high 
+This happened only once. There was a buffer allocation error [thanks @defragster](https://forum.pjrc.com/threads/43572-Optimization-Fast-Faster-Fastest-with-without-LTO?p=141888&viewfull=1#post141888) and it was
+this and/or "Smallest Code" optimization which caused incorrect execution when printf() appeared in some 
+places in the code.
 
 ### Teensy output
 This is not a typical complete request.
