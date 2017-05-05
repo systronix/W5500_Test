@@ -132,7 +132,9 @@ void setup() {
 	new_millis = millis();
 
 
-	Serial.println("DHCP Stress Test - 2017 Feb 25");
+	Serial.println("DHCP Stress Test");
+	Serial.printf("Build %s %s\r\n", __TIME__, __DATE__);
+
 	Serial.printf("%u msec to start serial\r\n", new_millis);
 	// Serial.print(millis());
 	// Serial.println(" msec to start serial");
@@ -180,6 +182,8 @@ void setup() {
 	}
 	Serial.print(tries-1);	// loop already incremented it
 	Serial.println(" attempts");
+
+	Serial.printf("\r\n");
 
 }	// end of setup
 

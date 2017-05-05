@@ -87,7 +87,8 @@ void setup() {
   new_millis = millis();
 
   Serial.println();
-  Serial.println("NTP Test for Teensy 3 - 2017 Mar 02");
+  Serial.println("NTP Test for Teensy 3");
+  Serial.printf("Build %s %s\r\n", __TIME__, __DATE__);
 
   Serial.printf("%u msec to start serial\r\n", new_millis);
 
@@ -114,6 +115,8 @@ void setup() {
       ;
   }
   Udp.begin(localPort);
+
+  Serial.printf("\r\n");
 }
 
 void loop() {

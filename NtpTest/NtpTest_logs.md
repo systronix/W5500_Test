@@ -1,6 +1,18 @@
 # NtpTest Logs
 
 ## Teensy 3.2 with WIZ850io and 2.8" touchscreen on PJRC adapter, USB power
+### 2017 May 05
+loaded new build, no code changes, Arduino 1.8.2 and TD 1.36
+
+### 2017 May 05
+Running 47 hours
+```
+@169458352 ask for time from pool.ntp.org
+Seconds since Jan 1 1900 = 3703012562
+Unix time = 1494023762
+The UTC time is 22:36:02
+```
+
 ### 2017 May 04
 Now running for 16 hours
 ```
