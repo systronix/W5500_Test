@@ -280,7 +280,6 @@ void loop()
                         client.print("@");
                         client.print(new_elapsed_seconds);
                         client.println(" sec: ");
-                        client.print("Temp is ");
                         client.print(temp, 2);
                         client.print(" deg C <br />");
                         client.print(http_request_count);
@@ -338,21 +337,20 @@ void loop()
         // close the connection:
         client.stop();
         Serial.println("client disconnected");
-        // These serial.printf cause SPI to WIZnet 850io to halt in Ard1.8.1/TD1.35 or temp never printed in Ard1.8.2/TD1.36!!
-        Serial.printf("Temp %f C\r\n", temp);
-        Serial.printf("Timeout count=%u\r\n", timeout_http_count);
+        // // These serial.printf cause SPI to WIZnet 850io to halt in Ard1.8.1/TD1.35 or temp never printed in Ard1.8.2/TD1.36!!
+        // Serial.printf("Temp %f C\r\n", temp);
+        // Serial.printf("Timeout count=%u\r\n", timeout_http_count);
         // Serial.flush();
 
-        Serial.print("Temp is ");
-        Serial.print(temp,2);
-        Serial.print("C, ");
-        Serial.print(timeout_http_count);
-        Serial.print(" timeouts, ");
-        Serial.print(http_request_count);
-        Serial.print(" http requests, ");
+        Serial.printf("@ %u sec, Temp is %.3f C\r\n", new_elapsed_seconds, temp);
+
+        Serial.printf("%u http requests, %.2f per sec, %u timeouts\r\n", 
+          http_request_count, (float)http_request_count/(float)new_elapsed_seconds, timeout_http_count);
+
         Serial.print(max_without_client);
         Serial.println(" sec max w/o client");
         Serial.println();
+
 
     }   // end of if-client
     else
