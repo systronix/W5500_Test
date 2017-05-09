@@ -35,7 +35,8 @@ X and Y swapped.
 
 /**
 Revisions:
-
+2017 May 08 bboyes  SALT boards have a peripheral reset on Teensy P22. The PJRC adapter board
+  ties display reset to 3.3V. Added control of this pin as PERIPHERAL_RESET
 2016 Jan 15 bboyes  Change TFT_CS and TFT_DC pins in attempt to use ILI9341 touchscreen with 
 WIZ820io Ethernet adapter.
 2015 Nov 14  bboyes  Bringing up custom board DemoB with backlight PWM, laser control
@@ -56,6 +57,7 @@ library (available on github).
 #define TFT_DC 21    // 9 is default, different on ethernet/touch combo
 
 #define ETHERNET_RESET 9	// WIZ820io
+#define PERIPHERAL_RESET 22 // for ILI9341 and other peripherals
 
 // MOSI=11, MISO=12, SCK=13
 
@@ -90,6 +92,12 @@ void setup() {
   digitalWrite(ETHERNET_RESET, HIGH);
   delay(200);
 
+  pinMode(PERIPHERAL_RESET, OUTPUT);
+  digitalWrite(PERIPHERAL_RESET, LOW);
+  delay(1);
+  digitalWrite(PERIPHERAL_RESET, HIGH);
+  delay(100);
+
 //pinMode(TFT_CS, OUTPUT);
 //  pinMode(TFT_DC, OUTPUT);
 
@@ -98,7 +106,15 @@ void setup() {
   
   tft.begin();
   tft.setRotation(1);
+
   tft.fillScreen(ILI9341_BLACK);
+
+  // do 
+  // {
+  //     
+  //     delay(1);
+  // } while (true);
+
   ts.begin();
   
   if (demob)

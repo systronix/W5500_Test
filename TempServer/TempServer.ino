@@ -1,22 +1,21 @@
 /*
-  Web Server
+  Temp Server
 
- A simple web server that shows the value of the analog input pins.
- using an Arduino Wiznet Ethernet shield.
+  Based on Arduino Ethernet>Webserver example:
+  created 18 Dec 2009
+  by David A. Mellis
+  modified 9 Apr 2012
+  by Tom Igoe
+  modified 02 Sept 2015
+  by Arturo Guadalupi
 
- Circuit:
- * Ethernet shield attached to pins 10, 11, 12, 13
- * Analog inputs attached to pins A0 through A5 (optional)
-
- created 18 Dec 2009
- by David A. Mellis
- modified 9 Apr 2012
- by Tom Igoe
- modified 02 Sept 2015
- by Arturo Guadalupi
+  Modified 2017 May 08 bboyes added output of temp to ILI9341 Color Touchscreen
  
  */
 
+#include <ILI9341_t3.h>
+#include <font_Arial.h> // from ILI9341_t3
+#include <XPT2046_Touchscreen.h>
 #include <SPI.h>
 #include <Ethernet.h>
 #include <TeensyID.h>
@@ -27,6 +26,7 @@
 #define TFT_DC 21    // 9 is default, different on ethernet/touch combo
 
 #define ETH_RST 9 // ethernet reset pin
+#define PERIPHERAL_RESET 22 // for ILI9341 and other peripherals
 
 uint8_t t_mac[6]; // hold internal MAC from Teensy 
 
@@ -65,11 +65,14 @@ float temp = 0.0;
 Systronix_TMP102 tmp102_48;    // We can pass constructor a value
 uint16_t configOptions;
 
+
+// MOSI=11, MISO=12, SCK=13
+XPT2046_Touchscreen ts(CS_PIN);
+ILI9341_t3 tft = ILI9341_t3(TFT_CS, TFT_DC);
+
 int8_t stat = -1;
 
 char log_message[128];
-
-
 
 // Initialize the Ethernet server library
 // with the IP address and port you want to use
@@ -103,7 +106,18 @@ void setup() {
   delay(1);
   digitalWrite(ETH_RST, HIGH);
   delay(10);                      // recover from reset
- 
+
+  pinMode(PERIPHERAL_RESET, OUTPUT);
+  digitalWrite(PERIPHERAL_RESET, LOW);
+  delay(1);
+  digitalWrite(PERIPHERAL_RESET, HIGH);
+  delay(100);
+
+  tft.begin();
+  tft.setRotation(1);
+  tft.fillScreen(ILI9341_GREEN);
+  ts.begin();
+
   strcpy (log_message, "Build time: ");
   strcat (log_message, __TIME__);
   strcat (log_message, " MDT, ");
@@ -175,9 +189,22 @@ void setup() {
   stat = tmp102_48.writePointer(TMP102_TEMP_REG_PTR);  
 
   Serial.println();
+
+  tft.fillScreen(ILI9341_BLACK);
+  tft.setTextColor(ILI9341_YELLOW);
+  tft.setFont(Arial_40);
+  tft.setCursor(5, 20);
+  tft.print("TempServer");
+  delay(2000);
+
 }
 
 uint8_t update = 5;
+
+boolean wastouched = true;
+uint16_t xmax, xmin=4095, ymax, ymin=4095, zmax, zmin=4095;
+uint16_t xnow, ynow, znow;
+uint32_t touch_start, touch_total, touch_secs;  // in millis unless _secs
 
 void loop() 
 {
@@ -231,6 +258,16 @@ void loop()
         {
             minute_tick = true;
         }
+
+      // wipe to black the part of screen with changing values
+      // note: for 48 pt font, Y span of 48 leaves one pixel not cleared...
+      tft.fillRect(5, 15, 319, 60, ILI9341_BLACK);    
+      tft.setTextColor(ILI9341_YELLOW);
+      tft.setFont(Arial_48);
+      tft.setCursor(80, 20);
+      tft.print(temp);    
+
+
     }
 
 

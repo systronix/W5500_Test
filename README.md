@@ -7,6 +7,7 @@ Applies to all boards and modules which use the WIZnet W5500 chip: WIZ850io, W55
   - TFT_CS moves from default 10 to 20
   - TFT_DC moves from default 9 to 21
 - WIZnet [WIZ850io](http://www.wiznet.co.kr/product-item/wiz850io/) - about USD $17; this module uses the W5500 chip, will also work with WIZ820io which uses the W5200
+- ILI9341 2.8" color touchscreen, available tested [from PJRC](https://www.pjrc.com/store/display_ili9341_touch.html) or take your chances on eBay. A recent order of five on eBay had 4/5 with cracked screens, all with bent pins. Inadequately packaged.
 - eBay [WIZ850io clones](http://www.ebay.com/itm/201560299414?_trksid=p2057872.m2749.l2649&ssPageName=STRK%3AMEBIDX%3AIT) - about USD $9; ignore the misleading name in the listing. Five ordered 2017 Feb 25 for testing. These have been tested by PJRC. These are reporterdly the real W5500 cheap on a cheaper Chinese module with other Chinese components. It ain't rocket science so there's no reason these have to be crap.
 - Adafruit [M0 Pro](https://www.adafruit.com/products/2417) which appears to be identical to the Arduino.org M0Pro with SAMD21 ARM Cortex M0
 - Arduino.org [M0 Pro](http://www.arduino.org/products/boards/arduino-m0-pro)
