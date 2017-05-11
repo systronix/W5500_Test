@@ -248,11 +248,31 @@
 			}
 		},
 		{
+			"contents": "/**\nILI9341 Test\n\nPJRC's example of using XPT2046 touchscreen controller \non the common LCD boards TJCTM24028-SPI which are \n320x240 touchscreens using the ILI9341 controller \nchip, with SPI interface\n\nFunction:\nReport X, Y, and Z (pressure) of a touch to the USB serial port\nand display the data on the LCD screen.\n\nTJCTM24028-SPI are available for under $10 on eBay. \nPJRC sells tested\ncopies of this screen and also designed a purple dev\nboard which plugs a Teensy 3.2 or 3.1 into the screen.\n\nThe dev boards are at OSHPark:\nhttps://www.oshpark.com/shared_projects/TG395I75\nbut there's no BOM so refer to the older version.\n\nPJRC forum for this display at the not-well-named topic\nhttps://forum.pjrc.com/threads/30559-2-8-ILI9341-restive-touch-miso-not-connected\n\nSome important notes:\nThe XPT2046 library assumes the upper left corner of the screen is 0,0\nwhen the strip of header pins is on the right and the SD card slot\nis towards you. Logical enough.\n\nThe ILI9341 library does not make the same assumption unless\nyou use setRotation(1). Practically, what this means is\nthat all the Adafruit examples will appear to have their\nX and Y swapped.\n**/\n\n/**\nRevisions:\n2017 May 08 bboyes  SALT boards have a peripheral reset on Teensy P22. The PJRC adapter board\n  ties display reset to 3.3V. Added control of this pin as PERIPHERAL_RESET\n2016 Jan 15 bboyes  Change TFT_CS and TFT_DC pins in attempt to use ILI9341 touchscreen with \nWIZ820io Ethernet adapter.\n2015 Nov 14  bboyes  Bringing up custom board DemoB with backlight PWM, laser control\n2015 Nov 03  bboyes  Added output to screen and serial port of pressure.\nThis is the example program provided by PRJC with their XPT2046_Touchscreen\nlibrary (available on github).\n\n**/\n\n#include <ILI9341_t3.h>\n#include <font_Arial.h> // from ILI9341_t3\n#include <XPT2046_Touchscreen.h>\n//#include <SPI.h>\n\n#define CS_PIN  8   // resistive touch controller XPT2406 uses SPI\n\n#define TFT_CS 20    // 10 is default, different on ethernet/touch combo\n#define TFT_DC 21    // 9 is default, different on ethernet/touch combo\n\n#define ETHERNET_RESET 9\t// WIZ820io\n#define PERIPHERAL_RESET 22 // for ILI9341 and other peripherals\n\n// MOSI=11, MISO=12, SCK=13\n\nXPT2046_Touchscreen ts(CS_PIN);\n\nILI9341_t3 tft = ILI9341_t3(TFT_CS, TFT_DC);\n//ILI9341_t3 tft = ILI9341_t3(TFT_CS, TFT_DC, 255, 11, 13, 12);\n\n// uint8_t backlight=5;\n uint8_t laser=4;\n uint8_t vbsense_pin = 0;  // battery sense on analog 0, p14\n uint16_t vbsense;\n// \n// uint8_t buzzer_pin = 6;\n \n\n\nvoid setup() {\n  Serial.begin(115200);\n  while((!Serial) && (millis()<5000));    // wait until serial monitor is open or timeout\n  Serial.print(millis());\n\n  Serial.println(\" ILI9341 Test! \");\n  \n  // yes this is deprecated but I don't know a better way to set clock\n  // when we don't use the SPI methods directly\n  // DIV16 gives 2 MHz SCK\n  // DIV 4 gives 2 MHz\n  // SPI.setClockDivider(SPI_CLOCK_DIV16);\n\n  // This might be the right way\n  // default SPI.SPIsettings(4000000, MSBFIRST, SPI_MODE0);\n  // With clock 4000000, SCK is breifly 24 MHz then becomes 2 MHz\n  // 2000000 or 8000000 also give 2 MHz SCK\n  // SPISettings(4000000, MSBFIRST, SPI_MODE0);    \n\n  /**\n   * WIZ820io/W5200 must be at least reset to avoid it clashing with SPI\n   */\n  pinMode(ETHERNET_RESET, OUTPUT);\n  digitalWrite(ETHERNET_RESET, LOW);\n  delay(1);\n  digitalWrite(ETHERNET_RESET, HIGH);\n  delay(200);\n\n  // reset the touchscreen\n  pinMode(PERIPHERAL_RESET, OUTPUT);\n  digitalWrite(PERIPHERAL_RESET, LOW);\n  delay(10);\n  digitalWrite(PERIPHERAL_RESET, HIGH);\n  delay(100);\n\n \n  tft.begin();\n\n  tft.setRotation(1);\n\n  tft.fillScreen(ILI9341_GREEN);\n\n  delay(500);\n\n  tft.fillScreen(ILI9341_BLACK);\n\n  delay(500);\n\n  // do \n  // {\n  //     tft.fillScreen(ILI9341_GREEN);\n  //     Serial.println(\"Fill green\");\n  //     delay(1000);\n  // } while (true);\n\n  ts.begin();\n  \n}\n\n\nboolean wastouched = true;  // so no touch starts with \"No Touch\" on display vs blank\nuint16_t xmax, xmin=4095, ymax, ymin=4095, zmax, zmin=4095;\nuint16_t xnow, ynow, znow;\nuint32_t touch_start, touch_total, touch_secs;  // in millis unless _secs\n\nvoid loop() {\n  boolean istouched = ts.touched();\n  if (istouched) \n  {\n    TS_Point p = ts.getPoint();\n    if (!wastouched) {\n      // it's a new touch starting... \n      // ...do things needed at start only of new touch\n      \n      touch_start = millis();\n      \n      tft.fillScreen(ILI9341_BLACK);\n      tft.setTextColor(ILI9341_YELLOW);\n      tft.setFont(Arial_48);\n      tft.setCursor(5, 20);\n      tft.print(\"Touch\");\n      \n      \n      tft.setTextColor(ILI9341_CYAN);\n      tft.setFont(Arial_18);\n      tft.setCursor(35, 90);  \n      tft.print(\"now\");\n      tft.setCursor(110, 90);\n      tft.print(\"min\");\n      tft.setCursor(185, 90);\n      tft.print(\"max\");\n      tft.setCursor(260, 90);\n      tft.print(\"delta\");\n    \n\n    }\n    // fall through after start of touch actions\n    // not a new touch start; how long have we been touching?\n    touch_total = millis() - touch_start;\n    // wipe to black the part of screen with changing values\n    // note: for 48 pt font, Y span of 48 leaves one pixel not cleared...\n    tft.fillRect(200, 20, 119, 49, ILI9341_BLACK);    \n    tft.setTextColor(ILI9341_YELLOW);\n    tft.setFont(Arial_48);\n    tft.setCursor(200, 20);\n    touch_secs = touch_total/1000;\n    tft.print(touch_secs);    \n          \n    if (0 == touch_secs % 5) stats_reset();\n    stats_calc(p.x, p.y, p.z);\n    // wipe to black the part of screen with changing values\n    tft.fillRect(30, 120, 289, 89, ILI9341_BLACK);    \n    \n    \n    tft.setTextColor(ILI9341_GREEN);\n    tft.setFont(Arial_18);\n    tft.setCursor(5, 120);\n    tft.print(\"X\");\n    tft.setCursor(35, 120);\n    tft.print(p.x);\n    tft.setCursor(110, 120);\n    tft.print(xmin);\n    tft.setCursor(185, 120);\n    tft.print(xmax);\n    tft.setCursor(260, 120);\n    tft.print(xmax-xmin);\n    \n    tft.setCursor(5, 150);\n    tft.print(\"Y\");\n    tft.setCursor(35,150);\n    tft.print(p.y);\n    tft.setCursor(110, 150);\n    tft.print(ymin);\n    tft.setCursor(185, 150);\n    tft.print(ymax);\n    tft.setCursor(260, 150);\n    tft.print(ymax-ymin);\n    \n    tft.setCursor(5, 180);\n    tft.print(\"Z\");\n    tft.setCursor(35,180);\n    tft.print(p.z);\n    tft.setCursor(110, 180);\n    tft.print(zmin);\n    tft.setCursor(185, 180);\n    tft.print(zmax);\n    tft.setCursor(260, 180);\n    tft.print(zmax-zmin);\n\n\n    \n    Serial.print(\"x = \");\n    Serial.print(p.x);\n    Serial.print(\", y = \");\n    Serial.print(p.y);\n    Serial.print(\", z = \");\n    Serial.println(p.z);\n  } else {\n    if (wastouched) {\n      tft.fillScreen(ILI9341_BLACK);\n      tft.setTextColor(ILI9341_RED);\n      tft.setFont(Arial_48);\n      tft.setCursor(120, 50);\n      tft.print(\"No\");\n      tft.setCursor(80, 120);\n      tft.print(\"Touch\");\n      // reset all min and max if no touch\n      stats_reset();\n      Serial.println(\"no touch\");\n      \n    }\n    \n  }\n  wastouched = istouched;\n  delay(100);\n}\n\n/**\nCaclulate min max and delta for X Y Z\n**/\nvoid stats_calc (uint16_t x, uint16_t y, uint16_t z)\n{\n  xmax = x > xmax ? x : xmax;  \n  ymax = y > ymax ? y : ymax;\n  zmax = z > zmax ? z : zmax;\n  \n  xmin = x < xmin ? x : xmin;  \n  ymin = y < ymin ? y : ymin;\n  zmin = z < zmin ? z : zmin;  \n}\n\n/**\nReset stats, useful at first touch\nand after a few seconds while touching\n**/\nvoid stats_reset (void)\n{\n  xmin=4095; xmax=0; ymin=4095; ymax=0; zmin=4095; zmax=0;\n}\n",
 			"file": "ILI9341_Test/ILI9341_Test.ino",
+			"file_size": 7785,
+			"file_write_time": 131390159776846770,
 			"settings":
 			{
-				"buffer_size": 7674,
+				"buffer_size": 7409,
 				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/D/arduino-1.8.2-TD1v36/hardware/teensy/avr/libraries/ILI9341_t3/ILI9341_t3.cpp",
+			"settings":
+			{
+				"buffer_size": 46210,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/D/arduino-1.8.2-TD1v36/hardware/teensy/avr/libraries/SPI/SPI.h",
+			"settings":
+			{
+				"buffer_size": 65614,
 				"line_ending": "Unix"
 			}
 		},
@@ -338,7 +358,9 @@
 	"expanded_folders":
 	[
 		"/C/Users/BAB/Documents/code/Arduino/W5500_Test",
-		"/C/Users/BAB/Documents/code/Arduino/W5500_Test/ILI9341_Test"
+		"/C/Users/BAB/Documents/code/Arduino/W5500_Test/ILI9341_Test",
+		"/D/arduino-1.8.2-TD1v36/hardware/teensy/avr/libraries/ILI9341_t3",
+		"/D/arduino-1.8.2-TD1v36/hardware/teensy/avr/libraries/SPI"
 	],
 	"file_history":
 	[
@@ -488,6 +510,8 @@
 		"find_history":
 		[
 			"demob",
+			"beginTransaction",
+			"demob",
 			"timeout",
 			"defTimeout",
 			"timeout",
@@ -612,9 +636,7 @@
 			"dwr_heat_lamp",
 			"pad",
 			"menu_factory_autocycle_start",
-			"MENU_CYCLE",
-			"by_drawer",
-			"menu_factory_autocycle"
+			"MENU_CYCLE"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -751,7 +773,7 @@
 	"groups":
 	[
 		{
-			"selected": 7,
+			"selected": 8,
 			"sheets":
 			[
 				{
@@ -782,7 +804,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 9,
+					"stack_index": 11,
 					"type": "text"
 				},
 				{
@@ -813,7 +835,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 6,
 					"type": "text"
 				},
 				{
@@ -843,7 +865,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
@@ -873,7 +895,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 10,
+					"stack_index": 12,
 					"type": "text"
 				},
 				{
@@ -905,7 +927,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 8,
 					"type": "text"
 				},
 				{
@@ -935,7 +957,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
@@ -965,7 +987,7 @@
 						"translation.y": 1302.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
@@ -997,7 +1019,7 @@
 						"translation.y": 504.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 3,
 					"type": "text"
 				},
 				{
@@ -1006,33 +1028,93 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 7674,
+						"buffer_size": 7409,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2102,
-								2102
+								3856,
+								3856
 							]
 						],
 						"settings":
 						{
-							"function_name_status_row": 58,
+							"function_name_status_row": -1,
 							"syntax": "Packages/C++/C++.sublime-syntax",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 448.0,
+						"translation.y": 2772.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "/D/arduino-1.8.2-TD1v36/hardware/teensy/avr/libraries/ILI9341_t3/ILI9341_t3.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 46210,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1564,
+								1564
+							]
+						],
+						"settings":
+						{
+							"function_name_status_row": 34,
+							"syntax": "Packages/C++/C++.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 400.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 1,
 					"type": "text"
 				},
 				{
-					"buffer": 9,
+					"buffer": 10,
+					"file": "/D/arduino-1.8.2-TD1v36/hardware/teensy/avr/libraries/SPI/SPI.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 65614,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								9565,
+								9565
+							]
+						],
+						"settings":
+						{
+							"function_name_status_row": 323,
+							"syntax": "Packages/C++/C++.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 4068.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 11,
 					"file": "/C/Users/BAB/Documents/code/Arduino/libraries/Systronix_TMP102/Systronix_TMP102.h",
 					"semi_transient": false,
 					"settings":
@@ -1059,11 +1141,11 @@
 						"translation.y": 1961.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 11,
+					"stack_index": 13,
 					"type": "text"
 				},
 				{
-					"buffer": 10,
+					"buffer": 12,
 					"file": "/C/Users/BAB/Documents/code/Arduino/SALT_reptile/SALT_reptile.ino",
 					"semi_transient": false,
 					"settings":
@@ -1090,11 +1172,11 @@
 						"translation.y": 6631.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 12,
+					"stack_index": 14,
 					"type": "text"
 				},
 				{
-					"buffer": 11,
+					"buffer": 13,
 					"file": "DhcpStressTest-T3/DhcpStressTest-T3.ino",
 					"semi_transient": false,
 					"settings":
@@ -1121,11 +1203,11 @@
 						"translation.y": 2016.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 9,
 					"type": "text"
 				},
 				{
-					"buffer": 12,
+					"buffer": 14,
 					"file": "NtpTest/NtpTest.ino",
 					"semi_transient": false,
 					"settings":
@@ -1153,7 +1235,7 @@
 						"translation.y": 1092.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 8,
+					"stack_index": 10,
 					"type": "text"
 				}
 			]

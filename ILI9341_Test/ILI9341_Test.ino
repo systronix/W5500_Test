@@ -106,16 +106,11 @@ void setup() {
   // reset the touchscreen
   pinMode(PERIPHERAL_RESET, OUTPUT);
   digitalWrite(PERIPHERAL_RESET, LOW);
-  delay(1);
+  delay(10);
   digitalWrite(PERIPHERAL_RESET, HIGH);
   delay(100);
 
-//pinMode(TFT_CS, OUTPUT);
-//  pinMode(TFT_DC, OUTPUT);
-
-// try to force CS
-//  SPI.setCS(5);
-  
+ 
   tft.begin();
 
   tft.setRotation(1);
@@ -130,15 +125,20 @@ void setup() {
 
   // do 
   // {
-  //     
-  //     delay(1);
+  //     tft.fillScreen(ILI9341_GREEN);
+  //     Serial.println("Fill green");
+  //     delay(1000);
   // } while (true);
 
   ts.begin();
   
 }
 
+<<<<<<< HEAD
 boolean wastouched = true;  // so no touch starts with "No Touch" on display vs blank
+=======
+boolean wastouched = false;
+>>>>>>> 91e86233dd77f75653ec89238de09c0fdc6ec4b8
 uint16_t xmax, xmin=4095, ymax, ymin=4095, zmax, zmin=4095;
 uint16_t xnow, ynow, znow;
 uint32_t touch_start, touch_total, touch_secs;  // in millis unless _secs
