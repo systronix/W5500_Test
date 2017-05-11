@@ -49,7 +49,7 @@ library (available on github).
 #include <ILI9341_t3.h>
 #include <font_Arial.h> // from ILI9341_t3
 #include <XPT2046_Touchscreen.h>
-#include <SPI.h>
+//#include <SPI.h>
 
 #define CS_PIN  8   // resistive touch controller XPT2406 uses SPI
 
@@ -73,16 +73,27 @@ ILI9341_t3 tft = ILI9341_t3(TFT_CS, TFT_DC);
 // 
 // uint8_t buzzer_pin = 6;
  
- // make this false if not using Systronix demob board, but generic 2.8" TFT
- const boolean demob = false;
+
 
 void setup() {
   Serial.begin(115200);
   while((!Serial) && (millis()<5000));    // wait until serial monitor is open or timeout
   Serial.print(millis());
-  if (demob) Serial.print(" Demo B board ");
+
   Serial.println(" ILI9341 Test! ");
   
+  // yes this is deprecated but I don't know a better way to set clock
+  // when we don't use the SPI methods directly
+  // DIV16 gives 2 MHz SCK
+  // DIV 4 gives 2 MHz
+  // SPI.setClockDivider(SPI_CLOCK_DIV16);
+
+  // This might be the right way
+  // default SPI.SPIsettings(4000000, MSBFIRST, SPI_MODE0);
+  // With clock 4000000, SCK is breifly 24 MHz then becomes 2 MHz
+  // 2000000 or 8000000 also give 2 MHz SCK
+  // SPISettings(4000000, MSBFIRST, SPI_MODE0);    
+
   /**
    * WIZ820io/W5200 must be at least reset to avoid it clashing with SPI
    */
@@ -92,6 +103,7 @@ void setup() {
   digitalWrite(ETHERNET_RESET, HIGH);
   delay(200);
 
+  // reset the touchscreen
   pinMode(PERIPHERAL_RESET, OUTPUT);
   digitalWrite(PERIPHERAL_RESET, LOW);
   delay(1);
@@ -105,9 +117,16 @@ void setup() {
 //  SPI.setCS(5);
   
   tft.begin();
+
   tft.setRotation(1);
 
+  tft.fillScreen(ILI9341_GREEN);
+
+  delay(500);
+
   tft.fillScreen(ILI9341_BLACK);
+
+  delay(500);
 
   // do 
   // {
@@ -117,22 +136,9 @@ void setup() {
 
   ts.begin();
   
-  if (demob)
-  {
-//    pinMode(backlight, OUTPUT);
-//    analogWrite(backlight, 200);
-//    
-//    pinMode(laser, OUTPUT);
-//    digitalWrite(laser, HIGH);
-//    
-//    pinMode(buzzer_pin, OUTPUT);
-//    analogWrite(buzzer_pin, 128);
-    
-    analogReference(DEFAULT);
-  }
 }
 
-boolean wastouched = true;
+boolean wastouched = true;  // so no touch starts with "No Touch" on display vs blank
 uint16_t xmax, xmin=4095, ymax, ymin=4095, zmax, zmin=4095;
 uint16_t xnow, ynow, znow;
 uint32_t touch_start, touch_total, touch_secs;  // in millis unless _secs
@@ -154,7 +160,6 @@ void loop() {
       tft.setCursor(5, 20);
       tft.print("Touch");
       
-      if (demob) vbsense = analogRead(vbsense_pin);
       
       tft.setTextColor(ILI9341_CYAN);
       tft.setFont(Arial_18);
@@ -167,12 +172,7 @@ void loop() {
       tft.setCursor(260, 90);
       tft.print("delta");
     
-//      if (demob)
-//      {
-//        analogWrite(backlight, 0);  // 0 is max bright
-//        digitalWrite(laser, LOW);  // laser on
-//      }
-    
+
     }
     // fall through after start of touch actions
     // not a new touch start; how long have we been touching?
@@ -226,12 +226,7 @@ void loop() {
     tft.print(zmax);
     tft.setCursor(260, 180);
     tft.print(zmax-zmin);
-    
-    if (demob)
-    {
-      tft.setCursor(35,210);
-      tft.print(vbsense);
-    }
+
 
     
     Serial.print("x = ");
@@ -253,11 +248,6 @@ void loop() {
       stats_reset();
       Serial.println("no touch");
       
-//      if (demob)
-//      {
-//        analogWrite(backlight, 240);  // higer values is dimmer
-//        digitalWrite(laser, HIGH);  // laser off
-//      }
     }
     
   }
