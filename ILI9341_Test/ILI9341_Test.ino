@@ -63,7 +63,10 @@ library (available on github).
 
 XPT2046_Touchscreen ts(CS_PIN);
 
-ILI9341_t3 tft = ILI9341_t3(TFT_CS, TFT_DC);
+
+// from ILI9341_t3.cpp, constructor with all pins defined 
+// ILI9341_t3(uint8_t cs, uint8_t dc, uint8_t rst, uint8_t mosi, uint8_t sclk, uint8_t miso)
+ILI9341_t3 tft = ILI9341_t3(TFT_CS, TFT_DC, PERIPHERAL_RESET, 11, 13, 12);
 //ILI9341_t3 tft = ILI9341_t3(TFT_CS, TFT_DC, 255, 11, 13, 12);
 
 // uint8_t backlight=5;
@@ -73,6 +76,7 @@ ILI9341_t3 tft = ILI9341_t3(TFT_CS, TFT_DC);
 // 
 // uint8_t buzzer_pin = 6;
  
+char log_message[128];
 
 
 void setup() {
@@ -80,7 +84,14 @@ void setup() {
   while((!Serial) && (millis()<5000));    // wait until serial monitor is open or timeout
   Serial.print(millis());
 
-  Serial.println(" ILI9341 Test! ");
+  Serial.println("ILI9341 Test");
+
+  strcpy (log_message, "Build: ");
+  strcat (log_message, __TIME__);
+  strcat (log_message, " MDT, ");
+  strcat (log_message, __DATE__);  
+  strcat (log_message, 0x00);
+  Serial.println(log_message);
   
   // yes this is deprecated but I don't know a better way to set clock
   // when we don't use the SPI methods directly
@@ -94,34 +105,40 @@ void setup() {
   // 2000000 or 8000000 also give 2 MHz SCK
   // SPISettings(4000000, MSBFIRST, SPI_MODE0);    
 
+
+  pinMode(PERIPHERAL_RESET, INPUT);
+  // pinMode(PERIPHERAL_RESET, OUTPUT);
+  // digitalWrite(PERIPHERAL_RESET, HIGH);
+  delay(500);
+
   /**
    * WIZ820io/W5200 must be at least reset to avoid it clashing with SPI
    */
   pinMode(ETHERNET_RESET, OUTPUT);
   digitalWrite(ETHERNET_RESET, LOW);
   delay(1);
-  digitalWrite(ETHERNET_RESET, HIGH);
-  delay(200);
+  digitalWrite(ETHERNET_RESET, HIGH);  
 
   // reset the touchscreen
-  pinMode(PERIPHERAL_RESET, OUTPUT);
-  digitalWrite(PERIPHERAL_RESET, LOW);
-  delay(10);
-  digitalWrite(PERIPHERAL_RESET, HIGH);
-  delay(100);
+  // pinMode(PERIPHERAL_RESET, OUTPUT);
+  // digitalWrite(PERIPHERAL_RESET, LOW);
+  // delay(10);
+  // digitalWrite(PERIPHERAL_RESET, HIGH);
+  // delay(100);
 
+  // SPISettings(8000000, MSBFIRST, SPI_MODE0);    // SCK is 24 MHz with 4000000
  
-  tft.begin();
+  tft.begin();    // SPI lib begin() called from tft.begin() sets up SPI, and drives the PERIPHERAL RESET too
 
   tft.setRotation(1);
 
   tft.fillScreen(ILI9341_GREEN);
 
-  delay(500);
+  delay(200);
 
   tft.fillScreen(ILI9341_BLACK);
 
-  delay(500);
+  delay(200);
 
   // do 
   // {
@@ -134,11 +151,8 @@ void setup() {
   
 }
 
-<<<<<<< HEAD
+
 boolean wastouched = true;  // so no touch starts with "No Touch" on display vs blank
-=======
-boolean wastouched = false;
->>>>>>> 91e86233dd77f75653ec89238de09c0fdc6ec4b8
 uint16_t xmax, xmin=4095, ymax, ymin=4095, zmax, zmin=4095;
 uint16_t xnow, ynow, znow;
 uint32_t touch_start, touch_total, touch_secs;  // in millis unless _secs
