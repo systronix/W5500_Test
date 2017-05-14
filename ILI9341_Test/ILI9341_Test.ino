@@ -116,8 +116,9 @@ void setup() {
    */
   pinMode(ETHERNET_RESET, OUTPUT);
   digitalWrite(ETHERNET_RESET, LOW);
-  delay(1);
+  delay(10);
   digitalWrite(ETHERNET_RESET, HIGH);  
+  delay(120);
 
   // reset the touchscreen
   // pinMode(PERIPHERAL_RESET, OUTPUT);
