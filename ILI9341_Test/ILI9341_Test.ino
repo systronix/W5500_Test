@@ -128,6 +128,9 @@ void setup() {
   // delay(100);
 
   // SPISettings(8000000, MSBFIRST, SPI_MODE0);    // SCK is 24 MHz with 4000000
+
+  // must do this before begin() 
+  tft.setSPIclock(6600000);
  
   tft.begin();    // SPI lib begin() called from tft.begin() sets up SPI, and drives the PERIPHERAL RESET too
 
