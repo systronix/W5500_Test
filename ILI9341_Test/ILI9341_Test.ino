@@ -76,21 +76,20 @@ ILI9341_t3 tft = ILI9341_t3(TFT_CS, TFT_DC, PERIPHERAL_RESET, 11, 13, 12);
 // 
 // uint8_t buzzer_pin = 6;
  
-char log_message[128];
+char log_message[128] = {};   // init to all zeros just to be sure (C++ not C does this)
 
 
 void setup() {
   Serial.begin(115200);
   while((!Serial) && (millis()<5000));    // wait until serial monitor is open or timeout
-  Serial.print(millis());
 
   Serial.println("ILI9341 Test");
 
-  strcpy (log_message, "Build: ");
-  strcat (log_message, __TIME__);
+  strcpy (log_message, "Build: ");    // strcpy null-terminates
+  strcat (log_message, __TIME__);     // strcat finds null term, overwrites it, and adds new null term
   strcat (log_message, " MDT, ");
   strcat (log_message, __DATE__);  
-  strcat (log_message, 0x00);
+
   Serial.println(log_message);
   
   // yes this is deprecated but I don't know a better way to set clock
