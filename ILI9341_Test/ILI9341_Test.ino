@@ -106,10 +106,10 @@ void setup() {
   // SPISettings(4000000, MSBFIRST, SPI_MODE0);    
 
 
-  pinMode(PERIPHERAL_RESET, INPUT);
-  // pinMode(PERIPHERAL_RESET, OUTPUT);
+  // pinMode(PERIPHERAL_RESET, INPUT);
+  pinMode(PERIPHERAL_RESET, OUTPUT);
   // digitalWrite(PERIPHERAL_RESET, HIGH);
-  delay(500);
+  // delay(500);
 
   /**
    * WIZ820io/W5200 must be at least reset to avoid it clashing with SPI
@@ -120,17 +120,10 @@ void setup() {
   digitalWrite(ETHERNET_RESET, HIGH);  
   delay(120);
 
-  // reset the touchscreen
-  // pinMode(PERIPHERAL_RESET, OUTPUT);
-  // digitalWrite(PERIPHERAL_RESET, LOW);
-  // delay(10);
-  // digitalWrite(PERIPHERAL_RESET, HIGH);
-  // delay(100);
-
-  // SPISettings(8000000, MSBFIRST, SPI_MODE0);    // SCK is 24 MHz with 4000000
-
+  // SPISettings gets overwritten by ILI9341_t3
   // must do this before begin() 
-  tft.setSPIclock(6600000);
+  tft.setSPIclock_read(6600000);
+  tft.setSPIclock_write(10000000);
  
   tft.begin();    // SPI lib begin() called from tft.begin() sets up SPI, and drives the PERIPHERAL RESET too
 
