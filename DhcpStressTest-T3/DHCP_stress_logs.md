@@ -1,4 +1,14 @@
 # DhcpStressTest_T3 
+
+### 2017 May 20
+```
+	@769130 maintain()=2  Renew_F/S Bind_F/S Restart_F/S = 0/12945 0/0 0/0 192.168.1.213
+	@769140 192.168.1.213
+	Renew_F/S Bind_F/S Restart_F/S = 0/12945 0/0 0/0
+	@769150 192.168.1.213
+	@769160 192.168.1.213
+```
+
 ### 2017 May 16
 ```
 	DHCP Stress Test
