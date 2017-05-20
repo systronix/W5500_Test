@@ -42,6 +42,9 @@
 		},
 		{
 			"path": "C:\\Users\\BAB\\Documents\\code\\Arduino\\libraries\\SPI"
+		},
+		{
+			"path": "C:\\Users\\BAB\\Documents\\code\\Arduino\\libraries\\Systronix_PCA9548A"
 		}
 	]
 }
