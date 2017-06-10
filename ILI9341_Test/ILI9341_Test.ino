@@ -76,21 +76,20 @@ ILI9341_t3 tft = ILI9341_t3(TFT_CS, TFT_DC, PERIPHERAL_RESET, 11, 13, 12);
 // 
 // uint8_t buzzer_pin = 6;
  
-char log_message[128];
+char log_message[128] = {};   // init to all zeros just to be sure (C++ not C does this)
 
 
 void setup() {
   Serial.begin(115200);
   while((!Serial) && (millis()<5000));    // wait until serial monitor is open or timeout
-  Serial.print(millis());
 
   Serial.println("ILI9341 Test");
 
-  strcpy (log_message, "Build: ");
-  strcat (log_message, __TIME__);
+  strcpy (log_message, "Build: ");    // strcpy null-terminates
+  strcat (log_message, __TIME__);     // strcat finds null term, overwrites it, and adds new null term
   strcat (log_message, " MDT, ");
   strcat (log_message, __DATE__);  
-  strcat (log_message, 0x00);
+
   Serial.println(log_message);
   
   // yes this is deprecated but I don't know a better way to set clock
@@ -106,27 +105,24 @@ void setup() {
   // SPISettings(4000000, MSBFIRST, SPI_MODE0);    
 
 
-  pinMode(PERIPHERAL_RESET, INPUT);
-  // pinMode(PERIPHERAL_RESET, OUTPUT);
+  // pinMode(PERIPHERAL_RESET, INPUT);
+  pinMode(PERIPHERAL_RESET, OUTPUT);
   // digitalWrite(PERIPHERAL_RESET, HIGH);
-  delay(500);
+  // delay(500);
 
   /**
    * WIZ820io/W5200 must be at least reset to avoid it clashing with SPI
    */
   pinMode(ETHERNET_RESET, OUTPUT);
   digitalWrite(ETHERNET_RESET, LOW);
-  delay(1);
+  delay(10);
   digitalWrite(ETHERNET_RESET, HIGH);  
+  delay(120);
 
-  // reset the touchscreen
-  // pinMode(PERIPHERAL_RESET, OUTPUT);
-  // digitalWrite(PERIPHERAL_RESET, LOW);
-  // delay(10);
-  // digitalWrite(PERIPHERAL_RESET, HIGH);
-  // delay(100);
-
-  // SPISettings(8000000, MSBFIRST, SPI_MODE0);    // SCK is 24 MHz with 4000000
+  // SPISettings gets overwritten by ILI9341_t3
+  // must do this before begin() 
+  tft.setSPIclock_read(6600000);
+  tft.setSPIclock_write(10000000);
  
   tft.begin();    // SPI lib begin() called from tft.begin() sets up SPI, and drives the PERIPHERAL RESET too
 

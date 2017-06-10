@@ -1,6 +1,29 @@
 # NtpTest Logs
 
 ## Teensy 3.2 with WIZ850io and 2.8" touchscreen on PJRC adapter, USB power
+
+### 2017 May 20
+```
+	@1168264508 ask for time from pool.ntp.org
+	pool.ntp.org too busy: 5565@1168275560 ask for time from pool.ntp.org
+	pool.ntp.org too busy: 5566@1168286613 ask for time from pool.ntp.org
+	Seconds since Jan 1 1900 = 3704181443
+	Unix time = 1495192643
+	The UTC time is 11:17:23
+	...
+	@1292698246 ask for time from pool.ntp.org
+	Seconds since Jan 1 1900 = 3704305857
+	Unix time = 1495317057
+	The UTC time is 21:50:57
+```
+### 2017 May 16
+running for 265 hrs, 11.1 days
+```
+	@955892694 ask for time from pool.ntp.org
+	Seconds since Jan 1 1900 = 3703969046
+	Unix time = 1494980246
+	The UTC time is 0:17:26
+```
 ### 2017 May 05
 loaded new build, no code changes, Arduino 1.8.2 and TD 1.36
 

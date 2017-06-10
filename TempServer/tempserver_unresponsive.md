@@ -3,7 +3,40 @@
 Tennsy 3.2, Arduino.cc 1.8.2, Teensyduino 1.36
 Compile options: 48 MHz, Fast
 
-### Teensy output
+### 2017 May 16
+Failed after only 6.1 hours
+```
+	.GET /favicon.ico HTTP/1.1
+	Host: systronix.hopto.org:8080
+	Connection: keep-alive
+	User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36
+	Accept: image/webp,image/*,*/*;q=0.8
+	Referer: http://systronix.hopto.org:8080/
+	Accept-Encoding: gzip, deflate, sdch
+	Accept-Language: en-US,en;q=0.8
+
+	Sending Response...done
+	Out of while...
+	client disconnected
+	@ 21977 sec, Temp is 24.500 C
+	16879 http requests, 0.77 per sec, 3 timeouts
+	5 sec max w/o client
+...'..........'..........'..........'..........'
+```
+
+
+### 2017 May 15
+Made it through 166,143 requests then I accidentally reset the system
+```
+	Sending Response...done
+	Out of while...
+	client disconnected
+	@ 324494 sec, Temp is 23.125 C
+	166143 http requests, 0.51 per sec, 1 timeouts
+	67 sec max w/o client
+```
+
+### 2017 May 04
 Starting and stopping the browser seemed to break things easily.
 Teensy excecution has not stopped, but http requests are being ignored.
 SPI communication is active.

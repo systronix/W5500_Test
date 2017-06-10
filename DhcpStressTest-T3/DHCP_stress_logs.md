@@ -1,4 +1,23 @@
 # DhcpStressTest_T3 
+
+### 2017 May 20
+```
+	@769130 maintain()=2  Renew_F/S Bind_F/S Restart_F/S = 0/12945 0/0 0/0 192.168.1.213
+	@769140 192.168.1.213
+	Renew_F/S Bind_F/S Restart_F/S = 0/12945 0/0 0/0
+	@769150 192.168.1.213
+	@769160 192.168.1.213
+```
+
+### 2017 May 16
+```
+	DHCP Stress Test
+	Build 16:45:53 May  5 2017
+	
+	@432020 192.168.1.213
+	@432030 maintain()=2  Renew_F/S Bind_F/S Restart_F/S = 0/7271 0/0 0/0 192.168.1.213
+	@432040 192.168.1.213
+```
 ### 2017 May 05
 loaded new build, no code changes, Arduino 1.8.2 and TD 1.36
 
