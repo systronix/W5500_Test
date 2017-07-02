@@ -145,8 +145,8 @@ void setup()
 
 boolean	clock_set = false;					// flag so we set the clock only once
 int32_t	diff;								// difference between NTP time and RTC time; positive diff: NTP leads RTC
-int32_t	min_diff = 0x7FFFFFFF;				// worst case RTC lagging
-int32_t	max_diff = 0;						// worst case NTP lagging
+int32_t	min_diff = 0x7FFFFFFF;				// worst case RTC lag time
+int32_t	max_diff = 0;						// worst case NTP lag time
 
 void loop()
 	{
