@@ -20,6 +20,7 @@
 
 /** Revisions
 
+2017Jul01 bboyes  Change to use TeensyID lib for mac address
 2017Mar02 bboyes  Testing on Teensy 3.2 and W5500
 
 
@@ -32,12 +33,17 @@ Output sometimes stops after some hours. Why? How to recover? Etnernet.maintain(
 #include <Ethernet.h>    // Ethernet 2 for W5500
 #include <EthernetUdp.h>
 
-#include <T3Mac.h>
+//#include <T3Mac.h>
+#include <TeensyID.h>   // https://github.com/systronix/TeensyID
 
 #define CS_PIN  8   // resistive touch controller XPT2406 uses SPI
 
 #define TFT_CS 20    // 10 is default, different on ethernet/touch combo
 #define TFT_DC 21    // 9 is default, different on ethernet/touch combo
+
+#define PERIPH_RST 22   // SALT I/O such as PCA9557
+#define ETH_RST 9 // ethernet reset pin
+#define ETH_CS  10  // ethernet chip select
 
 // Enter a MAC address for your controller below.
 // Newer Ethernet shields have a MAC address printed on a sticker on the shield
@@ -61,6 +67,9 @@ uint32_t new_millis=0;
 
 uint32_t server_too_busy;
 
+// for use with TeensyID lib
+uint8_t mac[6];
+
 void setup() {
   /*
    * When using with PJRC wiz820 sd adapter
@@ -72,13 +81,24 @@ void setup() {
    * while the other is initialized.
    */
   pinMode(4, INPUT_PULLUP);
-  pinMode(10, INPUT_PULLUP);
-  pinMode (CS_PIN, INPUT_PULLUP);  // disable resistive touch controller
+  // pinMode(ETH_CS, INPUT_PULLUP);
+  pinMode(ETH_RST, OUTPUT);         // This drives the pin low. Don't see any way to avoid that
+  pinMode(PERIPH_RST, OUTPUT);
+  digitalWrite(ETH_RST, LOW);       // assert it deliberately
+  digitalWrite(PERIPH_RST, LOW);
 
+  pinMode (CS_PIN, INPUT_PULLUP);  // disable resistive touch controller
   pinMode (TFT_CS, INPUT_PULLUP);    // disable LCD display
   pinMode (TFT_DC, INPUT_PULLUP);    // 
 
-  delay(1);  // allow time for both pins to reach 3.3V  
+  delay(1);  // allow time for pins to settle
+
+  digitalWrite(ETH_RST, HIGH);  // reset is active low 
+  digitalWrite(PERIPH_RST, HIGH);
+
+  delay(1);                     // time for WIZ850io to reset
+
+
 
   // Open serial communications and wait for port to open:
   Serial.begin(115200);
@@ -92,10 +112,12 @@ void setup() {
 
   Serial.printf("%u msec to start serial\r\n", new_millis);
 
-  char ID[32];
-  sprintf(ID, "%08lX %08lX %08lX %08lX", SIM_UIDH, SIM_UIDMH, SIM_UIDML, SIM_UIDL);
-  Serial.print("Teensy3 128-bit UniqueID: ");
-  Serial.println(ID);
+  // get Teensy MAC address
+  teensyMAC(mac);
+
+  // print out the USB serial number
+  Serial.printf("USB Serialnumber: %u \n", teensyUsbSN());
+
 
   //  pinMode(12, INPUT);   // help make sure MISO is input to Teensy
 
@@ -103,9 +125,7 @@ void setup() {
 
 
   Serial.print("MAC from Teensy: ");
-  read_mac();
-  print_mac();
-  Serial.println();  
+  Serial.printf("Array MAC Address: %02X:%02X:%02X:%02X:%02X:%02X \r\n", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);  
 
   // start Ethernet and UDP
   if (Ethernet.begin(mac) == 0) {

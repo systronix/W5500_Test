@@ -45,6 +45,9 @@
 		},
 		{
 			"path": "C:\\Users\\BAB\\Documents\\code\\Arduino\\libraries\\Systronix_PCA9548A"
+		},
+		{
+			"path": "C:\\Users\\BAB\\Documents\\code\\Arduino\\Tests\\uint64"
 		}
 	]
 }
