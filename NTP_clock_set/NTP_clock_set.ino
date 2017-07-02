@@ -152,46 +152,58 @@ void loop()
 	{
 	send_NTP_packet (time_server_str);		// send an NTP packet to a time server
 	Serial.printf("@%u ask for time from %s\r\n", millis(), time_server_str);
+	uint32_t NTP_wait_timer_start_time = millis ();
+	uint32_t NTP_wait_timer;
 
-	delay(1000);							// wait to see if a reply is available	
-
-	if (Udp.parsePacket())
-		{    								// We've received a packet, read the data from it
-		uint32_t secs_since_1900;
-		uint32_t epoch;
-		uint32_t rtc_ts;
-
-		extract_time_data (&secs_since_1900, &epoch);
-		Serial.printf ("Seconds since Jan 1 1900 = %lu\n", secs_since_1900);
-		Serial.printf ("Unix time = %lu\n", epoch);				// print Unix time stamp
-
-		Serial.printf ("The UTC time is %.2d:%.2d:%.2d\n\n",	// print UTC time
-			(uint8_t)((epoch  % 86400L) / 3600),				// hour
-			(uint8_t)((epoch % 3600) / 60),						// minute
-			(uint8_t)(epoch % 60));								// second
-
-		if (clock_set)
+	while (1)								// loop until timeout or we get an NTP packet
+		{
+		if (Udp.parsePacket())
 			{
-			rtc_ts = RTC.get();									// get time from RTC
-			Serial.printf ("RTC time = %lu\n", rtc_ts);			// print RTC time stamp
-			diff = (int32_t)(epoch - rtc_ts);
-			min_diff = min (min_diff, diff);
-			max_diff = max (max_diff, diff);
-			Serial.printf ("difference: %lu (min: %lu; max: %lu)\n\n", diff, min_diff, max_diff);
-			}
-		else
-			{
-			if (RTC.set (epoch))
+			uint32_t secs_since_1900;
+			uint32_t epoch;
+			uint32_t rtc_ts;
+
+			extract_time_data (&secs_since_1900, &epoch);
+			Serial.printf ("Seconds since Jan 1 1900 = %lu\n", secs_since_1900);
+			Serial.printf ("Unix time = %lu\n", epoch);				// print Unix time stamp
+
+			Serial.printf ("The UTC time is %.2d:%.2d:%.2d\n\n",	// print UTC time
+				(uint8_t)((epoch  % 86400L) / 3600),				// hour
+				(uint8_t)((epoch % 3600) / 60),						// minute
+				(uint8_t)(epoch % 60));								// second
+
+			if (clock_set)
 				{
-				Serial.printf ("RTC set to %lu\n", epoch);
-				clock_set = true;
+				rtc_ts = RTC.get();									// get time from RTC
+				Serial.printf ("RTC time = %lu\n", rtc_ts);			// print RTC time stamp
+				diff = (int32_t)(epoch - rtc_ts);
+				min_diff = min (min_diff, diff);
+				max_diff = max (max_diff, diff);
+				Serial.printf ("difference: %lu (min: %lu; max: %lu)\n\n", diff, min_diff, max_diff);
+				}
+			else
+				{
+				if (RTC.set (epoch))
+					{
+					Serial.printf ("RTC set to %lu\n", epoch);
+					clock_set = true;
+					}
+				}
+			break;
+			}
+		else														// no NTP packet yet
+			{
+			if (1000 > (millis () - NTP_wait_timer_start_time))		// have we waited for one second for a response?
+				{
+				continue;											// still waiting; loop back and try again
+				}
+			else													// waited too long
+				{
+				server_too_busy++;
+				Serial.printf ("\t%s too busy: %u\n", time_server_str, server_too_busy);
+				break;												// break out of the loop
 				}
 			}
-		}
-	else
-		{
-		server_too_busy++;
-		Serial.printf ("\t%s too busy: %u\n", time_server_str, server_too_busy);
 		}
 
 	delay (10000);							// wait ten seconds before asking for the time again
@@ -227,7 +239,8 @@ void send_NTP_packet (char* address)
 
 	memset (packet_buffer, 0, NTP_PACKET_SIZE);	// set all bytes in the buffer to 0
 												// Initialize values needed to form NTP request (see URL above for details)
-	packet_buffer[0] = 0b11100011;				// LI, Version, Mode
+//	packet_buffer[0] = 0b11100011;				// msb to lsb Mode (111 = rsvd for private use); Version (000 should be 4?);  LI = clock unsynchronized
+	packet_buffer[0] = 0b01110011;				// msb to lsb Mode (011 = client); Version (100 = 4);  LI = clock unsynchronized
 	packet_buffer[1] = 0;						// Stratum, or type of clock
 	packet_buffer[2] = 6;						// Polling Interval
 	packet_buffer[3] = 0xEC;					// Peer Clock Precision
