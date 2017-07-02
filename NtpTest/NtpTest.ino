@@ -81,11 +81,11 @@ void setup() {
    * while the other is initialized.
    */
   pinMode(4, INPUT_PULLUP);
-  // pinMode(ETH_CS, INPUT_PULLUP);
+
   pinMode(ETH_RST, OUTPUT);         // This drives the pin low. Don't see any way to avoid that
-  pinMode(PERIPH_RST, OUTPUT);
+  pinMode(PERIPH_RST, OUTPUT);      // High after POR, low when declared output
   digitalWrite(ETH_RST, LOW);       // assert it deliberately
-  digitalWrite(PERIPH_RST, LOW);
+  digitalWrite(PERIPH_RST, LOW);    // low after POR anyway
 
   pinMode (CS_PIN, INPUT_PULLUP);  // disable resistive touch controller
   pinMode (TFT_CS, INPUT_PULLUP);    // disable LCD display
@@ -93,7 +93,7 @@ void setup() {
 
   delay(1);  // allow time for pins to settle
 
-  digitalWrite(ETH_RST, HIGH);  // reset is active low 
+  digitalWrite(ETH_RST, HIGH);      // negate resets
   digitalWrite(PERIPH_RST, HIGH);
 
   delay(1);                     // time for WIZ850io to reset
