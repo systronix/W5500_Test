@@ -153,15 +153,14 @@ void loop()
 	send_NTP_packet (time_server_str);		// send an NTP packet to a time server
 	Serial.printf("@%u ask for time from %s\r\n", millis(), time_server_str);
 	uint32_t NTP_wait_timer_start_time = millis ();
-	uint32_t NTP_wait_timer;
 
 	while (1)								// loop until timeout or we get an NTP packet
 		{
 		if (Udp.parsePacket())
 			{
-			uint32_t secs_since_1900;
-			uint32_t epoch;
-			uint32_t rtc_ts;
+			time_t secs_since_1900;
+			time_t epoch;
+			time_t rtc_ts;
 
 			extract_time_data (&secs_since_1900, &epoch);
 			Serial.printf ("Seconds since Jan 1 1900 = %lu\n", secs_since_1900);
@@ -187,6 +186,7 @@ void loop()
 					{
 					Serial.printf ("RTC set to %lu\n", epoch);
 					clock_set = true;
+					dump_NTP_packet ();
 					}
 				}
 			break;
@@ -194,11 +194,9 @@ void loop()
 		else														// no NTP packet yet
 			{
 			if (1000 > (millis () - NTP_wait_timer_start_time))		// have we waited for one second for a response?
-				{
 				continue;											// still waiting; loop back and try again
-				}
-			else													// waited too long
-				{
+			else
+				{													// waited too long
 				server_too_busy++;
 				Serial.printf ("\t%s too busy: %u\n", time_server_str, server_too_busy);
 				break;												// break out of the loop
@@ -213,19 +211,85 @@ void loop()
 
 //---------------------------< E X T R A C T _ T I M E _ D A T A >--------------------------------------------
 //
-// the timestamp starts at byte 40 of the received packet and is four bytes long.  In ARM, lowest array index
-// holds the least significant byte but the NTP timestamp is most significant byte in the lowest index so here
-// we reorder
+// the timestamp starts at byte 40 of the received packet and is four bytes long.
+
+// ARM is little endian ls byte in lowest memory address.  Network protocol is big endian.  In an array of bytes,
+// lowest array index holds the most significant byte but when we grab four at once (as if the memory address
+// is a unit32_t, the byte order is ass backwards.  But, we can flip the order to get the correct result.
 //
 
-void extract_time_data (uint32_t* ntp_ts_ptr, uint32_t* unix_ts_ptr)
+void extract_time_data (time_t* ntp_ts_ptr, time_t* unix_ts_ptr)
 	{
-	Udp.read(packet_buffer, NTP_PACKET_SIZE); // read the packet into the buffer
+	Udp.read(packet_buffer, NTP_PACKET_SIZE); 			// read the packet into the buffer
 
-	*ntp_ts_ptr = *(uint32_t*)&packet_buffer[40];			// grab four bytes from array as uint32_t
+	*ntp_ts_ptr = *(time_t*)&packet_buffer[40];			// grab four bytes from array as uint32_t
 	*ntp_ts_ptr = __builtin_bswap32 (*ntp_ts_ptr);		// and reorder
 
 	*unix_ts_ptr = *ntp_ts_ptr - SEVENTY_YEARS;			// convert NTP time to Unix time
+	}
+
+
+//---------------------------< D U M P _ N T P _ P A C K E T >------------------------------------------------
+//
+// dump the content of the received NTP packet
+//
+
+void dump_NTP_packet (void)
+	{
+	uint32_t	temp32;
+
+	Serial.printf ("NTP rx packet dump:\n");
+	Serial.printf ("\t [0]: 0x%.2X\n", packet_buffer[0]);
+	Serial.printf ("\t\t[0]: %d - leap indicator\n", packet_buffer[0] >> 6);
+	Serial.printf ("\t\t[0]: %d - version\n", (packet_buffer[0] & 0b00111000) >> 3);
+	Serial.printf ("\t\t[0]: %d - mode\n", packet_buffer[0] & 0b00000111);
+	Serial.printf ("\t [1]: 0x%.2X (%d) - stratum\n", packet_buffer[1], packet_buffer[1]);
+	Serial.printf ("\t [2]: 0x%.2X (%d) - poll\n", packet_buffer[2], (int8_t)packet_buffer[2]);
+	Serial.printf ("\t [3]: 0x%.2X (%d) - precision\n", packet_buffer[3], (int8_t)packet_buffer[3]);
+
+	temp32 = *(uint32_t*)&packet_buffer[4];
+	temp32 = __builtin_bswap32 (temp32);
+	Serial.printf ("\t [4]: 0x%.8X (%lu) - root delay\n", temp32, temp32);
+
+	temp32 = *(uint32_t*)&packet_buffer[8];
+	temp32 = __builtin_bswap32 (temp32);
+	Serial.printf ("\t [8]: 0x%.8X (%lu) - root dispersion\n", temp32, temp32);
+
+	temp32 = *(uint32_t*)&packet_buffer[12];
+	temp32 = __builtin_bswap32 (temp32);
+	Serial.printf ("\t[12]: 0x%.8X (%lu) - reference ID\n", temp32, temp32);
+
+	temp32 = *(uint32_t*)&packet_buffer[16];
+	temp32 = __builtin_bswap32 (temp32);
+	Serial.printf ("\t[16]: 0x%.8X (%lu) - reference TS (int)\n", temp32, temp32);
+
+	temp32 = *(uint32_t*)&packet_buffer[20];
+	temp32 = __builtin_bswap32 (temp32);
+	Serial.printf ("\t[20]: 0x%.8X (%lu) - reference TS (frac)\n", temp32, temp32);
+
+	temp32 = *(uint32_t*)&packet_buffer[24];
+	temp32 = __builtin_bswap32 (temp32);
+	Serial.printf ("\t[24]: 0x%.8X (%lu) - origin TS (int)\n", temp32, temp32);
+
+	temp32 = *(uint32_t*)&packet_buffer[28];
+	temp32 = __builtin_bswap32 (temp32);
+	Serial.printf ("\t[28]: 0x%.8X (%lu) - origin TS (frac)\n", temp32, temp32);
+
+	temp32 = *(uint32_t*)&packet_buffer[32];
+	temp32 = __builtin_bswap32 (temp32);
+	Serial.printf ("\t[32]: 0x%.8X (%lu) - receive TS (int)\n", temp32, temp32);
+
+	temp32 = *(uint32_t*)&packet_buffer[36];
+	temp32 = __builtin_bswap32 (temp32);
+	Serial.printf ("\t[36]: 0x%.8X (%lu) - receive TS (frac)\n", temp32, temp32);
+
+	temp32 = *(uint32_t*)&packet_buffer[40];
+	temp32 = __builtin_bswap32 (temp32);
+	Serial.printf ("\t[40]: 0x%.8X (%lu) - transmit TS (int)\n", temp32, temp32);
+
+	temp32 = *(uint32_t*)&packet_buffer[44];
+	temp32 = __builtin_bswap32 (temp32);
+	Serial.printf ("\t[44]: 0x%.8X (%lu) - transmit TS (frac)\n", temp32, temp32);
 	}
 
 
@@ -239,8 +303,7 @@ void send_NTP_packet (char* address)
 
 	memset (packet_buffer, 0, NTP_PACKET_SIZE);	// set all bytes in the buffer to 0
 												// Initialize values needed to form NTP request (see URL above for details)
-//	packet_buffer[0] = 0b11100011;				// msb to lsb Mode (111 = rsvd for private use); Version (000 should be 4?);  LI = clock unsynchronized
-	packet_buffer[0] = 0b01110011;				// msb to lsb Mode (011 = client); Version (100 = 4);  LI = clock unsynchronized
+	packet_buffer[0] = 0b11100011;				// msb to lsb LI = clock unsynchronized; Version (100 4);  Mode (011 = client) (0xE3)
 	packet_buffer[1] = 0;						// Stratum, or type of clock
 	packet_buffer[2] = 6;						// Polling Interval
 	packet_buffer[3] = 0xEC;					// Peer Clock Precision
