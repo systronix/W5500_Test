@@ -69,7 +69,8 @@ EthernetUDP Udp;						// A UDP instance to let us send and receive packets over 
 
 uint32_t new_millis=0;
 
-uint32_t server_too_busy;
+uint32_t server_too_busy_count;
+uint32_t kiss_o_death_count;
 
 uint8_t mac[6];							// for use with TeensyID lib
 
@@ -204,8 +205,8 @@ void loop()
 
 			if (0 == packet_buffer[1])								// if stratum is 0
 				{													// print message
-				Serial.printf ("kiss o' death message: %c%c%c%c\n", packet_buffer[12], packet_buffer[13], packet_buffer[14], packet_buffer[15]);
-				while (1);											// and hang
+				kiss_o_death_count++;
+				Serial.printf ("kiss o' death message: %c%c%c%c (%ld)\n", packet_buffer[12], packet_buffer[13], packet_buffer[14], packet_buffer[15], kiss_o_death_count);
 				}
 			break;
 			}
@@ -215,8 +216,8 @@ void loop()
 				continue;											// still waiting; loop back and try again
 			else
 				{													// waited too long
-				server_too_busy++;
-				Serial.printf ("\t%s too busy: %u\n", time_server_str, server_too_busy);
+				server_too_busy_count++;
+				Serial.printf ("\t%s too busy: %u\n", time_server_str, server_too_busy_count);
 				break;												// break out of the loop
 				}
 			}
