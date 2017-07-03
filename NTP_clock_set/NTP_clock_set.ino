@@ -72,6 +72,7 @@ uint32_t new_millis=0;
 uint32_t server_too_busy_count;
 uint32_t kiss_o_death_count;
 uint32_t response_count;
+uint32_t primary_stratum_count;
 
 uint8_t mac[6];							// for use with TeensyID lib
 
@@ -208,7 +209,12 @@ void loop()
 			if (0 == packet_buffer[1])								// if stratum is 0
 				{													// print message
 				kiss_o_death_count++;
-				Serial.printf ("kiss o' death message: %c%c%c%c (%ld)\n", packet_buffer[12], packet_buffer[13], packet_buffer[14], packet_buffer[15], kiss_o_death_count);
+				Serial.printf ("\tkiss o' death message: %c%c%c%c (%ld)\n\n", packet_buffer[12], packet_buffer[13], packet_buffer[14], packet_buffer[15], kiss_o_death_count);
+				}
+			if (1 == packet_buffer[1])								// if primary stratum
+				{													// print message
+				primary_stratum_count++;
+				Serial.printf ("\tprimary stratum ID code: %c%c%c%c (%ld)\n\n", packet_buffer[12], packet_buffer[13], packet_buffer[14], packet_buffer[15], primary_stratum_count);
 				}
 
 			response_count++;
@@ -229,10 +235,11 @@ void loop()
 
 	if ((0 == (uint8_t)((event_secs % 3600) / 60) % 10) && !summary_flag)
 		{
-		Serial.printf ("10 minute summary:\n\tattempts: %lu\n\ttoo busy: %lu\n\tkiss o' death: %lu\n\n",
+		Serial.printf ("10 minute summary:\n\tattempts: %lu\n\ttoo busy: %lu\n\tkiss o' death: %lu\n\tprimary stratum: %lu\n\n",
 			response_count + server_too_busy_count,					// attempts
 			server_too_busy_count,
-			kiss_o_death_count);
+			kiss_o_death_count,
+			primary_stratum_count);
 		summary_flag = true;
 		}
 	else if (((uint8_t)((event_secs % 3600) / 60) % 10) && summary_flag)
@@ -283,11 +290,11 @@ void dump_NTP_packet (void)
 
 	temp32 = *(uint32_t*)&packet_buffer[4];
 	temp32 = __builtin_bswap32 (temp32);
-	Serial.printf ("\t [4]: 0x%.8X (%lu) - root delay\n", temp32, temp32);
+	Serial.printf ("\t [4]: 0x%.8X (%0d.%d) - root delay\n", temp32, (int16_t)(temp32 >> 16), (uint16_t)temp32);	// TODO fix this
 
 	temp32 = *(uint32_t*)&packet_buffer[8];
 	temp32 = __builtin_bswap32 (temp32);
-	Serial.printf ("\t [8]: 0x%.8X (%lu) - root dispersion\n", temp32, temp32);
+	Serial.printf ("\t [8]: 0x%.8X (%0d.%d) - root dispersion\n", temp32, (uint16_t)(temp32 >> 16), (uint16_t)temp32);	// TODO fix this
 
 	temp32 = *(uint32_t*)&packet_buffer[12];
 	temp32 = __builtin_bswap32 (temp32);
@@ -334,19 +341,9 @@ void dump_NTP_packet (void)
 
 void send_NTP_packet (char* address)
 	{
-
 	memset (packet_buffer, 0, NTP_PACKET_SIZE);	// set all bytes in the buffer to 0
 												// Initialize values needed to form NTP request (see URL above for details)
-	packet_buffer[0] = 0b11100011;				// msb to lsb LI = clock unsynchronized; Version (100 4);  Mode (011 = client) (0xE3)
-
-//	packet_buffer[1] = 0;						// Stratum, or type of clock
-//	packet_buffer[2] = 6;						// Polling Interval
-//	packet_buffer[3] = 0xEC;					// Peer Clock Precision
-												// 8 bytes of zero for Root Delay & Root Dispersion
-//	packet_buffer[12]  = 49;					// reference ID; why is this set here?
-//	packet_buffer[13]  = 0x4E;
-//	packet_buffer[14]  = 49;
-//	packet_buffer[15]  = 52;
+	packet_buffer[0] = 0b00100011;				// msb to lsb: LI (00 - server message); Version (100 4);  Mode (011 = client) (0x23)
 
 												// all NTP fields have been given values, now send a packet requesting a timestamp
 	Udp.beginPacket (address, 123);				//NTP requests are to port 123
