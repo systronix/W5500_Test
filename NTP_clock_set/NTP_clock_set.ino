@@ -71,6 +71,7 @@ uint32_t new_millis=0;
 
 uint32_t server_too_busy_count;
 uint32_t kiss_o_death_count;
+uint32_t response_count;
 
 uint8_t mac[6];							// for use with TeensyID lib
 
@@ -145,6 +146,7 @@ void setup()
 //
 
 boolean	clock_set = false;					// flag so we set the clock only once
+boolean summary_flag = true;				// flag to tell us that we've printed the 10 minute summary; true at startup because pointless
 int32_t	diff;								// difference between NTP time and RTC time; positive diff: NTP leads RTC
 int32_t	min_diff = 0x7FFFFFFF;				// worst case RTC lag time
 int32_t	max_diff = 0;						// worst case NTP lag time
@@ -208,6 +210,8 @@ void loop()
 				kiss_o_death_count++;
 				Serial.printf ("kiss o' death message: %c%c%c%c (%ld)\n", packet_buffer[12], packet_buffer[13], packet_buffer[14], packet_buffer[15], kiss_o_death_count);
 				}
+
+			response_count++;
 			break;
 			}
 		else														// no NTP packet yet
@@ -222,6 +226,17 @@ void loop()
 				}
 			}
 		}
+
+	if ((0 == (uint8_t)((event_secs % 3600) / 60) % 10) && !summary_flag)
+		{
+		Serial.printf ("10 minute summary:\n\tattempts: %lu\n\ttoo busy: %lu\n\tkiss o' death: %lu\n\n",
+			response_count + server_too_busy_count,					// attempts
+			server_too_busy_count,
+			kiss_o_death_count);
+		summary_flag = true;
+		}
+	else if (((uint8_t)((event_secs % 3600) / 60) % 10) && summary_flag)
+		summary_flag = false;
 
 	delay (10000);													// wait ten seconds before asking for the time again
 	Ethernet.maintain();
