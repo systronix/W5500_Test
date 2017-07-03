@@ -51,6 +51,7 @@ https://www.arduino.cc/en/reference/ethernet
 
 #define CS_PIN  8   // resistive touch controller XPT2406 uses SPI
 #define ETH_RST 9	// ethernet reset pin
+#define ETH_CS	10	// ethernet chip select
 
 #define TFT_CS 20    // 10 is default, different on ethernet/touch combo
 #define TFT_DC 21    // 9 is default, different on ethernet/touch combo
@@ -113,13 +114,18 @@ void setup() {
 	 * while the other is initialized.
 	 */
 	pinMode(4, INPUT_PULLUP);
-	pinMode(10, INPUT_PULLUP);
+	pinMode(ETH_CS, INPUT_PULLUP);
+	pinMode(ETH_RST, INPUT_PULLUP);
+
 	pinMode (CS_PIN, INPUT_PULLUP);  // disable resistive touch controller
 
 	pinMode (TFT_CS, INPUT_PULLUP);    // disable LCD display
 	pinMode (TFT_DC, INPUT_PULLUP);    // 
 
 	delay(1);  // allow time for pins to reach 3.3V
+
+	pinMode(ETH_RST, OUTPUT);	// should be high
+	digitalWrite(ETH_RST, HIGH);	// reset is active low
 
 	// Open serial communications and wait for port to open:
 	Serial.begin(115200);
