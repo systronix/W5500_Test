@@ -150,11 +150,20 @@ int32_t	max_diff = 0;						// worst case NTP lag time
 
 void loop()
 	{
-	send_NTP_packet (time_server_str);		// send an NTP packet to a time server
-	Serial.printf("@%u ask for time from %s\r\n", millis(), time_server_str);
+	uint32_t event_millis = millis();
+	uint32_t event_secs = event_millis/1000;
+
+	Serial.printf ("@%.2d:%.2d:%.2d.%.4d ask for time from %s\r\n",
+		(uint8_t)((event_secs % 86400L) / 3600),	// hour
+		(uint8_t)((event_secs % 3600) / 60),		// minute
+		(uint8_t)(event_secs % 60),					// second
+		(uint8_t)(event_millis % 1000),				// milisecond
+		time_server_str);
+
+	send_NTP_packet (time_server_str);				// send an NTP packet to a time server
 	uint32_t NTP_wait_timer_start_time = millis ();
 
-	while (1)								// loop until timeout or we get an NTP packet
+	while (1)										// loop until timeout or we get an NTP packet
 		{
 		if (Udp.parsePacket())
 			{
@@ -163,10 +172,10 @@ void loop()
 			time_t rtc_ts;
 
 			extract_time_data (&secs_since_1900, &epoch);
-			Serial.printf ("Seconds since Jan 1 1900 = %lu\n", secs_since_1900);
-			Serial.printf ("Unix time = %lu\n", epoch);				// print Unix time stamp
+			Serial.printf ("\tNTP ts: %lu\n", secs_since_1900);
+			Serial.printf ("\tUnix ts: %lu\n", epoch);				// print Unix time stamp
 
-			Serial.printf ("The UTC time is %.2d:%.2d:%.2d\n\n",	// print UTC time
+			Serial.printf ("\tUTC time: %.2d:%.2d:%.2d\n\n",		// print UTC time
 				(uint8_t)((epoch  % 86400L) / 3600),				// hour
 				(uint8_t)((epoch % 3600) / 60),						// minute
 				(uint8_t)(epoch % 60));								// second
@@ -174,11 +183,12 @@ void loop()
 			if (clock_set)
 				{
 				rtc_ts = RTC.get();									// get time from RTC
-				Serial.printf ("RTC time = %lu\n", rtc_ts);			// print RTC time stamp
+				Serial.printf ("\tRTC ts: %lu\n", rtc_ts);			// print RTC time stamp
 				diff = (int32_t)(epoch - rtc_ts);
 				min_diff = min (min_diff, diff);
 				max_diff = max (max_diff, diff);
-				Serial.printf ("difference: %lu (min: %lu; max: %lu)\n\n", diff, min_diff, max_diff);
+				Serial.printf ("\tNTP Unix/RTC difference: %ld (min: %ld; max: %ld)\n\n", diff, min_diff, max_diff);
+//				dump_NTP_packet ();
 				}
 			else
 				{
@@ -188,6 +198,14 @@ void loop()
 					clock_set = true;
 					dump_NTP_packet ();
 					}
+				else
+					Serial.printf ("RTC.set() failed\n");			// can't know why; RTC.set() returns boolean
+				}
+
+			if (0 == packet_buffer[1])								// if stratum is 0
+				{													// print message
+				Serial.printf ("kiss o' death message: %c%c%c%c\n", packet_buffer[12], packet_buffer[13], packet_buffer[14], packet_buffer[15]);
+				while (1);											// and hang
 				}
 			break;
 			}
@@ -204,7 +222,7 @@ void loop()
 			}
 		}
 
-	delay (10000);							// wait ten seconds before asking for the time again
+	delay (10000);													// wait ten seconds before asking for the time again
 	Ethernet.maintain();
 	}
 
@@ -289,7 +307,7 @@ void dump_NTP_packet (void)
 
 	temp32 = *(uint32_t*)&packet_buffer[44];
 	temp32 = __builtin_bswap32 (temp32);
-	Serial.printf ("\t[44]: 0x%.8X (%lu) - transmit TS (frac)\n", temp32, temp32);
+	Serial.printf ("\t[44]: 0x%.8X (%lu) - transmit TS (frac)\n\n", temp32, temp32);
 	}
 
 
@@ -304,14 +322,15 @@ void send_NTP_packet (char* address)
 	memset (packet_buffer, 0, NTP_PACKET_SIZE);	// set all bytes in the buffer to 0
 												// Initialize values needed to form NTP request (see URL above for details)
 	packet_buffer[0] = 0b11100011;				// msb to lsb LI = clock unsynchronized; Version (100 4);  Mode (011 = client) (0xE3)
-	packet_buffer[1] = 0;						// Stratum, or type of clock
-	packet_buffer[2] = 6;						// Polling Interval
-	packet_buffer[3] = 0xEC;					// Peer Clock Precision
+
+//	packet_buffer[1] = 0;						// Stratum, or type of clock
+//	packet_buffer[2] = 6;						// Polling Interval
+//	packet_buffer[3] = 0xEC;					// Peer Clock Precision
 												// 8 bytes of zero for Root Delay & Root Dispersion
-	packet_buffer[12]  = 49;
-	packet_buffer[13]  = 0x4E;
-	packet_buffer[14]  = 49;
-	packet_buffer[15]  = 52;
+//	packet_buffer[12]  = 49;					// reference ID; why is this set here?
+//	packet_buffer[13]  = 0x4E;
+//	packet_buffer[14]  = 49;
+//	packet_buffer[15]  = 52;
 
 												// all NTP fields have been given values, now send a packet requesting a timestamp
 	Udp.beginPacket (address, 123);				//NTP requests are to port 123
