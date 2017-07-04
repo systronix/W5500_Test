@@ -47,14 +47,14 @@ Output sometimes stops after some hours. Why? How to recover? Etnernet.maintain(
 #define	TFT_CS				20			// 10 is default, different on ethernet/touch combo
 #define	TFT_DC				21			// 9 is default, different on ethernet/touch combo
 
-#define	PERIPH_RST			22			// SALT I/O such as PCA9557
+#define	PERIF_RST			22			// SALT I/O such as PCA9557
 #define	ETH_RST				9			// ethernet reset pin
 #define	ETH_CS				10			// ethernet chip select
 
 #define	NTP_PACKET_SIZE		48			// NTP time stamp is in the first 48 bytes of the message
 #define	SEVENTY_YEARS		2208988800UL	// offset from 1900-01-01T00:00:00 to unix epoch 1970-01-01T00:00:00
 
-uint16_t local_port = 8888;       // local port to listen for UDP packets
+#define	LOCAL_PORT			8888
 
 //char time_server_str[] = "time.nist.gov";		// time.nist.gov NTP server
 char time_server_str[] = "pool.ntp.org";		// ntp project pool of servers http://www.pool.ntp.org/zone/us
@@ -95,7 +95,7 @@ void setup()
 	pinMode(4, INPUT_PULLUP);
 
 	pinMode(ETH_RST, OUTPUT);				// This drives the pin low. Don't see any way to avoid that
-	pinMode(PERIPH_RST, OUTPUT);			// High after POR, low when declared output
+	pinMode(PERIF_RST, OUTPUT);			// High after POR, low when declared output
 	digitalWrite(ETH_RST, LOW);				// assert it deliberately
 	digitalWrite(PERIPH_RST, LOW);			// low after POR anyway
 
@@ -106,7 +106,7 @@ void setup()
 	delay(1);								// allow time for pins to settle
 
 	digitalWrite(ETH_RST, HIGH);			// release resets
-	digitalWrite(PERIPH_RST, HIGH);
+	digitalWrite(PERIF_RST, HIGH);
 
 	delay(1);								// time for WIZ850io to reset
 	FETs.setup (I2C_FET);						// constructor for SALT_FETs, and PCA9557
@@ -135,9 +135,13 @@ void setup()
 		while (1);							// no point in carrying on, so do nothing forevermore
 		}
 
-	Udp.begin (local_port);
+	if (0 == Udp.begin (LOCAL_PORT))
+		{
+		Serial.printf ("\nUdp.begin() failed");
+		while (1);							// no point in carrying on, so do nothing forevermore
+		}
 
-	Serial.printf("\r\n");
+	Serial.printf("\nSend V/v to toggle verbose\n");
 	}
 
 
@@ -148,9 +152,11 @@ void setup()
 
 boolean	clock_set = false;					// flag so we set the clock only once
 boolean summary_flag = true;				// flag to tell us that we've printed the 10 minute summary; true at startup because pointless
+boolean	verbose = false;					// packet dump after every transaction
 int32_t	diff;								// difference between NTP time and RTC time; positive diff: NTP leads RTC
 int32_t	min_diff = 0x7FFFFFFF;				// worst case RTC lag time
 int32_t	max_diff = 0;						// worst case NTP lag time
+uint8_t	inbyte;
 
 void loop()
 	{
@@ -191,8 +197,9 @@ void loop()
 				diff = (int32_t)(epoch - rtc_ts);
 				min_diff = min (min_diff, diff);
 				max_diff = max (max_diff, diff);
-				Serial.printf ("\tNTP Unix/RTC difference: %ld (min: %ld; max: %ld)\n\n", diff, min_diff, max_diff);
-//				dump_NTP_packet ();
+				Serial.printf ("\tNTP Unix/RTC difference: %ld (NTP max lag: %ld; NTP max lead: %ld)\n\n", diff, min_diff, max_diff);
+				if (verbose)
+					dump_NTP_packet ();
 				}
 			else
 				{
@@ -245,7 +252,16 @@ void loop()
 	else if (((uint8_t)((event_secs % 3600) / 60) % 10) && summary_flag)
 		summary_flag = false;
 
+
 	delay (10000);													// wait ten seconds before asking for the time again
+
+	if (0 < Serial.available())
+		{
+		inbyte = Serial.read();
+		if (('v' == (inbyte)) || ('V' == (inbyte)))
+			verbose = !verbose;
+		}
+
 	Ethernet.maintain();
 	}
 
