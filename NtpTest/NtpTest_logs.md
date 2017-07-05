@@ -2,6 +2,21 @@
 
 ## Teensy 3.2 with WIZ850io and 2.8" touchscreen on PJRC adapter, USB power
 
+### 2017 Jul 04
+```
+	@1561466650 ask for time from pool.ntp.org
+	pool.ntp.org too busy: 4669@1561477702 ask for time from pool.ntp.org
+	Seconds since Jan 1 1900 = 3708193730
+	Unix time = 1499204930
+	The UTC time is 21:48:50
+
+	@1561488754 ask for time from pool.ntp.org
+	Seconds since Jan 1 1900 = 3708193741
+	Unix time = 1499204941
+	The UTC time is 21:49:01
+
+```
+
 ### 2017 May 20
 ```
 	@1168264508 ask for time from pool.ntp.org
