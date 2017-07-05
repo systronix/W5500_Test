@@ -183,19 +183,24 @@ void loop()
 
 	send_NTP_packet (time_server_str);				// send an NTP packet to a time server
 	NTP_wait_timer_start_time = millis ();			// mark the start time
-	timer = 0;										// initialize the timer
 
 	while (1)										// loop until timeout or we get an NTP packet
 		{
-		if (100 <= timer)							// don't check for a response until we've waited for 100mS
+		timer = millis() - NTP_wait_timer_start_time;
+		if ((100 <= timer) && (1000 > timer))		// don't check for a response until we've waited for 100mS
 			{
-			if (Udp.parsePacket())
+			if (Udp.parsePacket())					// returns number of bytes in packet or 0
 				{
 				time_t secs_since_1900;
 				time_t epoch;
 				time_t rtc_ts;
 
-				extract_time_data (&secs_since_1900, &epoch);
+				if (SUCCESS != extract_time_data (&secs_since_1900, &epoch))
+					{
+					Serial.printf ("udp read failed\n");
+					while(1);
+					}
+
 				Serial.printf ("\tNTP ts: %lu\n", secs_since_1900);
 				Serial.printf ("\tUnix ts: %lu\n", epoch);				// print Unix time stamp
 
@@ -244,7 +249,6 @@ void loop()
 			}
 		else														// no NTP packet yet
 			{
-			timer = millis() - NTP_wait_timer_start_time;
 			if (1000 > timer)
 				continue;											// still waiting; loop back and try again
 			else
@@ -303,14 +307,28 @@ void loop()
 // is a unit32_t, the byte order is ass backwards.  But, we can flip the order to get the correct result.
 //
 
-void extract_time_data (time_t* ntp_ts_ptr, time_t* unix_ts_ptr)
+uint8_t extract_time_data (time_t* ntp_ts_ptr, time_t* unix_ts_ptr)
 	{
-	Udp.read(packet_buffer, NTP_PACKET_SIZE); 			// read the packet into the buffer
+	int32_t	bytes_read;
+	bytes_read = Udp.read(packet_buffer, NTP_PACKET_SIZE);	// read the packet into the buffer
+	
+	if (-1 == bytes_read)
+		{
+		Serial.printf ("udp packet empty\n");
+		return FAIL;
+		}
+	
+	if (NTP_PACKET_SIZE != bytes_read)
+		{
+		Serial.printf ("udp read %ld bytes\n");
+		return FAIL;
+		}
 
 	*ntp_ts_ptr = *(time_t*)&packet_buffer[40];			// grab four bytes from array as uint32_t
 	*ntp_ts_ptr = __builtin_bswap32 (*ntp_ts_ptr);		// and reorder
 
 	*unix_ts_ptr = *ntp_ts_ptr - SEVENTY_YEARS;			// convert NTP time to Unix time
+	return SUCCESS;
 	}
 
 
