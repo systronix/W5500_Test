@@ -99,7 +99,7 @@ uint32_t restart_fail_count=0, restart_success_count=0;
 // renew is Ethernet.maintain() return value
 uint8_t renew;
 // Ethernet.maintain() fail and success counts
-uint32_t renew_success_count=0, renew_fail_count=0, rebind_success_count=0, rebind_fail_count=0;
+uint32_t renew_success_count=0, renew_fail_count=0, rebind_success_count=0, rebind_fail_count=0, hw_reset_count=0;
 
 
 void setup() {
@@ -126,6 +126,9 @@ void setup() {
 
 	pinMode(ETH_RST, OUTPUT);	// should be high
 	digitalWrite(ETH_RST, HIGH);	// reset is active low
+	digitalWrite(ETH_RST, LOW);
+	delay(1);
+	digitalWrite(ETH_RST, HIGH);
 
 	// Open serial communications and wait for port to open:
 	Serial.begin(115200);
@@ -264,6 +267,9 @@ void loop()
 			if (0 == flag)
 			{
 				restart_fail_count++;
+				// reset the WIZnet module
+				Serial.printf(" Reset Ethernet module! ");
+				module_reset();
 			}
 			else
 			{
@@ -403,6 +409,18 @@ int8_t ethernet_start(uint8_t mac[], boolean verbose)
 		Serial.println(" msec");
 	}
 	return status;
+}
+
+/**
+
+*/
+void module_reset(void)
+{
+	digitalWrite(ETH_RST, HIGH);	// reset is active low
+	digitalWrite(ETH_RST, LOW);
+	Serial.printf("HW reset count now=%u\r\n", ++hw_reset_count);
+	delay(1);
+	digitalWrite(ETH_RST, HIGH);
 }
 
 /**

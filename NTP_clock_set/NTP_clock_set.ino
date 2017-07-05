@@ -57,8 +57,8 @@ Output sometimes stops after some hours. Why? How to recover? Etnernet.maintain(
 #define	LOCAL_PORT			8888
 
 //char time_server_str[] = "time.nist.gov";		// time.nist.gov NTP server
-//char time_server_str[] = "pool.ntp.org";		// ntp project pool of servers http://www.pool.ntp.org/zone/us
-char time_server_str[] = "198.60.22.240";		// xmission ipv4 address
+char time_server_str[] = "pool.ntp.org";		// ntp project pool of servers http://www.pool.ntp.org/zone/us
+//char time_server_str[] = "198.60.22.240";		// xmission ipv4 address
 //char time_server_str[] = "clock.xmission.com";
 
 uint8_t packet_buffer[NTP_PACKET_SIZE];		//buffer to hold incoming and outgoing packets
@@ -287,13 +287,16 @@ void loop()
 		summary_flag = false;
 
 
-	delay (10000);													// wait ten seconds before asking for the time again
+	delay (60000);													// wait before asking for the time again
 
 	if (0 < Serial.available())
 		{
 		inbyte = Serial.read();
 		if (('v' == (inbyte)) || ('V' == (inbyte)))
-			verbose = !verbose;
+			{
+				verbose = !verbose;
+				Serial.printf("\r\nverbose: %s ", verbose ? "true" : "false");
+			}
 		}
 
 	Ethernet.maintain();
