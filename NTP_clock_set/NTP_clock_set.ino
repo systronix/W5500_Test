@@ -129,9 +129,12 @@ void setup()
 	Serial.print("MAC from Teensy: ");
 	Serial.printf("Array MAC Address: %02X:%02X:%02X:%02X:%02X:%02X \r\n", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);  
 
-	if (0 == Ethernet.begin(mac))			// start Ethernet and UDP
+	new_millis = millis();
+	Serial.printf ("configuring ethernet\n");
+
+	if (0 == Ethernet.begin (mac, 10000))			// start Ethernet and UDP
 		{
-		Serial.printf ("\nFailed to configure Ethernet using DHCP");
+		Serial.printf ("\nFailed to configure Ethernet using DHCP after %lumS", millis()-new_millis);
 		while (1);							// no point in carrying on, so do nothing forevermore
 		}
 
@@ -158,6 +161,14 @@ int32_t	min_diff = 0x7FFFFFFF;				// worst case RTC lag time
 int32_t	max_diff = 0;						// worst case NTP lag time
 uint8_t	inbyte;
 
+uint32_t NTP_wait_timer_start_time;
+uint32_t timer;
+uint32_t timer_min = 0xFFFFFFFF;
+uint32_t timer_max = 0;
+uint32_t timer_sum = 0;
+uint32_t timer_avg;
+
+
 void loop()
 	{
 	uint32_t event_millis = millis();
@@ -171,65 +182,70 @@ void loop()
 		time_server_str);
 
 	send_NTP_packet (time_server_str);				// send an NTP packet to a time server
-	uint32_t NTP_wait_timer_start_time = millis ();
+	NTP_wait_timer_start_time = millis ();			// mark the start time
+	timer = 0;										// initialize the timer
 
 	while (1)										// loop until timeout or we get an NTP packet
 		{
-		if (Udp.parsePacket())
+		if (100 <= timer)							// don't check for a response until we've waited for 100mS
 			{
-			time_t secs_since_1900;
-			time_t epoch;
-			time_t rtc_ts;
-
-			extract_time_data (&secs_since_1900, &epoch);
-			Serial.printf ("\tNTP ts: %lu\n", secs_since_1900);
-			Serial.printf ("\tUnix ts: %lu\n", epoch);				// print Unix time stamp
-
-			Serial.printf ("\tUTC time: %.2d:%.2d:%.2d\n\n",		// print UTC time
-				(uint8_t)((epoch  % 86400L) / 3600),				// hour
-				(uint8_t)((epoch % 3600) / 60),						// minute
-				(uint8_t)(epoch % 60));								// second
-
-			if (clock_set)
+			if (Udp.parsePacket())
 				{
-				rtc_ts = RTC.get();									// get time from RTC
-				Serial.printf ("\tRTC ts: %lu\n", rtc_ts);			// print RTC time stamp
-				diff = (int32_t)(epoch - rtc_ts);
-				min_diff = min (min_diff, diff);
-				max_diff = max (max_diff, diff);
-				Serial.printf ("\tNTP Unix/RTC difference: %ld (NTP max lag: %ld; NTP max lead: %ld)\n\n", diff, min_diff, max_diff);
-				if (verbose)
-					dump_NTP_packet ();
-				}
-			else
-				{
-				if (RTC.set (epoch))
+				time_t secs_since_1900;
+				time_t epoch;
+				time_t rtc_ts;
+
+				extract_time_data (&secs_since_1900, &epoch);
+				Serial.printf ("\tNTP ts: %lu\n", secs_since_1900);
+				Serial.printf ("\tUnix ts: %lu\n", epoch);				// print Unix time stamp
+
+				Serial.printf ("\tUTC time: %.2d:%.2d:%.2d\n\n",		// print UTC time
+					(uint8_t)((epoch  % 86400L) / 3600),				// hour
+					(uint8_t)((epoch % 3600) / 60),						// minute
+					(uint8_t)(epoch % 60));								// second
+
+				if (clock_set)
 					{
-					Serial.printf ("RTC set to %lu\n", epoch);
-					clock_set = true;
-					dump_NTP_packet ();
+					rtc_ts = RTC.get();									// get time from RTC
+					Serial.printf ("\tRTC ts: %lu\n", rtc_ts);			// print RTC time stamp
+					diff = (int32_t)(epoch - rtc_ts);
+					min_diff = min (min_diff, diff);
+					max_diff = max (max_diff, diff);
+					Serial.printf ("\tNTP Unix/RTC difference: %ld (NTP max lag: %ld; NTP max lead: %ld)\n\n", diff, min_diff, max_diff);
+					if (verbose)
+						dump_NTP_packet ();
 					}
 				else
-					Serial.printf ("RTC.set() failed\n");			// can't know why; RTC.set() returns boolean
-				}
+					{
+					if (RTC.set (epoch))
+						{
+						Serial.printf ("RTC set to %lu\n", epoch);
+						clock_set = true;
+						dump_NTP_packet ();
+						}
+					else
+						Serial.printf ("RTC.set() failed\n");			// can't know why; RTC.set() returns boolean
+					}
 
-			if (0 == packet_buffer[1])								// if stratum is 0
-				{													// print message
-				kiss_o_death_count++;
-				Serial.printf ("\tkiss o' death message: %c%c%c%c (%ld)\n\n", packet_buffer[12], packet_buffer[13], packet_buffer[14], packet_buffer[15], kiss_o_death_count);
-				}
-			if (1 == packet_buffer[1])								// if primary stratum
-				{													// print message
-				primary_stratum_count++;
-				Serial.printf ("\tprimary stratum ID code: %c%c%c%c (%ld)\n\n", packet_buffer[12], packet_buffer[13], packet_buffer[14], packet_buffer[15], primary_stratum_count);
-				}
+				if (0 == packet_buffer[1])								// if stratum is 0
+					{													// print message
+					kiss_o_death_count++;
+					Serial.printf ("\tkiss o' death message: %c%c%c%c (%ld)\n\n", packet_buffer[12], packet_buffer[13], packet_buffer[14], packet_buffer[15], kiss_o_death_count);
+					}
+				if (1 == packet_buffer[1])								// if primary stratum
+					{													// print message
+					primary_stratum_count++;
+					Serial.printf ("\tprimary stratum ID code: %c%c%c%c (%ld)\n\n", packet_buffer[12], packet_buffer[13], packet_buffer[14], packet_buffer[15], primary_stratum_count);
+					}
 
-			response_count++;
-			break;
+				response_count++;
+				break;
+				}
 			}
 		else														// no NTP packet yet
 			{
-			if (1000 > (millis () - NTP_wait_timer_start_time))		// have we waited for one second for a response?
+			timer = millis() - NTP_wait_timer_start_time;
+			if (1000 > timer)
 				continue;											// still waiting; loop back and try again
 			else
 				{													// waited too long
@@ -239,6 +255,18 @@ void loop()
 				}
 			}
 		}
+
+	if (1000 > timer)												// do not include timeouts
+		{
+		timer -= 100;												// remove our default delay
+//		timer_min = min (timer_min, timer);							// save min; with 100mS delay, don't really know what min is
+		timer_max = max (timer_max, timer);							// save max
+		timer_sum += timer;
+		timer_avg = timer_sum/response_count;
+		}
+
+//	Serial.printf("\tresponse time: %lu; min: %lu; max: %lu; avg: %lu\n\n", timer, timer_min, timer_max, timer_avg);
+	Serial.printf("\tresponse time: %lu; max: %lu; avg: %lu\n\n", timer, timer_max, timer_avg);	// with 100mS delay, don't really know what min is
 
 	if ((0 == (uint8_t)((event_secs % 3600) / 60) % 10) && !summary_flag)
 		{
