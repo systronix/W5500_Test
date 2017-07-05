@@ -57,7 +57,9 @@ Output sometimes stops after some hours. Why? How to recover? Etnernet.maintain(
 #define	LOCAL_PORT			8888
 
 //char time_server_str[] = "time.nist.gov";		// time.nist.gov NTP server
-char time_server_str[] = "pool.ntp.org";		// ntp project pool of servers http://www.pool.ntp.org/zone/us
+//char time_server_str[] = "pool.ntp.org";		// ntp project pool of servers http://www.pool.ntp.org/zone/us
+char time_server_str[] = "198.60.22.240";		// xmission ipv4 address
+//char time_server_str[] = "clock.xmission.com";
 
 uint8_t packet_buffer[NTP_PACKET_SIZE];		//buffer to hold incoming and outgoing packets
 
@@ -132,13 +134,13 @@ void setup()
 	new_millis = millis();
 	Serial.printf ("configuring ethernet\n");
 
-	if (0 == Ethernet.begin (mac, 10000))			// start Ethernet and UDP
+	if (0 == Ethernet.begin (mac, 10000))	// start Ethernet with 10ish second timeout
 		{
 		Serial.printf ("\nFailed to configure Ethernet using DHCP after %lumS", millis()-new_millis);
 		while (1);							// no point in carrying on, so do nothing forevermore
 		}
 
-	if (0 == Udp.begin (LOCAL_PORT))
+	if (0 == Udp.begin (LOCAL_PORT))		// start udp
 		{
 		Serial.printf ("\nUdp.begin() failed");
 		while (1);							// no point in carrying on, so do nothing forevermore
@@ -320,7 +322,7 @@ uint8_t extract_time_data (time_t* ntp_ts_ptr, time_t* unix_ts_ptr)
 	
 	if (NTP_PACKET_SIZE != bytes_read)
 		{
-		Serial.printf ("udp read %ld bytes\n");
+		Serial.printf ("udp read %ld bytes\n", bytes_read);
 		return FAIL;
 		}
 
