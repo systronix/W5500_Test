@@ -51,6 +51,7 @@ Applies to all boards and modules which use the WIZnet W5500 chip: WIZ850io, W55
 - DHCP lease time (on my router) is set to 120 seconds, the minimum allowed by the Asus RT56NU router, and it appears to allow renewal at 1/2 that, or every 60 seconds. 
 - This enables 24 * 60, or 1440 DHCP renewals in 24 hrs vs a more typical one or two. This compresses one or two years of DHCP renewal into 24 hours.
 - Versions for Teensy3 with WIZ850io and the Arduino.org (not the same as Arduino.cc) M0 Pro with WIZnet W5500 Shield
+- [Logs for this test](https://github.com/systronix/W5500_Test/blob/master/DhcpStressTest-T3/DHCP_stress_logs.md) 
 
 ### ILI9341_Test
 - Copied from WIZ820io_test repo 2017 Apr 23.
@@ -69,17 +70,22 @@ Applies to all boards and modules which use the WIZnet W5500 chip: WIZ850io, W55
 ### EthernetKeypadLCD (on my wish list)
 - the Arduino Ethernet Shield example adapted to the Teensy and WIZ820io hardware
 
+### NTP Servers
+- NTP servers are a surprisingly complex topic, and server response can be [fickle](https://www.google.com/search?q=define+fickle&oq=define+fickle&aqs=chrome..69i57j0l5.3344j0j7&sourceid=chrome&ie=UTF-8).
+- Typically we use the [NTP Pool Project](http://www.pool.ntp.org/en/) since it has fewer response fails than [NIST](http://tf.nist.gov/tf-cgi/servers.cgi)
+- NTP messages have a lot to [decode](https://www.eecis.udel.edu/~mills/ntp/html/decode.html)
+- Good NTP citizens don't request time more often than once per minute. Some servers will give you the Kiss of Death if you pester them.
+
 ### NtpTest
+
 - just as it sounds, to use Network Time Protocol. Based on Arduino Ethernet example UdpNtpClient with mods for Teensy and W5500. 
-- Typical output:
-```
-Seconds since Jan 1 1900 = 3697051697
-Unix time = 1488062897
-The UTC time is 22:48:17
-```
+- [Test Logs](https://github.com/systronix/W5500_Test/blob/master/NtpTest/NtpTest_logs.md)
+
 M0Pro version does not work and I don't know why.
 
+### Ntp_clock_set
+- Greatly enhanced output of NTP server response, by Scott.
+- [Test Logs coming soon]
+
 ### TODO
-NTP test code frequently stops outputting serial data, so I can't tell what it is doing: hung somewhere? 
-Waiting for NTP pool, or can't reach it?
-No idea why this would be the case. Find this and fix it.
+Current version of NtpTest runs for weeks without failing. The new NTP_clock_set is not so reliable.

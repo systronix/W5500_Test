@@ -1,5 +1,32 @@
 # DhcpStressTest_T3 
 
+### 2017 Jul 05
+Had been running fine for weeks, WIZ850io. Sometimes would get a bad IP address, but then recover:
+```
+	@920790 0.0.0.0
+	@920800  Error! IP address: 0.0.0.0 Try restart:OK DHCP after 55506 msec
+	1
+	192.168.1.213
+	@920860 192.168.1.213
+```
+
+Inexplicably, yesterday it could not recover:
+```
+	@1288840 192.168.1.213
+	@1288850 maintain()=3 Rebind Failed! Try restsart:Fail DHCP after 60609 msec
+	0
+	 Renew_F/S Bind_F/S Restart_F/S = 87/15443 7/79 1/8 0.0.0.0
+	@1288970  Error! IP address: 0.0.0.0 Try restart:Fail DHCP after 60589 msec
+	0
+	maintain()=3 Rebind Failed! Try restsart:Fail DHCP after 60589 msec
+	0
+	 Renew_F/S Bind_F/S Restart_F/S = 87/15443 8/79 3/8 0.0.0.0
+	@1289160  Error! IP address: 0.0.0.0 Try restart:Fail DHCP after 60588 msec
+	0
+```
+Also the Ethernet module was very warm to the touch, more than usual. And the WIZ850io yellow activity LED was on solid. Reloading the app and resetting Teensy did not recover operation or make the yellow activity LED normal.
+Looking at the code, if a restart fails, we don't use the hardware reset of the WIZ850io. Nor to we drive that on setup. So I added hardware reset code to do both those things.
+
 ### 2017 May 20
 ```
 	@769130 maintain()=2  Renew_F/S Bind_F/S Restart_F/S = 0/12945 0/0 0/0 192.168.1.213
