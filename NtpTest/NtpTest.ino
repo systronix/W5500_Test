@@ -148,6 +148,9 @@ void loop() {
   sendNTPpacket(timeServer); // send an NTP packet to a time server
   Serial.printf("@%u ask for time from %s\r\n", millis(), timeServer);
 
+  Serial.println();
+  Ethernet.getSocketStatus();
+
   // wait to see if a reply is available
   delay(1000);
   if (Udp.parsePacket()) { 

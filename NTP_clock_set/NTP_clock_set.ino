@@ -176,6 +176,9 @@ void loop()
 	uint32_t event_millis = millis();
 	uint32_t event_secs = event_millis/1000;
 
+	Serial.println();
+	Ethernet.getSocketStatus();
+
 	Serial.printf ("@%.2d:%.2d:%.2d.%.4d ask for time from %s\r\n",
 		(uint8_t)((event_secs % 86400L) / 3600),	// hour
 		(uint8_t)((event_secs % 3600) / 60),		// minute

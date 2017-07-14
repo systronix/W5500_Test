@@ -283,7 +283,9 @@ void loop()
     EthernetClient client = server.available();
     if (client) 
     {
-        Serial.printf("\tGot a new client connection\r\f");
+        Serial.printf("\nGot a new client connection\r\n");
+ //       Ethernet.getSocketStatus();
+
         start_millis = new_millis;  // for timeout check
         // Serial.printf("new client at %u sec\r\n", new_elapsed_seconds);
 
@@ -415,4 +417,6 @@ void loop()
     }
 
 }
+
+
 
