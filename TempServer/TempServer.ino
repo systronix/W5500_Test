@@ -10,6 +10,8 @@
   by Arturo Guadalupi
 
   Modified 2017 May 08 bboyes added output of temp to ILI9341 Color Touchscreen
+
+
  
  */
 
@@ -21,11 +23,15 @@
 #include <TeensyID.h>
 #include <Systronix_TMP102.h> // best version of I2C library is #included by the library. Don't include it here!
 
-#define CS_PIN  8   // resistive touch controller XPT2406 uses SPI
+#define RES_TOUCH_CS_PIN  8     // resistive touch controller XPT2406 uses SPI
 #define TFT_CS 20    // 10 is default, different on ethernet/touch combo
 #define TFT_DC 21    // 9 is default, different on ethernet/touch combo
 
-#define ETH_RST 9 // ethernet reset pin
+#define ETH_RST 9   // ethernet reset pin
+#define ETH_CS  10  // ethernet chip select
+
+#define SD_CS 4     // on PJRC WIZ8XX adapter, not on SALT
+
 #define PERIPHERAL_RESET 22 // for ILI9341 and other peripherals
 
 uint8_t t_mac[6]; // hold internal MAC from Teensy 
@@ -67,7 +73,7 @@ uint16_t configOptions;
 
 
 // MOSI=11, MISO=12, SCK=13
-XPT2046_Touchscreen ts(CS_PIN);
+XPT2046_Touchscreen ts(RES_TOUCH_CS_PIN);
 ILI9341_t3 tft = ILI9341_t3(TFT_CS, TFT_DC);
 
 int8_t stat = -1;
@@ -89,10 +95,12 @@ void setup() {
    * Pins 4 and 10 will be reconfigured as outputs by the SD and Ethernet libraries. Making them input
    * pullup mode before initialization guarantees neither device can respond to unintentional signals
    * while the other is initialized.
+   * This is Ethernet CS and SD CS
    */
-  pinMode(4, INPUT_PULLUP);
-  pinMode(10, INPUT_PULLUP);
-  pinMode (CS_PIN, INPUT_PULLUP);  // disable resistive touch controller
+  pinMode(SD_CS, INPUT_PULLUP);
+  pinMode(ETH_CS, INPUT_PULLUP);
+
+  pinMode (RES_TOUCH_CS_PIN, INPUT_PULLUP);  // disable resistive touch controller
 
   pinMode(TFT_CS, INPUT_PULLUP);    // disable LCD display
   pinMode(TFT_DC, INPUT_PULLUP);    // 
@@ -122,8 +130,9 @@ void setup() {
   strcat (log_message, __TIME__);
   strcat (log_message, " MDT, ");
   strcat (log_message, __DATE__);  
-  strcat (log_message, 0x00);
 
+  // Open serial communications and wait for port to open:
+  Serial.begin(115200);
   // Wait here for up to 10 seconds to see if we will use Serial Monitor, so output is not lost
   while((!Serial) && (millis()<10000));    // wait until serial monitor is open or timeout,
 
@@ -162,8 +171,7 @@ void setup() {
   tmp102_48.setup(0x48);
   tmp102_48.begin();
   
-  Serial.print("TMP102 Sensor at 0x");
-  Serial.println(tmp102_48.BaseAddr, HEX);
+  Serial.printf("TMP102 Sensor at 0x%02X\r\n", tmp102_48.base_get());
 
   // start with default config
   Serial.print ("SetCFG=0x");
@@ -182,11 +190,11 @@ void setup() {
   Serial.print ("SetCFG=0x");
   Serial.print (configOptions, HEX);
   Serial.print (" ");
-  stat = tmp102_48.writeRegister(TMP102_CONF_REG_PTR, configOptions);
+  stat = tmp102_48.register_write(TMP102_CONF_REG_PTR, configOptions);
   if (SUCCESS != stat) Serial.print (" writeReg error! ");  
 
   // leave the pointer set to read temperature
-  stat = tmp102_48.writePointer(TMP102_TEMP_REG_PTR);  
+  stat = tmp102_48.pointer_write(TMP102_TEMP_REG_PTR);  
 
   Serial.println();
 
@@ -241,12 +249,12 @@ void loop()
 
         // read the temperature to have it ready for any clients
         configOptions |= TMP102_CFG_OS;        // start One Shot conversion
-        stat = tmp102_48.writeRegister (TMP102_CONF_REG_PTR, configOptions);
+        stat = tmp102_48.register_write (TMP102_CONF_REG_PTR, configOptions);
 
         // pointer set to read temperature
-        stat = tmp102_48.writePointer(TMP102_TEMP_REG_PTR);     
+        stat = tmp102_48.pointer_write(TMP102_TEMP_REG_PTR);     
         // read two bytes of temperature
-        stat = tmp102_48.readRegister (&rawtemp);
+        stat = tmp102_48.register_read (&rawtemp);
         temp = tmp102_48.raw13ToC(rawtemp);
 
         if (0 == (total_elapsed_seconds % 10))
@@ -275,6 +283,7 @@ void loop()
     EthernetClient client = server.available();
     if (client) 
     {
+        Serial.printf("\tGot a new client connection\r\f");
         start_millis = new_millis;  // for timeout check
         // Serial.printf("new client at %u sec\r\n", new_elapsed_seconds);
 
