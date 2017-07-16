@@ -63,6 +63,12 @@ boolean minute_tick = false;
 uint32_t seconds_without_client = 0;
 uint32_t max_without_client = 0;
 
+boolean verbose = false;
+boolean silent = true;
+
+boolean socket_status = false;
+uint8_t inbyte = 0;
+
 uint16_t rawtemp;
 
 float temp = 0.0;
@@ -203,6 +209,9 @@ void setup() {
   tft.setFont(Arial_40);
   tft.setCursor(5, 20);
   tft.print("TempServer");
+
+  Serial.printf("Setup Complete!\r\nSend V/v to toggle verbose, h/H to toggle hush/silent, s/S socket status");
+
   delay(2000);
 
 }
@@ -276,15 +285,53 @@ void loop()
       tft.print(temp);    
 
 
+
     }
+
+  /**
+  * Get any serial input from user
+  */
+
+  if (Serial.available()>0)
+  {
+    inbyte = Serial.read();
+    switch (inbyte)
+    {
+
+    case 's':
+    case 'S':
+      // detailed socket status when we get a new client connection
+      socket_status = true;
+      Serial.printf("\r\nSocket Status: %s ", socket_status ? "true" : "false");
+      break;
+
+    case 'v':
+    case 'V':
+      verbose = !verbose;
+      if (verbose) silent = false;
+      Serial.printf("\r\nverbose: %s ", verbose ? "true" : "false");
+      break;
+
+    case 'h':
+    case 'H':
+      // hush mode
+      silent = !silent;
+      if (silent) verbose = false;  // can't have silent and verbose
+      Serial.printf("\r\nsilent: %s ", silent ? "true" : "false");
+      break;      
+
+    default:
+      break;  
+    }
+  }    
 
 
     // listen for incoming clients
     EthernetClient client = server.available();
     if (client) 
     {
-        Serial.printf("\nGot a new client connection\r\n");
- //       Ethernet.getSocketStatus();
+        Serial.printf("@ %u sec, Got new client, Temp is %.3f C\r\n", new_elapsed_seconds, temp);
+        if (socket_status) Ethernet.getSocketStatus();
 
         start_millis = new_millis;  // for timeout check
         // Serial.printf("new client at %u sec\r\n", new_elapsed_seconds);
@@ -298,7 +345,7 @@ void loop()
             if (client.available()) 
             {
                 char c = client.read();
-                Serial.write(c);
+                if (verbose) Serial.write(c);   // echo incoming request to serial monitor
                 // if you've gotten to the end of the line (received a newline
                 // character) and the line is blank, the http request has ended,
                 // so you can send a reply
@@ -381,23 +428,21 @@ void loop()
         // give the web browser time to receive the data
         delay(1);    // 1 msec seemed not enough, make it 10? 
         // Serial.println("Will stop client");
-        Serial.println("Out of while...");
+        // Serial.println("Out of while...");
         // close the connection:
         client.stop();
-        Serial.println("client disconnected");
+        Serial.println("client stopped");
         // // These serial.printf cause SPI to WIZnet 850io to halt in Ard1.8.1/TD1.35 or temp never printed in Ard1.8.2/TD1.36!!
         // Serial.printf("Temp %f C\r\n", temp);
         // Serial.printf("Timeout count=%u\r\n", timeout_http_count);
         // Serial.flush();
+        if (socket_status) Ethernet.getSocketStatus();
 
-        Serial.printf("@ %u sec, Temp is %.3f C\r\n", new_elapsed_seconds, temp);
-
-        Serial.printf("%u http requests, %.2f per sec, %u timeouts\r\n", 
+        if (verbose) Serial.printf("%u http requests, %.2f per sec, %u timeouts\r\n", 
           http_request_count, (float)http_request_count/(float)new_elapsed_seconds, timeout_http_count);
 
-        Serial.print(max_without_client);
-        Serial.println(" sec max w/o client");
-        Serial.println();
+        if (verbose) Serial.printf("%u sec max w/o client\r\n", max_without_client);
+        Serial.printf("--------\r\n");
 
 
     }   // end of if-client
