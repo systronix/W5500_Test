@@ -66,7 +66,7 @@ uint32_t max_without_client = 0;
 boolean verbose = false;
 boolean silent = true;
 
-boolean socket_status = false;
+boolean socket_status = true;
 uint8_t inbyte = 0;
 
 uint16_t rawtemp;
@@ -106,7 +106,7 @@ void setup() {
   pinMode(SD_CS, INPUT_PULLUP);
   pinMode(ETH_CS, INPUT_PULLUP);
 
-  pinMode (RES_TOUCH_CS_PIN, INPUT_PULLUP);  // disable resistive touch controller
+  pinMode (RES_TOUCH_CS_PIN, INPUT_PULLUP);  // resistive touch controller
 
   pinMode(TFT_CS, INPUT_PULLUP);    // disable LCD display
   pinMode(TFT_DC, INPUT_PULLUP);    // 
@@ -121,6 +121,7 @@ void setup() {
   digitalWrite(ETH_RST, HIGH);
   delay(10);                      // recover from reset
 
+  // reset peripherals
   pinMode(PERIPHERAL_RESET, OUTPUT);
   digitalWrite(PERIPHERAL_RESET, LOW);
   delay(1);
@@ -132,11 +133,6 @@ void setup() {
   tft.fillScreen(ILI9341_GREEN);
   ts.begin();
 
-  strcpy (log_message, "Build time: ");
-  strcat (log_message, __TIME__);
-  strcat (log_message, " MDT, ");
-  strcat (log_message, __DATE__);  
-
   // Open serial communications and wait for port to open:
   Serial.begin(115200);
   // Wait here for up to 10 seconds to see if we will use Serial Monitor, so output is not lost
@@ -146,14 +142,8 @@ void setup() {
   Serial.println("Teensy Temperature Server");
 
   Serial.printf("Build %s %s\r\n", __TIME__, __DATE__);
-  Serial.println(log_message);
 
   Serial.printf("%u msec to start serial\r\n", new_millis);
-
-  char ID[36];    // was 32! Buffer overun!
-  sprintf(ID, "%08lX %08lX %08lX %08lX", SIM_UIDH, SIM_UIDMH, SIM_UIDML, SIM_UIDL);
-  Serial.print("Teensy3 128-bit UniqueID char array: ");
-  Serial.println(ID);
 
   kinetisUID(uid);
   Serial.printf("Teensy3 128-bit UniqueID int array: %08X-%08X-%08X-%08X\n", uid[0], uid[1], uid[2], uid[3]);
@@ -169,9 +159,11 @@ void setup() {
   // start the Ethernet connection and the server:
   Ethernet.begin(t_mac, ip);
 
-  server.begin();
-  Serial.print("server is at ");
+  Serial.print("Begin server at ");
   Serial.println(Ethernet.localIP());
+  
+  server.begin();
+  Ethernet.getSocketStatus(4);
 
   // start TMP102 library
   tmp102_48.setup(0x48);
@@ -283,9 +275,6 @@ void loop()
       tft.setFont(Arial_48);
       tft.setCursor(80, 20);
       tft.print(temp);    
-
-
-
     }
 
   /**
@@ -331,7 +320,7 @@ void loop()
     if (client) 
     {
         Serial.printf("@ %u sec, Got new client, Temp is %.3f C\r\n", new_elapsed_seconds, temp);
-        if (socket_status) Ethernet.getSocketStatus();
+        if (socket_status) Ethernet.getSocketStatus(4);
 
         start_millis = new_millis;  // for timeout check
         // Serial.printf("new client at %u sec\r\n", new_elapsed_seconds);
@@ -436,13 +425,13 @@ void loop()
         // Serial.printf("Temp %f C\r\n", temp);
         // Serial.printf("Timeout count=%u\r\n", timeout_http_count);
         // Serial.flush();
-        if (socket_status) Ethernet.getSocketStatus();
+        if (socket_status) Ethernet.getSocketStatus(4);
 
         if (verbose) Serial.printf("%u http requests, %.2f per sec, %u timeouts\r\n", 
           http_request_count, (float)http_request_count/(float)new_elapsed_seconds, timeout_http_count);
 
         if (verbose) Serial.printf("%u sec max w/o client\r\n", max_without_client);
-        Serial.printf("--------\r\n");
+        Serial.printf("--------\r\n\n");
 
 
     }   // end of if-client

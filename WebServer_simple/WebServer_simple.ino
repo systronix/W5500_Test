@@ -20,6 +20,18 @@
 #include <SPI.h>
 #include <Ethernet.h>
 
+#define RES_TOUCH_CS_PIN  8     // resistive touch controller XPT2406 uses SPI
+#define TFT_CS 20    // 10 is default, different on ethernet/touch combo
+#define TFT_DC 21    // 9 is default, different on ethernet/touch combo
+
+#define ETH_RST 9   // ethernet reset pin
+#define ETH_CS  10  // ethernet chip select
+
+#define SD_CS 4     // on PJRC WIZ8XX adapter, not on SALT
+
+#define PERIPHERAL_RESET 22 // for ILI9341 and other peripherals
+
+
 // Enter a MAC address and IP address for your controller below.
 // The IP address will be dependent on your local network:
 byte mac[] = {
@@ -32,23 +44,38 @@ IPAddress ip(192, 168, 1, 10);
 // (port 80 is default for HTTP):
 EthernetServer server(8080);
 
-uint8_t update = 5;
-// char log_message[128];
+
 
 void setup() {
   // Open serial communications and wait for port to open:
-  Serial.begin(115200);
-  // Wait here for up to 10 seconds to see if we will use Serial Monitor, so output is not lost
+  Serial.begin(9600);
   while((!Serial) && (millis()<10000));    // wait until serial monitor is open or timeout,
 
-  // strcpy (log_message, "Build: ");
-  // strcat (log_message, __TIME__);
-  // strcat (log_message, " MDT, ");
-  // strcat (log_message, __DATE__);  
+  pinMode(SD_CS, INPUT_PULLUP);
+  pinMode(ETH_CS, INPUT_PULLUP);
 
-  Serial.println("Simple Webserver Example");
+  pinMode (RES_TOUCH_CS_PIN, INPUT_PULLUP);  // resistive touch controller
 
-//  Serial.println(log_message);
+  pinMode(TFT_CS, INPUT_PULLUP);    // disable LCD display
+  pinMode(TFT_DC, INPUT_PULLUP);    // 
+
+  pinMode(ETH_RST, INPUT_PULLUP);  // ethernet reset pin
+  delay(1);  // allow time for pins to reach 3.3V
+
+  // reset Ethernet
+  pinMode(ETH_RST, OUTPUT);       // this causes low output anyway...
+  digitalWrite(ETH_RST, LOW);     // ...so just do the reset Ethernet
+  delay(1);
+  digitalWrite(ETH_RST, HIGH);
+  delay(10);                      // recover from reset
+
+  // reset peripherals
+  pinMode(PERIPHERAL_RESET, OUTPUT);
+  digitalWrite(PERIPHERAL_RESET, LOW);
+  delay(1);
+  digitalWrite(PERIPHERAL_RESET, HIGH);
+  delay(100);  
+
 
   // start the Ethernet connection and the server:
   Ethernet.begin(mac, ip);
@@ -63,6 +90,7 @@ void loop() {
   EthernetClient client = server.available();
   if (client) {
     Serial.println("new client");
+    Ethernet.getSocketStatus(4);
     // an http request ends with a blank line
     boolean currentLineIsBlank = true;
     while (client.connected()) {
@@ -77,24 +105,14 @@ void loop() {
           client.println("HTTP/1.1 200 OK");
           client.println("Content-Type: text/html");
           client.println("Connection: close");  // the connection will be closed after completion of the response
-          client.print("Refresh: ");  // refresh the page automatically every XX sec
-          client.println(update);
-          client.println();   // must have this blank line or browser won't display anything!
+          client.println("Refresh: 5");  // refresh the page automatically every 5 sec
+          client.println();
           client.println("<!DOCTYPE HTML>");
           client.println("<html>");
-
-
-            client.print("Simple Webserver Test <br />");
-            client.println("<br />");
-            // client.println(log_message);
-            client.println("<br />");
-            client.print("Updates approx every ");
-            client.print(update);
-            client.println(" seconds<br />");
-            client.print("msec: ");
-            client.print(millis());
-            client.println("<br />");
-
+          client.println("Simple Server Teensy 3.2 and WIZ850io");
+          client.println("<br>");
+          client.print("millis=");
+          client.println(millis());
           client.println("</html>");
           break;
         }
@@ -112,7 +130,6 @@ void loop() {
     // close the connection:
     client.stop();
     Serial.println("client disconnected");
-
   }
 }
 
