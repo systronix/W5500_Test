@@ -63,7 +63,7 @@ boolean minute_tick = false;
 uint32_t seconds_without_client = 0;
 uint32_t max_without_client = 0;
 
-boolean verbose = false;
+boolean verbose = true;
 boolean silent = true;
 
 boolean socket_status = true;
@@ -83,8 +83,6 @@ XPT2046_Touchscreen ts(RES_TOUCH_CS_PIN);
 ILI9341_t3 tft = ILI9341_t3(TFT_CS, TFT_DC);
 
 int8_t stat = -1;
-
-char log_message[128];
 
 // Initialize the Ethernet server library
 // with the IP address and port you want to use
@@ -162,7 +160,9 @@ void setup() {
   Serial.print("Begin server at ");
   Serial.println(Ethernet.localIP());
   
-  server.begin();
+    // start listening for clients
+  server.begin();  
+
   Ethernet.getSocketStatus(4);
 
   // start TMP102 library
@@ -214,6 +214,8 @@ boolean wastouched = true;
 uint16_t xmax, xmin=4095, ymax, ymin=4095, zmax, zmin=4095;
 uint16_t xnow, ynow, znow;
 uint32_t touch_start, touch_total, touch_secs;  // in millis unless _secs
+
+uint8_t outcount = 0;
 
 void loop() 
 {
@@ -338,46 +340,59 @@ void loop()
                 // if you've gotten to the end of the line (received a newline
                 // character) and the line is blank, the http request has ended,
                 // so you can send a reply
+                // if (c == '\n') Serial.println ("newline");
                 if (c == '\n' && currentLineIsBlank) 
                 {
+                    Serial.println("Request is complete");
                     // we could be here if we get a request consisting of one blank line, in theory
                     // send a standard http response header
                     Serial.print("Sending Response...");
                     http_request_count++;
 
-                    client.println("HTTP/1.1 200 OK");
-                    client.println("Content-Type: text/html");
-                    client.println("Connection: close");  // the connection will be closed after completion of the response
-                    client.println("Refresh: 5");        // changing this to a print vs println breaks it
-                    // client.println(update);  // refresh the page automatically every X sec
-                    client.println();
-                    // client.print("<meta name=\"robots\" content=\"noindex\" />");
-                    client.println("<!DOCTYPE HTML>");
-                    client.println("<html>");
+                    outcount = client.println("HTTP/1.1 200 OK");
+                    if (!outcount) Serial.println("Could not print to client");
+                    outcount = client.println("Content-Type: text/html; charset=UTF-8");
+                    if (!outcount) Serial.println("Could not print to client");
+                    outcount = client.println("Connection: close");  // the connection will be closed after completion of the response
+                    if (!outcount) Serial.println("Could not print to client");
+                    outcount = client.print("Refresh: ");        // changing this to a print vs println breaks it
+                    if (!outcount) Serial.println("Could not print to client");
+                    client.println(update);  // refresh the page automatically every X sec
+                    client.println("<meta name=\"robots\" content=\"noindex\" />");
+                    client.println(); // blank line must be here to separate HTTP request response from html which follows
+                    //outcount = client.println("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">");
+                    outcount = client.println("<!DOCTYPE html>");
+                    if (!outcount) Serial.println("Could not print to client"); else Serial.printf ("Sent %u\n", outcount);
+                    outcount = client.println("<html>");
+                    if (!outcount) Serial.println("Could not print to client");
+                    outcount = client.println("<head>");
+                    outcount = client.println("<title>Simple Temperature Server</title>");
+                    outcount = client.println("</head>");
+                    outcount = client.println("<body>");
+                
 
-                        client.println("<b>SALT 2.1 TMP102 Temperature Server</b> <br />");
-                        client.print(log_message);
-                        client.println("<br />");
+                        outcount = client.println("<h2>SALT TMP102 Temperature Server</h2>");
+                        if (!outcount) Serial.println("Could not print to client");
                         client.print("Updates approx every ");
                         client.print(update);
-                        client.println(" seconds<br />");
+                        client.print(" seconds<br>");
                         client.print("@");
                         client.print(new_elapsed_seconds);
-                        client.println(" sec: ");
+                        client.print(" sec: ");
                         client.print(temp, 2);
-                        client.print(" deg C <br />");
+                        client.print(" deg C <br>");
                         client.print(http_request_count);
                         client.print(" http requests, ");
                         client.print((float)http_request_count/(float)new_elapsed_seconds);
-                        client.print(" per sec");
-                        client.print("<br />");
+                        client.print(" per sec. ");
                         client.print(timeout_http_count);
-                        client.println(" timeouts, ");
+                        client.print(" timeouts, ");
                         client.print(max_without_client);
-                        client.println(" sec w/o client");
-                        client.println("<br />");
-
+                        client.print(" sec w/o client");
+                        client.print("<br>");
+                    client.println("</body>");
                     client.println("</html>");
+                    client.println();
 
                     Serial.println("done");
                     

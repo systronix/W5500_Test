@@ -75,12 +75,12 @@ void loop() {
         if (c == '\n' && currentLineIsBlank) {
           // send a standard http response header
           client.println("HTTP/1.1 200 OK");
-          client.println("Content-Type: text/html");
+          client.println("Content-Type: text/html;; charset=UTF-8");
           client.println("Connection: close");  // the connection will be closed after completion of the response
           client.print("Refresh: ");  // refresh the page automatically every XX sec
           client.println(update);
           client.println();   // must have this blank line or browser won't display anything!
-          client.println("<!DOCTYPE HTML>");
+          cclient.println("<!DOCTYPE html>");
           client.println("<html>");
 
 
