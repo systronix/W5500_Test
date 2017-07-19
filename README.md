@@ -48,7 +48,7 @@ Applies to all boards and modules which use the WIZnet W5500 chip: WIZ850io, W55
   - Programmer selection is not critical, default is "AVR ISP". The TeensyDuino extension will pop up and do the actual programming.
   - Serial monitor baud rate doesn't matter. It's really serial over USB... Why is Arduino.org 1.7.11 different?
 
-## Programs
+## Programs & Logs
 ### DhcpStressTest
 - Originally developed for the WIZ820io which has some ARP/DHCP bugs which necessitate special recovery techniques in code
 - DHCP lease time (on my router) is set to 120 seconds, the minimum allowed by the Asus RT56NU router, and it appears to allow renewal at 1/2 that, or every 60 seconds. 
@@ -63,15 +63,25 @@ Applies to all boards and modules which use the WIZnet W5500 chip: WIZ850io, W55
 - Binaries saved in the bin subfolder 
 
 ### TempServer
+- TempServer [Socket Debug logs](https://github.com/systronix/W5500_Test/blob/master/TempServer/TempServer_Debug_logs.md) showing [Zombie Sockets](https://forum.pjrc.com/threads/43761-Ethernet-library-socket-issues?p=148714&viewfull=1#post148714)
 - Simple temperature server which displays TMP102 temperature from onboard SALT temp sensor, or from a TMP102 breakout
 - Intended to be a proof of concept for a highly reliable, secure (not hackable or crashable) Teensy/WIZ850io data server
 - Uses a DDNS service and Port Forwarding to operate behind a router/firewall 
 - First version stopped responding after some few thousand seconds. Turns out code optimization SMALLEST CODE breaks when printf is used just after client.stop() in Line 335
 - you can try the example at [this IP address](http://systronix.hopto.org:8080/)
 - some documentation about this apparent optimizer-related bug in [this google drive file](https://docs.google.com/document/d/1ZbH-lGuzJ1XOtw04R_Ga4RLg5KANeHKZRIIN780brBo/edit?usp=sharing), anyone can enter comments
+- Working very reliably 2017 Jul 18 after too much effort tracing Zombie Sockets
+- running on custom board with also a buffered interface to ILI9341 touchscreen displaying temperature
 
-### EthernetKeypadLCD (on my wish list)
-- the Arduino Ethernet Shield example adapted to the Teensy and WIZ820io hardware
+### Webserver
+- taken from the Arduino Ethernet Example "Webserver" with minimal changes to work on our hardware
+- but even this would not run for more than a few hours without becoming unresponsive to requests
+- I set this aside in 2017 May to work on other things
+
+### Webserver Simple
+- start over with Arduino Ethernet webserver example, making even fewer changes, only what is needed to get to run on our hardware, simpler than "Webserver"
+- but this also does not render reliably in standard browsers, fails W3 validator, and becomes unresponsive
+- back to TempServer as the focus, 2017 July
 
 ### NTP Servers
 - NTP servers are a surprisingly complex topic, and server response can be [fickle](https://www.google.com/search?q=define+fickle&oq=define+fickle&aqs=chrome..69i57j0l5.3344j0j7&sourceid=chrome&ie=UTF-8).
@@ -87,7 +97,7 @@ Applies to all boards and modules which use the WIZnet W5500 chip: WIZ850io, W55
 M0Pro version does not work and I don't know why.
 
 ### Ntp_clock_set
-- Greatly enhanced output of NTP server response, by Scott.
+- Greatly enhanced output of NTP server response, by Scott. With a lot more info about the particular NTP server connection. Quite informative.
 - [Test Logs coming soon]
 
 ### TODO
