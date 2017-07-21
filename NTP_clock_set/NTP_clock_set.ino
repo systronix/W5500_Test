@@ -97,9 +97,9 @@ void setup()
 	pinMode(4, INPUT_PULLUP);
 
 	pinMode(ETH_RST, OUTPUT);				// This drives the pin low. Don't see any way to avoid that
-	pinMode(PERIF_RST, OUTPUT);			// High after POR, low when declared output
+	pinMode(PERIF_RST, OUTPUT);				// High after POR, low when declared output
 	digitalWrite(ETH_RST, LOW);				// assert it deliberately
-	digitalWrite(PERIPH_RST, LOW);			// low after POR anyway
+	digitalWrite(PERIF_RST, LOW);			// low after POR anyway
 
 	pinMode (CS_PIN, INPUT_PULLUP);			// disable resistive touch controller
 	pinMode (TFT_CS, INPUT_PULLUP);			// disable LCD display
@@ -165,10 +165,10 @@ uint8_t	inbyte;
 
 uint32_t NTP_wait_timer_start_time;
 uint32_t timer;
-uint32_t timer_min = 0xFFFFFFFF;
+//uint32_t timer_min = 0xFFFFFFFF;			// meaningless with 100mS delay
 uint32_t timer_max = 0;
-uint32_t timer_sum = 0;
-uint32_t timer_avg;
+//uint32_t timer_sum = 0;					// meaningless with 100mS delay
+//uint32_t timer_avg;						// meaningless with 100mS delay
 
 
 void loop()
@@ -270,12 +270,12 @@ void loop()
 		timer -= 100;												// remove our default delay
 //		timer_min = min (timer_min, timer);							// save min; with 100mS delay, don't really know what min is
 		timer_max = max (timer_max, timer);							// save max
-		timer_sum += timer;
-		timer_avg = timer_sum/response_count;
+//		timer_sum += timer;
+//		timer_avg = timer_sum/response_count;						// now meaningless with 100mS delay
 		}
 
 //	Serial.printf("\tresponse time: %lu; min: %lu; max: %lu; avg: %lu\n\n", timer, timer_min, timer_max, timer_avg);
-	Serial.printf("\tresponse time: %lu; max: %lu; avg: %lu\n\n", timer, timer_max, timer_avg);	// with 100mS delay, don't really know what min is
+	Serial.printf("\tresponse time: %lu; max: %lu\n\n", timer, timer_max);	// with 100mS delay, don't really know what min or avg areis
 
 	if ((0 == (uint8_t)((event_secs % 3600) / 60) % 10) && !summary_flag)
 		{
@@ -297,8 +297,8 @@ void loop()
 		inbyte = Serial.read();
 		if (('v' == (inbyte)) || ('V' == (inbyte)))
 			{
-				verbose = !verbose;
-				Serial.printf("\r\nverbose: %s ", verbose ? "true" : "false");
+			verbose = !verbose;
+			Serial.printf("\r\nverbose: %s ", verbose ? "true" : "false");
 			}
 		}
 
