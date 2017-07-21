@@ -36,7 +36,7 @@ Output sometimes stops after some hours. Why? How to recover? Etnernet.maintain(
 //#include <T3Mac.h>
 #include <TeensyID.h>   // https://github.com/systronix/TeensyID
 
-#define CS_PIN  8   // resistive touch controller XPT2406 uses SPI
+#define RES_TOUCH_CS_PIN  8   // resistive touch controller XPT2406 uses SPI
 
 #define TFT_CS 20    // 10 is default, different on ethernet/touch combo
 #define TFT_DC 21    // 9 is default, different on ethernet/touch combo
@@ -44,6 +44,8 @@ Output sometimes stops after some hours. Why? How to recover? Etnernet.maintain(
 #define PERIPH_RST 22   // SALT I/O such as PCA9557
 #define ETH_RST 9 // ethernet reset pin
 #define ETH_CS  10  // ethernet chip select
+
+#define SD_CS 4   // on PJRC WIZ8XX adapter, not on SALT
 
 // Enter a MAC address for your controller below.
 // Newer Ethernet shields have a MAC address printed on a sticker on the shield
@@ -79,15 +81,18 @@ void setup() {
    * Pins 4 and 10 will be reconfigured as outputs by the SD and Ethernet libraries. Making them input
    * pullup mode before initialization guarantees neither device can respond to unintentional signals
    * while the other is initialized.
+   *
+   * We don't use P4 on SALT, it is N/C
    */
-  pinMode(4, INPUT_PULLUP);
+  pinMode(SD_CS, INPUT_PULLUP);
+  pinMode(ETH_CS, INPUT_PULLUP);
 
   pinMode(ETH_RST, OUTPUT);         // This drives the pin low. Don't see any way to avoid that
   pinMode(PERIPH_RST, OUTPUT);      // High after POR, low when declared output
   digitalWrite(ETH_RST, LOW);       // assert it deliberately
   digitalWrite(PERIPH_RST, LOW);    // low after POR anyway
 
-  pinMode (CS_PIN, INPUT_PULLUP);  // disable resistive touch controller
+  pinMode (RES_TOUCH_CS_PIN, INPUT_PULLUP);  // disable resistive touch controller
   pinMode (TFT_CS, INPUT_PULLUP);    // disable LCD display
   pinMode (TFT_DC, INPUT_PULLUP);    // 
 
@@ -142,6 +147,9 @@ void setup() {
 void loop() {
   sendNTPpacket(timeServer); // send an NTP packet to a time server
   Serial.printf("@%u ask for time from %s\r\n", millis(), timeServer);
+
+  Serial.println();
+  Ethernet.getSocketStatus();
 
   // wait to see if a reply is available
   delay(1000);

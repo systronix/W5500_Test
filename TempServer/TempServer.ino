@@ -10,6 +10,8 @@
   by Arturo Guadalupi
 
   Modified 2017 May 08 bboyes added output of temp to ILI9341 Color Touchscreen
+
+
  
  */
 
@@ -21,11 +23,15 @@
 #include <TeensyID.h>
 #include <Systronix_TMP102.h> // best version of I2C library is #included by the library. Don't include it here!
 
-#define CS_PIN  8   // resistive touch controller XPT2406 uses SPI
+#define RES_TOUCH_CS_PIN  8     // resistive touch controller XPT2406 uses SPI
 #define TFT_CS 20    // 10 is default, different on ethernet/touch combo
 #define TFT_DC 21    // 9 is default, different on ethernet/touch combo
 
-#define ETH_RST 9 // ethernet reset pin
+#define ETH_RST 9   // ethernet reset pin
+#define ETH_CS  10  // ethernet chip select
+
+#define SD_CS 4     // on PJRC WIZ8XX adapter, not on SALT
+
 #define PERIPHERAL_RESET 22 // for ILI9341 and other peripherals
 
 uint8_t t_mac[6]; // hold internal MAC from Teensy 
@@ -57,6 +63,12 @@ boolean minute_tick = false;
 uint32_t seconds_without_client = 0;
 uint32_t max_without_client = 0;
 
+boolean verbose = true;
+boolean silent = true;
+
+boolean socket_status = true;
+uint8_t inbyte = 0;
+
 uint16_t rawtemp;
 
 float temp = 0.0;
@@ -67,12 +79,10 @@ uint16_t configOptions;
 
 
 // MOSI=11, MISO=12, SCK=13
-XPT2046_Touchscreen ts(CS_PIN);
+XPT2046_Touchscreen ts(RES_TOUCH_CS_PIN);
 ILI9341_t3 tft = ILI9341_t3(TFT_CS, TFT_DC);
 
 int8_t stat = -1;
-
-char log_message[128];
 
 // Initialize the Ethernet server library
 // with the IP address and port you want to use
@@ -89,10 +99,12 @@ void setup() {
    * Pins 4 and 10 will be reconfigured as outputs by the SD and Ethernet libraries. Making them input
    * pullup mode before initialization guarantees neither device can respond to unintentional signals
    * while the other is initialized.
+   * This is Ethernet CS and SD CS
    */
-  pinMode(4, INPUT_PULLUP);
-  pinMode(10, INPUT_PULLUP);
-  pinMode (CS_PIN, INPUT_PULLUP);  // disable resistive touch controller
+  pinMode(SD_CS, INPUT_PULLUP);
+  pinMode(ETH_CS, INPUT_PULLUP);
+
+  pinMode (RES_TOUCH_CS_PIN, INPUT_PULLUP);  // resistive touch controller
 
   pinMode(TFT_CS, INPUT_PULLUP);    // disable LCD display
   pinMode(TFT_DC, INPUT_PULLUP);    // 
@@ -107,6 +119,7 @@ void setup() {
   digitalWrite(ETH_RST, HIGH);
   delay(10);                      // recover from reset
 
+  // reset peripherals
   pinMode(PERIPHERAL_RESET, OUTPUT);
   digitalWrite(PERIPHERAL_RESET, LOW);
   delay(1);
@@ -118,12 +131,8 @@ void setup() {
   tft.fillScreen(ILI9341_GREEN);
   ts.begin();
 
-  strcpy (log_message, "Build time: ");
-  strcat (log_message, __TIME__);
-  strcat (log_message, " MDT, ");
-  strcat (log_message, __DATE__);  
-  strcat (log_message, 0x00);
-
+  // Open serial communications and wait for port to open:
+  Serial.begin(115200);
   // Wait here for up to 10 seconds to see if we will use Serial Monitor, so output is not lost
   while((!Serial) && (millis()<10000));    // wait until serial monitor is open or timeout,
 
@@ -131,14 +140,8 @@ void setup() {
   Serial.println("Teensy Temperature Server");
 
   Serial.printf("Build %s %s\r\n", __TIME__, __DATE__);
-  Serial.println(log_message);
 
   Serial.printf("%u msec to start serial\r\n", new_millis);
-
-  char ID[36];    // was 32! Buffer overun!
-  sprintf(ID, "%08lX %08lX %08lX %08lX", SIM_UIDH, SIM_UIDMH, SIM_UIDML, SIM_UIDL);
-  Serial.print("Teensy3 128-bit UniqueID char array: ");
-  Serial.println(ID);
 
   kinetisUID(uid);
   Serial.printf("Teensy3 128-bit UniqueID int array: %08X-%08X-%08X-%08X\n", uid[0], uid[1], uid[2], uid[3]);
@@ -154,16 +157,19 @@ void setup() {
   // start the Ethernet connection and the server:
   Ethernet.begin(t_mac, ip);
 
-  server.begin();
-  Serial.print("server is at ");
+  Serial.print("Begin server at ");
   Serial.println(Ethernet.localIP());
+  
+    // start listening for clients
+  server.begin();  
+
+  Ethernet.getSocketStatus(4);
 
   // start TMP102 library
   tmp102_48.setup(0x48);
   tmp102_48.begin();
   
-  Serial.print("TMP102 Sensor at 0x");
-  Serial.println(tmp102_48.BaseAddr, HEX);
+  Serial.printf("TMP102 Sensor at 0x%02X\r\n", tmp102_48.base_get());
 
   // start with default config
   Serial.print ("SetCFG=0x");
@@ -182,11 +188,11 @@ void setup() {
   Serial.print ("SetCFG=0x");
   Serial.print (configOptions, HEX);
   Serial.print (" ");
-  stat = tmp102_48.writeRegister(TMP102_CONF_REG_PTR, configOptions);
+  stat = tmp102_48.register_write(TMP102_CONF_REG_PTR, configOptions);
   if (SUCCESS != stat) Serial.print (" writeReg error! ");  
 
   // leave the pointer set to read temperature
-  stat = tmp102_48.writePointer(TMP102_TEMP_REG_PTR);  
+  stat = tmp102_48.pointer_write(TMP102_TEMP_REG_PTR);  
 
   Serial.println();
 
@@ -195,6 +201,9 @@ void setup() {
   tft.setFont(Arial_40);
   tft.setCursor(5, 20);
   tft.print("TempServer");
+
+  Serial.printf("Setup Complete!\r\nSend V/v to toggle verbose, h/H to toggle hush/silent, s/S socket status");
+
   delay(2000);
 
 }
@@ -205,6 +214,8 @@ boolean wastouched = true;
 uint16_t xmax, xmin=4095, ymax, ymin=4095, zmax, zmin=4095;
 uint16_t xnow, ynow, znow;
 uint32_t touch_start, touch_total, touch_secs;  // in millis unless _secs
+
+uint8_t outcount = 0;
 
 void loop() 
 {
@@ -241,12 +252,12 @@ void loop()
 
         // read the temperature to have it ready for any clients
         configOptions |= TMP102_CFG_OS;        // start One Shot conversion
-        stat = tmp102_48.writeRegister (TMP102_CONF_REG_PTR, configOptions);
+        stat = tmp102_48.register_write (TMP102_CONF_REG_PTR, configOptions);
 
         // pointer set to read temperature
-        stat = tmp102_48.writePointer(TMP102_TEMP_REG_PTR);     
+        stat = tmp102_48.pointer_write(TMP102_TEMP_REG_PTR);     
         // read two bytes of temperature
-        stat = tmp102_48.readRegister (&rawtemp);
+        stat = tmp102_48.register_read (&rawtemp);
         temp = tmp102_48.raw13ToC(rawtemp);
 
         if (0 == (total_elapsed_seconds % 10))
@@ -266,15 +277,53 @@ void loop()
       tft.setFont(Arial_48);
       tft.setCursor(80, 20);
       tft.print(temp);    
-
-
     }
+
+  /**
+  * Get any serial input from user
+  */
+
+  if (Serial.available()>0)
+  {
+    inbyte = Serial.read();
+    switch (inbyte)
+    {
+
+    case 's':
+    case 'S':
+      // detailed socket status when we get a new client connection
+      socket_status = true;
+      Serial.printf("\r\nSocket Status: %s ", socket_status ? "true" : "false");
+      break;
+
+    case 'v':
+    case 'V':
+      verbose = !verbose;
+      if (verbose) silent = false;
+      Serial.printf("\r\nverbose: %s ", verbose ? "true" : "false");
+      break;
+
+    case 'h':
+    case 'H':
+      // hush mode
+      silent = !silent;
+      if (silent) verbose = false;  // can't have silent and verbose
+      Serial.printf("\r\nsilent: %s ", silent ? "true" : "false");
+      break;      
+
+    default:
+      break;  
+    }
+  }    
 
 
     // listen for incoming clients
     EthernetClient client = server.available();
     if (client) 
     {
+        Serial.printf("@ %u sec, Got new client, Temp is %.3f C\r\n", new_elapsed_seconds, temp);
+        if (socket_status) Ethernet.getSocketStatus(4);
+
         start_millis = new_millis;  // for timeout check
         // Serial.printf("new client at %u sec\r\n", new_elapsed_seconds);
 
@@ -287,50 +336,63 @@ void loop()
             if (client.available()) 
             {
                 char c = client.read();
-                Serial.write(c);
+                if (verbose) Serial.write(c);   // echo incoming request to serial monitor
                 // if you've gotten to the end of the line (received a newline
                 // character) and the line is blank, the http request has ended,
                 // so you can send a reply
+                // if (c == '\n') Serial.println ("newline");
                 if (c == '\n' && currentLineIsBlank) 
                 {
+                    Serial.println("Request is complete");
                     // we could be here if we get a request consisting of one blank line, in theory
                     // send a standard http response header
                     Serial.print("Sending Response...");
                     http_request_count++;
 
-                    client.println("HTTP/1.1 200 OK");
-                    client.println("Content-Type: text/html");
-                    client.println("Connection: close");  // the connection will be closed after completion of the response
-                    client.println("Refresh: 5");        // changing this to a print vs println breaks it
-                    // client.println(update);  // refresh the page automatically every X sec
-                    client.println();
-                    // client.print("<meta name=\"robots\" content=\"noindex\" />");
-                    client.println("<!DOCTYPE HTML>");
-                    client.println("<html>");
+                    outcount = client.println("HTTP/1.1 200 OK");
+                    if (!outcount) Serial.println("Could not print to client");
+                    outcount = client.println("Content-Type: text/html; charset=UTF-8");
+                    if (!outcount) Serial.println("Could not print to client");
+                    outcount = client.println("Connection: close");  // the connection will be closed after completion of the response
+                    if (!outcount) Serial.println("Could not print to client");
+                    outcount = client.print("Refresh: ");        // changing this to a print vs println breaks it
+                    if (!outcount) Serial.println("Could not print to client");
+                    client.println(update);  // refresh the page automatically every X sec
+                    client.println("<meta name=\"robots\" content=\"noindex\" />");
+                    client.println(); // blank line must be here to separate HTTP request response from html which follows
+                    //outcount = client.println("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">");
+                    outcount = client.println("<!DOCTYPE html>");
+                    if (!outcount) Serial.println("Could not print to client"); else Serial.printf ("Sent %u\n", outcount);
+                    outcount = client.println("<html>");
+                    if (!outcount) Serial.println("Could not print to client");
+                    outcount = client.println("<head>");
+                    outcount = client.println("<title>Simple Temperature Server</title>");
+                    outcount = client.println("</head>");
+                    outcount = client.println("<body>");
+                
 
-                        client.println("<b>SALT 2.1 TMP102 Temperature Server</b> <br />");
-                        client.print(log_message);
-                        client.println("<br />");
+                        outcount = client.println("<h2>SALT TMP102 Temperature Server</h2>");
+                        if (!outcount) Serial.println("Could not print to client");
                         client.print("Updates approx every ");
                         client.print(update);
-                        client.println(" seconds<br />");
+                        client.print(" seconds<br>");
                         client.print("@");
                         client.print(new_elapsed_seconds);
-                        client.println(" sec: ");
+                        client.print(" sec: ");
                         client.print(temp, 2);
-                        client.print(" deg C <br />");
+                        client.print(" deg C <br>");
                         client.print(http_request_count);
                         client.print(" http requests, ");
                         client.print((float)http_request_count/(float)new_elapsed_seconds);
-                        client.print(" per sec");
-                        client.print("<br />");
+                        client.print(" per sec. ");
                         client.print(timeout_http_count);
-                        client.println(" timeouts, ");
+                        client.print(" timeouts, ");
                         client.print(max_without_client);
-                        client.println(" sec w/o client");
-                        client.println("<br />");
-
+                        client.print(" sec w/o client");
+                        client.print("<br>");
+                    client.println("</body>");
                     client.println("</html>");
+                    client.println();
 
                     Serial.println("done");
                     
@@ -370,23 +432,21 @@ void loop()
         // give the web browser time to receive the data
         delay(1);    // 1 msec seemed not enough, make it 10? 
         // Serial.println("Will stop client");
-        Serial.println("Out of while...");
+        // Serial.println("Out of while...");
         // close the connection:
         client.stop();
-        Serial.println("client disconnected");
+        Serial.println("client stopped");
         // // These serial.printf cause SPI to WIZnet 850io to halt in Ard1.8.1/TD1.35 or temp never printed in Ard1.8.2/TD1.36!!
         // Serial.printf("Temp %f C\r\n", temp);
         // Serial.printf("Timeout count=%u\r\n", timeout_http_count);
         // Serial.flush();
+        if (socket_status) Ethernet.getSocketStatus(4);
 
-        Serial.printf("@ %u sec, Temp is %.3f C\r\n", new_elapsed_seconds, temp);
-
-        Serial.printf("%u http requests, %.2f per sec, %u timeouts\r\n", 
+        if (verbose) Serial.printf("%u http requests, %.2f per sec, %u timeouts\r\n", 
           http_request_count, (float)http_request_count/(float)new_elapsed_seconds, timeout_http_count);
 
-        Serial.print(max_without_client);
-        Serial.println(" sec max w/o client");
-        Serial.println();
+        if (verbose) Serial.printf("%u sec max w/o client\r\n", max_without_client);
+        Serial.printf("--------\r\n\n");
 
 
     }   // end of if-client
@@ -406,4 +466,6 @@ void loop()
     }
 
 }
+
+
 

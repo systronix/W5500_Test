@@ -8,6 +8,14 @@ Test Setup:
 
 ## Server stops responding to http requests
 
+### 2017 Jul 16
+Finally back on this. Uncommented the debug output in Ethernet::socketBegin().
+Used Ethernet example Webserver to make the simplest possible server but added WIZ850io reset and disable of touchscreen and uSD.
+
+```
+
+```
+
 ### 2017 May 07
 Stopped responding after 17.55 hours.
 This is built with Arduino 1.8.2 and TD 1.36

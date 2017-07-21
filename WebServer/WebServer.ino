@@ -33,7 +33,7 @@ IPAddress ip(192, 168, 1, 10);
 EthernetServer server(8080);
 
 uint8_t update = 5;
-char log_message[128];
+// char log_message[128];
 
 void setup() {
   // Open serial communications and wait for port to open:
@@ -41,15 +41,14 @@ void setup() {
   // Wait here for up to 10 seconds to see if we will use Serial Monitor, so output is not lost
   while((!Serial) && (millis()<10000));    // wait until serial monitor is open or timeout,
 
-  strcpy (log_message, "Build: ");
-  strcat (log_message, __TIME__);
-  strcat (log_message, " MDT, ");
-  strcat (log_message, __DATE__);  
-  strcat (log_message, 0x00);
+  // strcpy (log_message, "Build: ");
+  // strcat (log_message, __TIME__);
+  // strcat (log_message, " MDT, ");
+  // strcat (log_message, __DATE__);  
 
   Serial.println("Simple Webserver Example");
 
-  Serial.println(log_message);
+//  Serial.println(log_message);
 
   // start the Ethernet connection and the server:
   Ethernet.begin(mac, ip);
@@ -76,18 +75,18 @@ void loop() {
         if (c == '\n' && currentLineIsBlank) {
           // send a standard http response header
           client.println("HTTP/1.1 200 OK");
-          client.println("Content-Type: text/html");
+          client.println("Content-Type: text/html;; charset=UTF-8");
           client.println("Connection: close");  // the connection will be closed after completion of the response
           client.print("Refresh: ");  // refresh the page automatically every XX sec
           client.println(update);
           client.println();   // must have this blank line or browser won't display anything!
-          client.println("<!DOCTYPE HTML>");
+          cclient.println("<!DOCTYPE html>");
           client.println("<html>");
 
 
             client.print("Simple Webserver Test <br />");
             client.println("<br />");
-            client.println(log_message);
+            // client.println(log_message);
             client.println("<br />");
             client.print("Updates approx every ");
             client.print(update);
@@ -113,8 +112,7 @@ void loop() {
     // close the connection:
     client.stop();
     Serial.println("client disconnected");
-    Serial.printf("A serial printf at %u millis\r\n", millis());
-    Serial.printf("Another printf with just text\r\n");
+
   }
 }
 
