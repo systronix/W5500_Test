@@ -3,12 +3,11 @@
 - More than one socket is established, which should not be possible since requests are handled one at a time and closed when response is complete, assuming the requester is well-behaved and not malicious.
 - One socket is stuck in the 'temporary' state of 0x16 which is SYN packet received. W5500 should have sent SYN/ACK, received an ACK from the requester and changed this socket to Established, or change to Closed after a timeout. Apparently none of this happened.
 - The output "W5000socket 3" means socketBegin will use socket 3, the one in Listen mode. But socket status reports it is still in Listen mode. Perhaps there is some more delay before socket 3 enters Established mode. But...
-- ...socketBegin looks for a socket in Closed mode:
+- ...socketBegin looks for a socket in Closed mode... and this would not apply to socket 3 which is Listening. What??? 
 ```
 	if (status[s] == SnSR::CLOSED) goto makesocket;
 ```
-and this would not apply to socket 3. What??? 
-- It appears that when makesocket reports it is using socket n it is really using n+1 but lookign at the code I don't see how this is possible.
+- It appears that when makesocket reports it is using socket n it is really using n+1 but looking at the code I don't see how this is possible.
 ```
 	...W5000socket begin, protocol=1, port=8080
 	W5000socket 3
