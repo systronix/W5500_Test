@@ -1,4 +1,45 @@
 # TempServer
+### 2017 Jul 29
+- More than one socket is established, which should not be possible since requests are handled one at a time and closed when response is complete, assuming the requester is well-behaved and not malicious.
+- One socket is stuck in the 'temporary' state of 0x16 which is SYN packet received. W5500 should have sent SYN/ACK, received an ACK from the requester and changed this socket to Established, or change to Closed after a timeout. Apparently none of this happened.
+- The output "W5000socket 3" means socketBegin will use socket 3, the one in Listen mode. But socket status reports it is still in Listen mode. Perhaps there is some more delay before socket 3 enters Established mode. But...
+- ...socketBegin looks for a socket in Closed mode:
+```
+	if (status[s] == SnSR::CLOSED) goto makesocket;
+```
+and this would not apply to socket 3. What??? It appears that when makesocket reports it is using socket n it is really using n+1 but I don't see how this is possible.
+```
+	...W5000socket begin, protocol=1, port=8080
+	W5000socket 3
+	W5000socket prot=1, RX_RD=0
+	@ 177107 sec, Got new client, Temp is 28.875 C
+	    Socket(0) SnSr = Establ SnMR = TCP
+	    Socket(1) SnSr = Establ SnMR = TCP
+	    Socket(2) SnSr = 0x16   SnMR = TCP
+	    Socket(3) SnSr = Listen SnMR = TCP
+	GET / HTTP/1.1
+	Host: 192.168.1.10:8080
+	Connection: keep-alive
+	Cache-Control: max-age=0
+	Upgrade-Insecure-Requests: 1
+	User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36
+	Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8
+	Referer: http://192.168.1.10:8080/
+	Accept-Encoding: gzip, deflate
+	Accept-Language: en-US,en;q=0.8
+
+	Request is complete
+	Sending Response...Sent 17
+	done
+	client stopped
+	    Socket(0) SnSr = Establ SnMR = TCP
+	    Socket(1) SnSr = Closed SnMR = TCP
+	    Socket(2) SnSr = 0x16   SnMR = TCP
+	    Socket(3) SnSr = Listen SnMR = TCP
+	123363 http requests, 0.70 per sec, 0 timeouts
+	351 sec max w/o client
+	--------
+```
 
 ### 2017 Jul 19
 - All four sockets are "used up"

@@ -9,6 +9,7 @@
   modified 02 Sept 2015
   by Arturo Guadalupi
 
+  2017 Jul 27 bboyes, rebuild with newly synched SPI library of PJRC
   Modified 2017 May 08 bboyes added output of temp to ILI9341 Color Touchscreen
 
 
@@ -346,8 +347,10 @@ void loop()
                     Serial.println("Request is complete");
                     // we could be here if we get a request consisting of one blank line, in theory
                     // send a standard http response header
-                    Serial.print("Sending Response...");
+                    Serial.println("Sending Response...");
                     http_request_count++;
+
+                    if (socket_status) Ethernet.getSocketStatus(4);
 
                     outcount = client.println("HTTP/1.1 200 OK");
                     if (!outcount) Serial.println("Could not print to client");
@@ -373,6 +376,12 @@ void loop()
 
                         outcount = client.println("<h2>SALT TMP102 Temperature Server</h2>");
                         if (!outcount) Serial.println("Could not print to client");
+                        // Serial.printf("Build %s %s\r\n", __TIME__, __DATE__);
+                        client.print("Build ");
+                        client.print(__TIME__);
+                        client.print(" ");
+                        client.print(__DATE__);
+                        client.print("<br>");
                         client.print("Updates approx every ");
                         client.print(update);
                         client.print(" seconds<br>");
@@ -388,7 +397,7 @@ void loop()
                         client.print(timeout_http_count);
                         client.print(" timeouts, ");
                         client.print(max_without_client);
-                        client.print(" sec w/o client");
+                        client.print(" max sec w/o client");
                         client.print("<br>");
                     client.println("</body>");
                     client.println("</html>");
