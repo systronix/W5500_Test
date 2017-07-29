@@ -7,7 +7,8 @@
 ```
 	if (status[s] == SnSR::CLOSED) goto makesocket;
 ```
-and this would not apply to socket 3. What??? It appears that when makesocket reports it is using socket n it is really using n+1 but I don't see how this is possible.
+and this would not apply to socket 3. What??? 
+- It appears that when makesocket reports it is using socket n it is really using n+1 but lookign at the code I don't see how this is possible.
 ```
 	...W5000socket begin, protocol=1, port=8080
 	W5000socket 3
