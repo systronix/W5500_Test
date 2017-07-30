@@ -338,6 +338,7 @@ void loop()
             {
                 char c = client.read();
                 if (verbose) Serial.write(c);   // echo incoming request to serial monitor
+
                 // if you've gotten to the end of the line (received a newline
                 // character) and the line is blank, the http request has ended,
                 // so you can send a reply
@@ -374,31 +375,31 @@ void loop()
                     outcount = client.println("<body>");
                 
 
-                        outcount = client.println("<h2>SALT TMP102 Temperature Server</h2>");
-                        if (!outcount) Serial.println("Could not print to client");
-                        // Serial.printf("Build %s %s\r\n", __TIME__, __DATE__);
-                        client.print("Build ");
-                        client.print(__TIME__);
-                        client.print(" ");
-                        client.print(__DATE__);
-                        client.print("<br>");
-                        client.print("Updates approx every ");
-                        client.print(update);
-                        client.print(" seconds<br>");
-                        client.print("@");
-                        client.print(new_elapsed_seconds);
-                        client.print(" sec: ");
-                        client.print(temp, 2);
-                        client.print(" deg C <br>");
-                        client.print(http_request_count);
-                        client.print(" http requests, ");
-                        client.print((float)http_request_count/(float)new_elapsed_seconds);
-                        client.print(" per sec. ");
-                        client.print(timeout_http_count);
-                        client.print(" timeouts, ");
-                        client.print(max_without_client);
-                        client.print(" max sec w/o client");
-                        client.print("<br>");
+                    outcount = client.println("<h2>SALT TMP102 Temperature Server</h2>");
+                    if (!outcount) Serial.println("Could not print to client");
+                    // Serial.printf("Build %s %s\r\n", __TIME__, __DATE__);
+                    client.print("Build ");
+                    client.print(__TIME__);
+                    client.print(" ");
+                    client.print(__DATE__);
+                    client.print("<br>");
+                    client.print("Updates approx every ");
+                    client.print(update);
+                    client.print(" seconds<br>");
+                    client.print("@");
+                    client.print(new_elapsed_seconds);
+                    client.print(" sec: ");
+                    client.print(temp, 2);
+                    client.print(" deg C <br>");
+                    client.print(http_request_count);
+                    client.print(" http requests, ");
+                    client.print((float)http_request_count/(float)new_elapsed_seconds);
+                    client.print(" per sec. ");
+                    client.print(timeout_http_count);
+                    client.print(" timeouts, ");
+                    client.print(max_without_client);
+                    client.print(" max sec w/o client");
+                    client.print("<br>");
                     client.println("</body>");
                     client.println("</html>");
                     client.println();
@@ -406,7 +407,7 @@ void loop()
                     Serial.println("done");
                     
                     seconds_without_client = 0; // reset to zero
-                    break;    // out of the while
+                    break;    // out of the while client.connected ??? Is this really correct?
                 }   // end of responding to complete request
                 if (c == '\n') 
                 {
@@ -420,8 +421,8 @@ void loop()
                     // here if char was not a newline and not a carriage return
                     // you've gotten a character on the current line
                     currentLineIsBlank = false;
-                  }
-            }   // end of if client available
+                }
+            }   // end of if client.available
             else
             {
                 // client connected but nothing available, don't wait forever!
@@ -435,7 +436,7 @@ void loop()
                     break;  // get out of while
                 }
             }
-        }   // end of while-connected
+        }   // end of while client.connected
 
         // client no longer connected, or request was ended
         // give the web browser time to receive the data
