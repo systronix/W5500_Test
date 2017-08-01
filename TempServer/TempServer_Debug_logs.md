@@ -1,5 +1,100 @@
 # TempServer
-### 2017 Aug 01
+### 2017 Aug 01 
+## Restart from lockup
+Sending TyQt reset starts operation again but it starts off very oddly by immediately connecting on all three available sockets:
+
+	Teensy Temperature Server
+	Build 16:57:58 Jul 29 2017
+	689 msec to start serial
+	Teensy3 128-bit UniqueID int array: E4A10000-8E620024-003A300B-32624E45
+	USB Serialnumber: 1772780 
+	Teensy MAC Address: 04:E9:E5:02:B4:7E 
+	Begin server at 192.168.1.10
+	W5000socket begin, protocol=1, port=8080
+	W5000socket 0
+	W5000socket prot=1, RX_RD=0
+	    Socket(0) SnSr = Listen SnMR = TCP
+	    Socket(1) SnSr = Closed SnMR = Close
+	    Socket(2) SnSr = Closed SnMR = Close
+	    Socket(3) SnSr = Closed SnMR = Close
+	TMP102 Sensor at 0x48
+	SetCFG=0x80 SetCFG=0x150 
+	Setup Complete!
+	Send V/v to toggle verbose, h/H to toggle hush/silent, s/S socket status........'W5000socket begin, protocol=1, port=8080
+	W5000socket 1
+	W5000socket prot=1, RX_RD=0
+	W5000socket begin, protocol=1, port=8080
+	W5000socket 2
+	W5000socket prot=1, RX_RD=0
+	W5000socket begin, protocol=1, port=8080
+	W5000socket 3
+	W5000socket prot=1, RX_RD=0
+	@ 10 sec, Got new client, Temp is 27.250 C
+	    Socket(0) SnSr = Establ SnMR = TCP
+	    Socket(1) SnSr = Establ SnMR = TCP
+	    Socket(2) SnSr = Establ SnMR = TCP
+	    Socket(3) SnSr = Listen SnMR = TCP
+	GET / HTTP/1.1
+	Host: systronix.hopto.org:8080
+	Connection: keep-alive
+	Cache-Control: max-age=0
+	Upgrade-Insecure-Requests: 1
+	User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36
+	Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8
+	Accept-Encoding: gzip, deflate
+	Accept-Language: en-US,en;q=0.8
+
+	Request is complete
+	Sending Response...
+	    Socket(0) SnSr = Establ SnMR = TCP
+	    Socket(1) SnSr = Establ SnMR = TCP
+	    Socket(2) SnSr = Establ SnMR = TCP
+	    Socket(3) SnSr = Listen SnMR = TCP
+	Sent 17
+	done
+	client stopped
+	    Socket(0) SnSr = Closed SnMR = TCP
+	    Socket(1) SnSr = Establ SnMR = TCP
+	    Socket(2) SnSr = Establ SnMR = TCP
+	    Socket(3) SnSr = Listen SnMR = TCP
+	1 http requests, 0.10 per sec, 0 timeouts
+	8 sec max w/o client
+	--------
+
+	.@ 11 sec, Got new client, Temp is 27.250 C
+	    Socket(0) SnSr = Closed SnMR = TCP
+	    Socket(1) SnSr = Establ SnMR = TCP
+	    Socket(2) SnSr = Establ SnMR = TCP
+	    Socket(3) SnSr = Listen SnMR = TCP
+	GET /favicon.ico HTTP/1.1
+	Host: systronix.hopto.org:8080
+	Connection: keep-alive
+	Pragma: no-cache
+	Cache-Control: no-cache
+	User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36
+	Accept: image/webp,image/apng,image/*,*/*;q=0.8
+	Referer: http://systronix.hopto.org:8080/
+	Accept-Encoding: gzip, deflate
+	Accept-Language: en-US,en;q=0.8
+
+	Request is complete
+	Sending Response...
+	    Socket(0) SnSr = Closed SnMR = TCP
+	    Socket(1) SnSr = Establ SnMR = TCP
+	    Socket(2) SnSr = Establ SnMR = TCP
+	    Socket(3) SnSr = Listen SnMR = TCP
+	Sent 17
+	done
+	client stopped
+	    Socket(0) SnSr = Closed SnMR = TCP
+	    Socket(1) SnSr = Closed SnMR = TCP
+	    Socket(2) SnSr = Establ SnMR = TCP
+	    Socket(3) SnSr = Listen SnMR = TCP
+	2 http requests, 0.18 per sec, 0 timeouts
+	8 sec max w/o client
+	--------
+
+## Lock up
 - Tempserver locked up similar to yesterday, in midst of response to client request
 - This time I had the Totalphase SPI analyzer running. BUT when I went to look at and save the data, it crashed! Urk. I did get a screen capture. It shows the last SPI message has multiple errors including Partial Last Byte.
 - Ethernet CS is low/active, MOSI is high/inactive, MISO is low. So SPI locked up in process of WIZ850io sending data to Teensy.
