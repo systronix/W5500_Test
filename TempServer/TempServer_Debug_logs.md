@@ -1,4 +1,128 @@
 # TempServer
+### 2017 Aug 01
+- Tempserver locked up similar to yesterday, in midst of response to client request
+- This time I had the Totalphase SPI analyzer running. BUT when I went to look at and save the data, it crashed! Urk. I did get a screen capture. It shows the last SPI message has multiple errors including Partial Last Byte.
+- Ethernet CS is low/active, MOSI is high/inactive, MISO is low. So SPI locked up in process of WIZ850io sending data to Teensy.
+- Last MOSI data is 0A 00 00 14 9B FF 1F 1F 0D 00 00 00
+- Last MISO data is 01 02 03 00 C0 A8 01 01 FF FF FF 00
+- Those data above are paired, so while MOSI at the start of the SPI cycle is 0A, MISO is 01
+
+Semi-normal activity. Already too many sockets are in Established state.
+
+	'.W5000socket begin, protocol=1, port=8080
+	W5000socket 0
+	W5000socket prot=1, RX_RD=0
+	@ 154841 sec, Got new client, Temp is 27.375 C
+	    Socket(0) SnSr = Listen SnMR = TCP
+	    Socket(1) SnSr = Establ SnMR = TCP
+	    Socket(2) SnSr = Establ SnMR = TCP
+	    Socket(3) SnSr = Closed SnMR = TCP
+	GET /favicon.ico HTTP/1.1
+	Host: systronix.hopto.org:8080
+	Accept: image/webp,image/apng,image/*,*/*;q=0.8
+	Accept-Encoding: gzip,deflate
+	Accept-Language: en-US,en;q=0.8
+	Forwarded: for="[2607:fb90:2779:aa40:45ad:a800:368c:867d]"
+	Referer: http://systronix.hopto.org:8080/
+	Save-Data: on
+	Scheme: http
+	Via: 1.1 Chrome-Compression-Proxy
+	X-Forwarded-For: 2607:fb90:2779:aa40:45ad:a800:368c:867d
+	Connection: Keep-alive
+	User-Agent: Mozilla/5.0 (Linux; Android 5.1; Z955A Build/LMY47O) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.125 Mobile Safari/537.36
+
+	Request is complete
+	Sending Response...
+	    Socket(0) SnSr = Listen SnMR = TCP
+	    Socket(1) SnSr = Establ SnMR = TCP
+	    Socket(2) SnSr = Establ SnMR = TCP
+	    Socket(3) SnSr = Closed SnMR = TCP
+	Sent 17
+	done
+	client stopped
+	    Socket(0) SnSr = Listen SnMR = TCP
+	    Socket(1) SnSr = Establ SnMR = TCP
+	    Socket(2) SnSr = Closed SnMR = TCP
+	    Socket(3) SnSr = Closed SnMR = TCP
+	97482 http requests, 0.63 per sec, 8 timeouts
+	7793 sec max w/o client
+	--------
+
+Above, that request response ended with a socket still in Established state.
+
+Now things go wrong more, with two more sockets Established. Only one at a time should be allowed.
+These allocated socket numbers are incorrect. Socket 2 is established but Socket 3 is listening.
+Socket.cpp incorrectly emits that Socket 3 was closed and can be used in a new connection.
+
+	...W5000socket begin, protocol=1, port=8080
+	W5000socket 2
+	W5000socket prot=1, RX_RD=0
+	W5000socket begin, protocol=1, port=8080
+	W5000socket 3
+	W5000socket prot=1, RX_RD=0
+	@ 154844 sec, Got new client, Temp is 27.375 C
+	    Socket(0) SnSr = Establ SnMR = TCP
+	    Socket(1) SnSr = Establ SnMR = TCP
+	    Socket(2) SnSr = Establ SnMR = TCP
+	    Socket(3) SnSr = Listen SnMR = TCP
+	GET / HTTP/1.1
+	Host: systronix.hopto.org:8080
+	Connection: keep-alive
+	Cache-Control: max-age=0
+	Upgrade-Insecure-Requests: 1
+	User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36
+	Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8
+	Referer: http://systronix.hopto.org:8080/
+	Accept-Encoding: gzip, deflate
+	Accept-Language: en-US,en;q=0.8
+
+	Request is complete
+	Sending Response...
+	    Socket(0) SnSr = Establ SnMR = TCP
+	    Socket(1) SnSr = Establ SnMR = TCP
+	    Socket(2) SnSr = Establ SnMR = TCP
+	    Socket(3) SnSr = Listen SnMR = TCP
+	Sent 17
+	done
+	client stopped
+	    Socket(0) SnSr = Closed SnMR = TCP
+	    Socket(1) SnSr = Establ SnMR = TCP
+	    Socket(2) SnSr = Establ SnMR = TCP
+	    Socket(3) SnSr = Listen SnMR = TCP
+	97483 http requests, 0.63 per sec, 8 timeouts
+	7793 sec max w/o client
+	--------
+
+Now we have only one socket Closed and available for a new connection.
+
+Immediately the already open request tries to process.
+
+	@ 154844 sec, Got new client, Temp is 27.375 C
+	    Socket(0) SnSr = Closed SnMR = TCP
+	    Socket(1) SnSr = Establ SnMR = TCP
+	    Socket(2) SnSr = Establ SnMR = TCP
+	    Socket(3) SnSr = Listen SnMR = TCP
+	GET /favicon.ico HTTP/1.1
+	Host: systronix.hopto.org:8080
+	Connection: keep-alive
+	User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36
+	Accept: image/webp,image/apng,image/*,*/*;q=0.8
+	Referer: http://systronix.hopto.org:8080/
+	Accept-Encoding: gzip, deflate
+	Accept-Language: en-US,en;q=0.8
+
+	Request is complete
+	Sending Response...
+	    Socket(0) SnSr = Closed SnMR = TCP
+	    Socket(1) SnSr = Establ SnMR = TCP
+	    Socket(2) SnSr = Establ SnMR = TCP
+	    Socket(3) SnSr = Listen SnMR = TCP
+	Sent 17
+
+Which socket is being used to respond to the request? Maybe Socket 2 but we can't tell. Execution hangs somewhere in the client.print()
+Teensy is not updating the touchscreen.
+Similar to the previous day's hang.
+
 ### 2017 Jul 30
 - Server unresponsive. WIZ85io in SALT 2.1 #2/4
 - SPI library updated a couple days earlier to PJRC latest
