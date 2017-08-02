@@ -158,12 +158,13 @@ void setup() {
   // start the Ethernet connection and the server:
   Ethernet.begin(t_mac, ip);
 
-  Serial.print("Begin server at ");
+  Serial.print("Server at ");
   Serial.println(Ethernet.localIP());
   
+  Ethernet.getSocketStatus(4);
+  Serial.println("Start listening:");
     // start listening for clients
   server.begin();  
-
   Ethernet.getSocketStatus(4);
 
   // start TMP102 library
@@ -203,7 +204,7 @@ void setup() {
   tft.setCursor(5, 20);
   tft.print("TempServer");
 
-  Serial.printf("Setup Complete!\r\nSend V/v to toggle verbose, h/H to toggle hush/silent, s/S socket status");
+  Serial.printf("Setup Complete!\nSend V/v to toggle verbose, h/H to toggle hush/silent, s/S socket status\n");
 
   delay(2000);
 
@@ -365,15 +366,18 @@ void loop()
                     client.println("<meta name=\"robots\" content=\"noindex\" />");
                     client.println(); // blank line must be here to separate HTTP request response from html which follows
                     //outcount = client.println("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">");
-                    outcount = client.println("<!DOCTYPE html>");
+                    //outcount = client.println("<!DOCTYPE html>");
+                    // http://www.htmlhelp.com/tools/validator/doctype.html
+                    // <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">   // declares for HTML 2.0
+                    outcount = client.println("<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML//EN\">");
                     if (!outcount) Serial.println("Could not print to client"); else Serial.printf ("Sent %u\n", outcount);
                     outcount = client.println("<html>");
                     if (!outcount) Serial.println("Could not print to client");
                     outcount = client.println("<head>");
                     outcount = client.println("<title>Simple Temperature Server</title>");
                     outcount = client.println("</head>");
+                    Serial.println("Sent head");
                     outcount = client.println("<body>");
-                
 
                     outcount = client.println("<h2>SALT TMP102 Temperature Server</h2>");
                     if (!outcount) Serial.println("Could not print to client");
@@ -383,6 +387,7 @@ void loop()
                     client.print(" ");
                     client.print(__DATE__);
                     client.print("<br>");
+                    Serial.println("Sent body header and build");
                     client.print("Updates approx every ");
                     client.print(update);
                     client.print(" seconds<br>");
@@ -391,6 +396,7 @@ void loop()
                     client.print(" sec: ");
                     client.print(temp, 2);
                     client.print(" deg C <br>");
+                    Serial.println("Sent temperature");
                     client.print(http_request_count);
                     client.print(" http requests, ");
                     client.print((float)http_request_count/(float)new_elapsed_seconds);
@@ -401,6 +407,7 @@ void loop()
                     client.print(" max sec w/o client");
                     client.print("<br>");
                     client.println("</body>");
+                    Serial.println("Sent all of body");
                     client.println("</html>");
                     client.println();
 
