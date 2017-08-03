@@ -20,7 +20,7 @@
 #include <font_Arial.h> // from ILI9341_t3
 #include <XPT2046_Touchscreen.h>
 #include <SPI.h>
-#include <Ethernet.h>
+#include <Ethernet2.h>
 #include <TeensyID.h>
 #include <Systronix_TMP102.h> // best version of I2C library is #included by the library. Don't include it here!
 
@@ -161,11 +161,11 @@ void setup() {
   Serial.print("Server at ");
   Serial.println(Ethernet.localIP());
   
-  Ethernet.printSocketStatus(4);
+  printSocketStatus(4);
   Serial.println("Start listening:");
     // start listening for clients
   server.begin();  
-  Ethernet.printSocketStatus(4);
+  printSocketStatus(4);
 
   // start TMP102 library
   tmp102_48.setup(0x48);
@@ -324,7 +324,7 @@ void loop()
     if (client) 
     {
         Serial.printf("@ %u sec, Got new client, Temp is %.3f C\r\n", new_elapsed_seconds, temp);
-        if (socket_status) Ethernet.printSocketStatus(4);
+        if (socket_status) printSocketStatus(4);
 
         start_millis = new_millis;  // for timeout check
         // Serial.printf("new client at %u sec\r\n", new_elapsed_seconds);
@@ -352,7 +352,7 @@ void loop()
                     Serial.println("Sending Response...");
                     http_request_count++;
 
-                    if (socket_status) Ethernet.printSocketStatus(4);
+                    if (socket_status) printSocketStatus(4);
 
                     outcount = client.println("HTTP/1.1 200 OK");
                     if (!outcount) Serial.println("Could not print to client");
@@ -457,7 +457,7 @@ void loop()
         // Serial.printf("Temp %f C\r\n", temp);
         // Serial.printf("Timeout count=%u\r\n", timeout_http_count);
         // Serial.flush();
-        if (socket_status) Ethernet.printSocketStatus(4);
+        if (socket_status) printSocketStatus(4);
 
         if (verbose) Serial.printf("%u http requests, %.2f per sec, %u timeouts\r\n", 
           http_request_count, (float)http_request_count/(float)new_elapsed_seconds, timeout_http_count);
