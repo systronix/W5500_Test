@@ -32,8 +32,8 @@ Output sometimes stops after some hours. Why? How to recover? Etnernet.maintain(
 
 //---------------------------< I N C L U D E S >--------------------------------------------------------------
 #include <SPI.h>
-#include <Ethernet.h>					// Ethernet 2 for W5500
-#include <EthernetUdp.h>
+#include <Ethernet2.h>					// Ethernet 2 for W5500
+#include <EthernetUdp2.h>
 
 #include <TeensyID.h>					// https://github.com/systronix/TeensyID
 #include <SALT_FETs.h>
@@ -134,7 +134,8 @@ void setup()
 	new_millis = millis();
 	Serial.printf ("configuring ethernet\n");
 
-	if (0 == Ethernet.begin (mac, 10000))	// start Ethernet with 10ish second timeout
+	//if (0 == Ethernet.begin (mac, 10000))	// start Ethernet with 10ish second timeout
+	if (0 == Ethernet.begin (mac))	// start Ethernet with 10ish second timeout
 		{
 		Serial.printf ("\nFailed to configure Ethernet using DHCP after %lumS", millis()-new_millis);
 		while (1);							// no point in carrying on, so do nothing forevermore
@@ -177,7 +178,7 @@ void loop()
 	uint32_t event_secs = event_millis/1000;
 
 	Serial.println();
-	Ethernet.getSocketStatus(4);
+	printSocketStatus(4);
 
 	Serial.printf ("@%.2d:%.2d:%.2d.%.4d ask for time from %s\r\n",
 		(uint8_t)((event_secs % 86400L) / 3600),	// hour

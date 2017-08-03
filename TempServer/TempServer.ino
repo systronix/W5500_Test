@@ -324,7 +324,7 @@ void loop()
     if (client) 
     {
         Serial.printf("@ %u sec, Got new client, Temp is %.3f C\r\n", new_elapsed_seconds, temp);
-        if (socket_status) printSocketStatus(4);
+        if (socket_status) printSocketStatus(8);
 
         start_millis = new_millis;  // for timeout check
         // Serial.printf("new client at %u sec\r\n", new_elapsed_seconds);
@@ -352,7 +352,7 @@ void loop()
                     Serial.println("Sending Response...");
                     http_request_count++;
 
-                    if (socket_status) printSocketStatus(4);
+                    if (socket_status) printSocketStatus(8);
 
                     outcount = client.println("HTTP/1.1 200 OK");
                     if (!outcount) Serial.println("Could not print to client");
@@ -457,7 +457,7 @@ void loop()
         // Serial.printf("Temp %f C\r\n", temp);
         // Serial.printf("Timeout count=%u\r\n", timeout_http_count);
         // Serial.flush();
-        if (socket_status) printSocketStatus(4);
+        if (socket_status) printSocketStatus(8);
 
         if (verbose) Serial.printf("%u http requests, %.2f per sec, %u timeouts\r\n", 
           http_request_count, (float)http_request_count/(float)new_elapsed_seconds, timeout_http_count);

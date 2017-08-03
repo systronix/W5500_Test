@@ -45,7 +45,7 @@ https://www.arduino.cc/en/reference/ethernet
 
 #include <SPI.h>
 
-#include <Ethernet.h>
+#include <Ethernet2.h>
 #include <TeensyID.h>
 //#include <T3Mac.h>
 
