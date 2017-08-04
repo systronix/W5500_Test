@@ -294,7 +294,7 @@ void loop()
     case 's':
     case 'S':
       // detailed socket status when we get a new client connection
-      socket_status = true;
+      socket_status = !socket_status;
       Serial.printf("\r\nSocket Status: %s ", socket_status ? "true" : "false");
       break;
 
@@ -324,6 +324,10 @@ void loop()
     if (client) 
     {
         Serial.printf("@ %u sec, Got new client, Temp is %.3f C\r\n", new_elapsed_seconds, temp);
+        Serial.print("From ");
+        Serial.print(client.remoteIP());
+        Serial.printf(", port %u\r\n", client.remotePort());
+        //Serial.printf("From %u and %u\r\n", client.remoteIP(), client.remotePort());
         if (socket_status) printSocketStatus(8);
 
         start_millis = new_millis;  // for timeout check
@@ -346,13 +350,13 @@ void loop()
                 // if (c == '\n') Serial.println ("newline");
                 if (c == '\n' && currentLineIsBlank) 
                 {
-                    Serial.println("Request is complete");
+                    if (verbose) Serial.println("Request is complete");
                     // we could be here if we get a request consisting of one blank line, in theory
                     // send a standard http response header
-                    Serial.println("Sending Response...");
+                    if (verbose) Serial.println("Sending Response...");
                     http_request_count++;
 
-                    if (socket_status) printSocketStatus(8);
+                    //if (socket_status) printSocketStatus(8);
 
                     outcount = client.println("HTTP/1.1 200 OK");
                     if (!outcount) Serial.println("Could not print to client");
@@ -370,13 +374,13 @@ void loop()
                     // http://www.htmlhelp.com/tools/validator/doctype.html
                     // <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">   // declares for HTML 2.0
                     outcount = client.println("<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML//EN\">");
-                    if (!outcount) Serial.println("Could not print to client"); else Serial.printf ("Sent %u\n", outcount);
+                    if (!outcount) Serial.println("Could not print to client");  else if (verbose) Serial.printf ("Sent %u\n", outcount);
                     outcount = client.println("<html>");
                     if (!outcount) Serial.println("Could not print to client");
                     outcount = client.println("<head>");
                     outcount = client.println("<title>Simple Temperature Server</title>");
                     outcount = client.println("</head>");
-                    Serial.println("Sent head");
+                    if (verbose) Serial.println("Sent head");
                     outcount = client.println("<body>");
 
                     outcount = client.println("<h2>SALT TMP102 Temperature Server</h2>");
@@ -387,7 +391,7 @@ void loop()
                     client.print(" ");
                     client.print(__DATE__);
                     client.print("<br>");
-                    Serial.println("Sent body header and build");
+                    if (verbose) Serial.println("Sent body header and build");
                     client.print("Updates approx every ");
                     client.print(update);
                     client.print(" seconds<br>");
@@ -396,7 +400,12 @@ void loop()
                     client.print(" sec: ");
                     client.print(temp, 2);
                     client.print(" deg C <br>");
-                    Serial.println("Sent temperature");
+                    if (verbose) Serial.println("Sent temperature");
+                    client.print(" You: ");
+                    client.print(client.remoteIP());
+                    client.print(", port ");
+                    client.print(client.remotePort());
+                    client.print("<br>");
                     client.print(http_request_count);
                     client.print(" http requests, ");
                     client.print((float)http_request_count/(float)new_elapsed_seconds);
@@ -407,11 +416,11 @@ void loop()
                     client.print(" max sec w/o client");
                     client.print("<br>");
                     client.println("</body>");
-                    Serial.println("Sent all of body");
+                    if (verbose) Serial.println("Sent all of body");
                     client.println("</html>");
                     client.println();
 
-                    Serial.println("done");
+                    if (verbose) Serial.println("done");
                     
                     seconds_without_client = 0; // reset to zero
                     break;    // out of the while client.connected ??? Is this really correct?
@@ -452,7 +461,7 @@ void loop()
         // Serial.println("Out of while...");
         // close the connection:
         client.stop();
-        Serial.println("client stopped");
+        if (verbose) Serial.println("client stopped");
         // // These serial.printf cause SPI to WIZnet 850io to halt in Ard1.8.1/TD1.35 or temp never printed in Ard1.8.2/TD1.36!!
         // Serial.printf("Temp %f C\r\n", temp);
         // Serial.printf("Timeout count=%u\r\n", timeout_http_count);
