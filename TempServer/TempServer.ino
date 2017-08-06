@@ -420,7 +420,7 @@ void loop()
                     client.println("</html>");
                     client.println();
 
-                    if (verbose) Serial.println("done");
+                    Serial.println("    ----");
                     
                     seconds_without_client = 0; // reset to zero
                     break;    // out of the while client.connected ??? Is this really correct?

@@ -1,6 +1,6 @@
 # TempServer
-### 2017 Aug 01 
-## Restart from lockup
+## 2017 Aug 01 
+### Restart from lockup
 Sending TyQt reset starts operation again but it starts off very oddly by immediately connecting on all three available sockets:
 
 	Teensy Temperature Server
@@ -94,7 +94,7 @@ Sending TyQt reset starts operation again but it starts off very oddly by immedi
 	8 sec max w/o client
 	--------
 
-## Lock up
+### Lock up
 - Tempserver locked up similar to yesterday, in midst of response to client request
 - This time I had the Totalphase SPI analyzer running. BUT when I went to look at and save the data, it crashed! Urk. I did get a screen capture. It shows the last SPI message has multiple errors including Partial Last Byte.
 - Ethernet CS is low/active, MOSI is high/inactive, MISO is low. So SPI locked up in process of WIZ850io sending data to Teensy.
@@ -218,7 +218,7 @@ Which socket is being used to respond to the request? Maybe Socket 2 but we can'
 Teensy is not updating the touchscreen.
 Similar to the previous day's hang.
 
-### 2017 Jul 30
+## 2017 Jul 30
 - Server unresponsive. WIZ85io in SALT 2.1 #2/4
 - SPI library updated a couple days earlier to PJRC latest
 - link light on green, yellow activity is blinking normally due to other traffic on the subnet.
@@ -320,7 +320,7 @@ Then immediately there is a new client without executing `EthernetClass::socketB
 **Looking at Ethernet module signals, MISO (from WIZ850io) is LOW and so is Ethernet CS (P10). But there is no SCK. So execution is hung attempting to do something with the WIZ850io. I don't have the SPI sniffer running at the moment so I can't see the last SPI transactions.**
 
 
-### 2017 Jul 29
+## 2017 Jul 29
 - More than one socket is established, which should not be possible since requests are handled one at a time and closed when response is complete, assuming the requester is well-behaved and not malicious.
 - One socket is stuck in the 'temporary' state of 0x16 which is SYN packet received. W5500 should have sent SYN/ACK, received an ACK from the requester and changed this socket to Established, or change to Closed after a timeout. Apparently none of this happened.
 - The output "W5000socket 3" means socketBegin will use socket 3, the one in Listen mode. But socket status reports it is still in Listen mode. Perhaps there is some more delay before socket 3 enters Established mode. But...
@@ -362,7 +362,7 @@ Then immediately there is a new client without executing `EthernetClass::socketB
 	--------
 ```
 
-### 2017 Jul 19
+## 2017 Jul 19
 - All four sockets are "used up"
 - library attempts to force close
 ```
@@ -422,7 +422,7 @@ Then immediately there is a new client without executing `EthernetClass::socketB
 ```
 
 
-### 2017 Jul 17
+## 2017 Jul 17
 - There should only be one established connection at a time.
 - The used socket doesn't always close successfully. Why not?
 ```
@@ -475,7 +475,7 @@ Then immediately there is a new client without executing `EthernetClass::socketB
 ```
 
 
-### 2017 Jul 15
+## 2017 Jul 15
 With debug printf and socket status output it has run over 24 hrs without failing.
 ```
 	..W5000socket begin, protocol=1, port=8080
