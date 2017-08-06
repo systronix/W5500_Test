@@ -1,4 +1,70 @@
 # TempServer with Ethernet2
+## 2017 Aug 06
+One Firefox client. Note there are not the duplicated requests, just one every 5 seconds.
+I am also outputting remote hardware address (should be remote MAC) but it never changes. Something broken there, not sure where.
+
+	.'....@ 71374 sec, Got new client, Temp is 25.812 C
+	From 192.168.1.1, port 58616
+	    Socket(0) SnSr=Listen SnMR=TCP
+	    Socket(1) SnSr=Establ SnMR=TCP IP=172.58.33.184 Port=48913 MAC=20:CF:30:B8:3D:ED
+	    Socket(2) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=58616 MAC=20:CF:30:B8:3D:ED
+	    Socket(3) SnSr=Closed SnMR=TCP IP=66.249.84.44 Port=61837 MAC=20:CF:30:B8:3D:ED
+	    Socket(4) SnSr=Closed SnMR=TCP IP=192.168.1.1 Port=54327 MAC=20:CF:30:B8:3D:ED
+	    Socket(5) SnSr=Closed SnMR=TCP IP=173.185.52.214 Port=60486 MAC=20:CF:30:B8:3D:ED
+	    Socket(6) SnSr=Closed SnMR=Close IP=0.0.0.0 Port=0 MAC=FF:FF:FF:FF:FF:FF
+	    Socket(7) SnSr=Closed SnMR=Close IP=0.0.0.0 Port=0 MAC=FF:FF:FF:FF:FF:FF
+	    ----
+	    Socket(0) SnSr=Listen SnMR=TCP
+	    Socket(1) SnSr=Establ SnMR=TCP IP=172.58.33.184 Port=48913 MAC=20:CF:30:B8:3D:ED
+	    Socket(2) SnSr=Closed SnMR=TCP IP=192.168.1.1 Port=58616 MAC=20:CF:30:B8:3D:ED
+	    Socket(3) SnSr=Closed SnMR=TCP IP=66.249.84.44 Port=61837 MAC=20:CF:30:B8:3D:ED
+	    Socket(4) SnSr=Closed SnMR=TCP IP=192.168.1.1 Port=54327 MAC=20:CF:30:B8:3D:ED
+	    Socket(5) SnSr=Closed SnMR=TCP IP=173.185.52.214 Port=60486 MAC=20:CF:30:B8:3D:ED
+	    Socket(6) SnSr=Closed SnMR=Close IP=0.0.0.0 Port=0 MAC=FF:FF:FF:FF:FF:FF
+	    Socket(7) SnSr=Closed SnMR=Close IP=0.0.0.0 Port=0 MAC=FF:FF:FF:FF:FF:FF
+	--------
+
+	......'@ 71380 sec, Got new client, Temp is 25.812 C
+	From 192.168.1.1, port 58623
+	    Socket(0) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=58623 MAC=20:CF:30:B8:3D:ED
+	    Socket(1) SnSr=Establ SnMR=TCP IP=172.58.33.184 Port=48913 MAC=20:CF:30:B8:3D:ED
+	    Socket(2) SnSr=Listen SnMR=TCP
+	    Socket(3) SnSr=Closed SnMR=TCP IP=66.249.84.44 Port=61837 MAC=20:CF:30:B8:3D:ED
+	    Socket(4) SnSr=Closed SnMR=TCP IP=192.168.1.1 Port=54327 MAC=20:CF:30:B8:3D:ED
+	    Socket(5) SnSr=Closed SnMR=TCP IP=173.185.52.214 Port=60486 MAC=20:CF:30:B8:3D:ED
+	    Socket(6) SnSr=Closed SnMR=Close IP=0.0.0.0 Port=0 MAC=FF:FF:FF:FF:FF:FF
+	    Socket(7) SnSr=Closed SnMR=Close IP=0.0.0.0 Port=0 MAC=FF:FF:FF:FF:FF:FF
+	    ----
+	    Socket(0) SnSr=Closed SnMR=TCP IP=192.168.1.1 Port=58623 MAC=20:CF:30:B8:3D:ED
+	    Socket(1) SnSr=Establ SnMR=TCP IP=172.58.33.184 Port=48913 MAC=20:CF:30:B8:3D:ED
+	    Socket(2) SnSr=Listen SnMR=TCP
+	    Socket(3) SnSr=Closed SnMR=TCP IP=66.249.84.44 Port=61837 MAC=20:CF:30:B8:3D:ED
+	    Socket(4) SnSr=Closed SnMR=TCP IP=192.168.1.1 Port=54327 MAC=20:CF:30:B8:3D:ED
+	    Socket(5) SnSr=Closed SnMR=TCP IP=173.185.52.214 Port=60486 MAC=20:CF:30:B8:3D:ED
+	    Socket(6) SnSr=Closed SnMR=Close IP=0.0.0.0 Port=0 MAC=FF:FF:FF:FF:FF:FF
+	    Socket(7) SnSr=Closed SnMR=Close IP=0.0.0.0 Port=0 MAC=FF:FF:FF:FF:FF:FF
+	--------
+
+	.....@ 71385 sec, Got new client, Temp is 25.812 C
+	From 192.168.1.1, port 58630
+	    Socket(0) SnSr=Listen SnMR=TCP
+	    Socket(1) SnSr=Establ SnMR=TCP IP=172.58.33.184 Port=48913 MAC=20:CF:30:B8:3D:ED
+	    Socket(2) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=58630 MAC=20:CF:30:B8:3D:ED
+	    Socket(3) SnSr=Closed SnMR=TCP IP=66.249.84.44 Port=61837 MAC=20:CF:30:B8:3D:ED
+	    Socket(4) SnSr=Closed SnMR=TCP IP=192.168.1.1 Port=54327 MAC=20:CF:30:B8:3D:ED
+	    Socket(5) SnSr=Closed SnMR=TCP IP=173.185.52.214 Port=60486 MAC=20:CF:30:B8:3D:ED
+	    Socket(6) SnSr=Closed SnMR=Close IP=0.0.0.0 Port=0 MAC=FF:FF:FF:FF:FF:FF
+	    Socket(7) SnSr=Closed SnMR=Close IP=0.0.0.0 Port=0 MAC=FF:FF:FF:FF:FF:FF
+	    ----
+	    Socket(0) SnSr=Listen SnMR=TCP
+	    Socket(1) SnSr=Establ SnMR=TCP IP=172.58.33.184 Port=48913 MAC=20:CF:30:B8:3D:ED
+	    Socket(2) SnSr=Closed SnMR=TCP IP=192.168.1.1 Port=58630 MAC=20:CF:30:B8:3D:ED
+	    Socket(3) SnSr=Closed SnMR=TCP IP=66.249.84.44 Port=61837 MAC=20:CF:30:B8:3D:ED
+	    Socket(4) SnSr=Closed SnMR=TCP IP=192.168.1.1 Port=54327 MAC=20:CF:30:B8:3D:ED
+	    Socket(5) SnSr=Closed SnMR=TCP IP=173.185.52.214 Port=60486 MAC=20:CF:30:B8:3D:ED
+	    Socket(6) SnSr=Closed SnMR=Close IP=0.0.0.0 Port=0 MAC=FF:FF:FF:FF:FF:FF
+	    Socket(7) SnSr=Closed SnMR=Close IP=0.0.0.0 Port=0 MAC=FF:FF:FF:FF:FF:FF
+	--------
 
 ## 2017 Aug 05
 Finally we have the ability to track socket use (or abuse) by remote IP. This seems so useful it's surprising this did not already exist in the library.
