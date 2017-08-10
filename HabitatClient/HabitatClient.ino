@@ -45,7 +45,8 @@ uint32_t uid[4];
 
 IPAddress gateway(192, 168, 1, 1);
 IPAddress subnet(255, 255, 255, 0);
-IPAddress server_ip(192,168,1,254);    // Yoga S1 at home office
+//IPAddress server_ip(192,168,1,254);    // Yoga S1 at home office
+IPAddress server_ip(192,168,1,194);    // Win7 desktop office
 uint8_t server_port = 105;    // server is listening on this port
 
 IPAddress client_ip(192,168,1,150);
@@ -207,12 +208,16 @@ void setup() {
 
   Serial.printf("Setup Complete!\nSend V/v to toggle verbose, h/H to toggle hush/silent, s/S socket status\n");
 
+  Serial.print("Try to connect to server at ");
+  Serial.print(server_ip);
+  Serial.printf(":%u\r\n", server_port);
+
   if (client.connect(server_ip, server_port)) 
     {
         Serial.printf("@ %u sec, connected to server, Temp is %.3f C\r\n", new_elapsed_seconds, temp);
         Serial.print("at ");
         Serial.print(client.remoteIP());
-        Serial.printf(", port %u\r\n", client.remotePort());
+        Serial.printf(":%u\r\n", client.remotePort());
         if (socket_status) printSocketStatus(4);
 
         start_millis = new_millis;  // for timeout check
