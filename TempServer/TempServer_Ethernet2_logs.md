@@ -1,4 +1,31 @@
 # TempServer with Ethernet2
+
+## 2017 Aug 19 - Malice Aforethought
+Finally some interesting malicious probes.
+IP addresses looked up with [icann whois](https://whois.icann.org/en) which you can [learn about here](https://whois.icann.org/en/about-whois), where
+it is stated that "Any entity that wants to become a registrar must earn ICANN accreditation." But there are five [Regional Internet Registries](https://en.wikipedia.org/wiki/Regional_Internet_registry) (RIRs) which are components of the Internet Number Registry System (IANA). Each maintains their own whois database, apparently not all linked to ICANN. So you may have to search all five to find specific whois data for a given IP. As in interesting aside, four of the five RISIs have exhausted IPV4 addresses - APNIC as early as 2011.
+
+120.194.X.X is from Beijing, China
+This is registered in Asia Pacific Network Information Centre (APNIC). APNIC is the Regional Internet Registry
+for the Asia Pacific region, with [apnic whois](http://wq.apnic.net/apnic-bin/whois.pl)
+which shows China Mobile Communications Corporation as the owner.
+120.194.54.186 is a known infection site for IoT DDOS attacks using Hajime, Wopbot, [Mirai](https://f5.com/labs/articles/threat-intelligence/ddos/mirai-the-iot-bot-that-took-down-krebs-and-launched-a-tbps-attack-on-ovh-22422) or similar malware
+
+37.201.4.100 is a known [Vawtrak](https://news.sophos.com/en-us/2016/06/08/sophoslabs-vawtrak-v2-analysis/) or NeverQuest or Snifula banking trojan infection site 
+
+You can look up details on these or other IP addresses at the [CBL abuseat site](https://www.abuseat.org/lookup.cgi)
+```
+...@ 230864 sec, Got new client, Temp is 24.875 C
+From 192.168.1.194, port 61775
+    Socket(0) SnSr=Establ SnMR=TCP IP=192.168.1.194 Port=61775 MAC=6C:62:6D:C3:34:4B
+    Socket(1) SnSr=Listen SnMR=TCP
+    Socket(2) SnSr=Closed SnMR=TCP IP=192.168.1.194 Port=60005 MAC=6C:62:6D:C3:34:4B
+    Socket(3) SnSr=Closed SnMR=TCP IP=67.177.36.6 Port=23953 MAC=20:CF:30:B8:3D:ED
+    Socket(4) SnSr=Closed SnMR=TCP IP=37.201.4.100 Port=20015 MAC=20:CF:30:B8:3D:ED
+    Socket(5) SnSr=Closed SnMR=TCP IP=120.194.54.186 Port=46043 MAC=20:CF:30:B8:3D:ED
+    Socket(6) SnSr=Closed SnMR=TCP IP=120.194.54.186 Port=46050 MAC=20:CF:30:B8:3D:ED
+    Socket(7) SnSr=Closed SnMR=TCP IP=120.194.54.186 Port=46070 MAC=20:CF:30:B8:3D:ED
+```
 ## 2017 Aug 06
 One Firefox client. Note there are not the duplicated requests, just one every 5 seconds.
 I am also outputting remote hardware address (should be remote MAC) but it never changes. Something broken there, not sure where.

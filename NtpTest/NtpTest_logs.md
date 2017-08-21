@@ -1,6 +1,30 @@
 # NtpTest Logs
+Note: NTP time value is the number of msec since the epoch started. NTP epoch starts Jan 1, 1900 whereas Unix epoch starts 1 Jan 1970. Perhaps surprisingly, it's a bit more complicated than that, especailly for [Unix time.](https://en.wikipedia.org/wiki/Unix_time)
 
 ## Teensy 3.2 with WIZ850io and 2.8" touchscreen on PJRC adapter, USB power
+
+### 2017 Aug 19
+Ran for a week while unattended, however we can't know for sure if a power loss caused a system reset on this particular test system.
+Also of interest here is that at some point another socket than 0 was opened and subsequently closed. How and why?
+```
+	    Socket(0) SnSr = Open SnMR = UDP
+	    Socket(1) SnSr = Closed SnMR = UDP
+	    Socket(2) SnSr = Closed SnMR = Close
+	    Socket(3) SnSr = Closed SnMR = Close
+	@01:50:55.0253 ask for time from pool.ntp.org
+		NTP ts: 3712340918
+		Unix ts: 1503352118
+		UTC time: 21:48:38
+
+	RTC.set() failed
+		response time: 0; max: 717
+
+	10 minute summary:
+		attempts: 4398
+		too busy: 168
+		kiss o' death: 1
+		primary stratum: 568
+```
 
 ### 2017 Jul 04
 ```
