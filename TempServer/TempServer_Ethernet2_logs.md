@@ -1,17 +1,24 @@
 # TempServer with Ethernet2
+## 2017 Aug 24 - e-mail 'attack' from Brazil
+According to CBL Lookup this IP is infected or NATting for an infected computer, emitting SPAM. It's been requesting and getting a connection to TempServer for a few days now, it just holds the connection open and seems to do nothing more... so it's not a very smart bot. I need to get a port mirror going and sniff this with Wireshark for more details. Also I should add a timeout to close the port if there's no request for some time.
+```
+	IP=179.220.112.223 Port=39849
+```
+According to APNIC WHOIS, this belongs to Claro, S.A., in Sao Paulo. They list no email or phone contact, just a street address.
 
-## 2017 Aug 19 - Malice Aforethought
+## 2017 Aug 19 - Malice Aforethought from China and Germany
 Finally some interesting malicious probes.
 IP addresses looked up with [icann whois](https://whois.icann.org/en) which you can [learn about here](https://whois.icann.org/en/about-whois), where
-it is stated that "Any entity that wants to become a registrar must earn ICANN accreditation." But there are five [Regional Internet Registries](https://en.wikipedia.org/wiki/Regional_Internet_registry) (RIRs) which are components of the Internet Number Registry System (IANA). Each maintains their own whois database, apparently not all linked to ICANN. So you may have to search all five to find specific whois data for a given IP. As in interesting aside, four of the five RISIs have exhausted IPV4 addresses - APNIC as early as 2011.
+it is stated that "Any entity that wants to become a registrar must earn ICANN accreditation." But there are five [Regional Internet Registries](https://en.wikipedia.org/wiki/Regional_Internet_registry) (RIRs) which are components of the Internet Number Registry System (IANA). Each maintains their own whois database, apparently not all linked to ICANN. So you may have to search all five to find specific whois data for a given IP. As an interesting aside, four of the five RIRs have exhausted IPV4 addresses - APNIC as early as 2011.
 
 120.194.X.X is from Beijing, China
 This is registered in Asia Pacific Network Information Centre (APNIC). APNIC is the Regional Internet Registry
 for the Asia Pacific region, with [apnic whois](http://wq.apnic.net/apnic-bin/whois.pl)
-which shows China Mobile Communications Corporation as the owner.
+which shows China Mobile Communications Corporation as the owner, with an abuse contact. I'll try that.
 120.194.54.186 is a known infection site for IoT DDOS attacks using Hajime, Wopbot, [Mirai](https://f5.com/labs/articles/threat-intelligence/ddos/mirai-the-iot-bot-that-took-down-krebs-and-launched-a-tbps-attack-on-ovh-22422) or similar malware
 
 37.201.4.100 is a known [Vawtrak](https://news.sophos.com/en-us/2016/06/08/sophoslabs-vawtrak-v2-analysis/) or NeverQuest or Snifula banking trojan infection site 
+This is registered to Unitymedia Group in Koeln, Germany. They have abuse email and phone contact information.
 
 You can look up details on these or other IP addresses at the [CBL abuseat site](https://www.abuseat.org/lookup.cgi)
 ```
@@ -26,6 +33,20 @@ From 192.168.1.194, port 61775
     Socket(6) SnSr=Closed SnMR=TCP IP=120.194.54.186 Port=46050 MAC=20:CF:30:B8:3D:ED
     Socket(7) SnSr=Closed SnMR=TCP IP=120.194.54.186 Port=46070 MAC=20:CF:30:B8:3D:ED
 ```
+## Those "duplicated" requests are for favicon.ico
+Doh! Thanks to @drmartin for [his answer](https://forum.pjrc.com/threads/43761-Ethernet-library-socket-issues?p=150145&viewfull=1#post150145) on the PJRC forum.
+Chrome does a GET of the main page from TempServer, then immediately another GET for favico.ico, which you can see in the logs:
+```
+	GET /favicon.ico HTTP/1.1
+```
+Chrome does this for every keep-alive refresh.
+Firefox only does it the first time, which seems the more sensible approach.
+My too-simple example doesn't parse out different types of requests, it serves the temperature page to any and all requests... so it currently sends another temperature
+page to the favicon requester. Something else to improve.
+
+### Serving a favicon.ico
+It's possible to server the favicon from a uSD card [according to this post](https://forum.arduino.cc/index.php?topic=337723.15) so there's a future task.
+
 ## 2017 Aug 06
 One Firefox client. Note there are not the duplicated requests, just one every 5 seconds.
 I am also outputting remote hardware address (should be remote MAC) but it never changes. Something broken there, not sure where.
