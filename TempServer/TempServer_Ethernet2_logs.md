@@ -4,7 +4,7 @@ According to CBL Lookup this IP is infected or NATting for an infected computer,
 ```
 	IP=179.220.112.223 Port=39849
 ```
-According to APNIC WHOIS, this belongs to Claro, S.A., in Sao Paulo. They list no email or phone contact, just a street address.
+According to APNIC WHOIS, this belongs to Claro, S.A., in Sao Paulo. They list no abuse email (maybe they don't have Internet?) or phone contact, just a street address.
 
 ## 2017 Aug 19 - Malice Aforethought from China and Germany
 Finally some interesting malicious probes.
