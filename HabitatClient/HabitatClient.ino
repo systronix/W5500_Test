@@ -46,8 +46,11 @@ uint32_t uid[4];
 IPAddress gateway(192, 168, 1, 1);
 IPAddress subnet(255, 255, 255, 0);
 //IPAddress server_ip(192,168,1,254);    // Yoga S1 at home office
-IPAddress server_ip(192,168,1,194);    // Win7 desktop office
-uint8_t server_port = 105;    // server is listening on this port
+//IPAddress server_ip(192,168,1,194);    // Win7 desktop office
+IPAddress server_ip(50,116,0,218);  // Julio virtual at slashome
+
+//uint8_t server_port = 105;    // server is listening on this port
+uint16_t server_port = 8081;     // Julio virtual at slashome
 
 IPAddress client_ip(192,168,1,150);
 
@@ -281,7 +284,7 @@ void loop()
         seconds_tick = false; // we've used it up
         seconds_without_client++; // increment, it will be cleared if there is a client
         if (seconds_without_client > max_without_client) max_without_client = seconds_without_client;
-        Serial.print(".");
+        // Serial.print(".");
 
         // read the temperature to have it ready for any clients
         configOptions |= TMP102_CFG_OS;        // start One Shot conversion
@@ -351,16 +354,11 @@ void loop()
 
   delay(50);
 
-    if (client.available()) 
+    while (client.available()) 
       {
         char c = client.read();
         Serial.print(c);
       }
-      else
-      {
-        Serial.printf("No data from server\r\n");
-      }
-    
 
     // if the server's disconnected, stop the client:
     if (!client.connected()) 
@@ -373,16 +371,16 @@ void loop()
 
     }
 
-      if (seconds_ten_tick)
-      {
-        seconds_ten_tick = false; // we've used it up
-        Serial.print("'");
-      } 
-      if (minute_tick)
-      {
-        minute_tick = false;  // we've used it up
-        Serial.println();     // keep periods from piling up on one line
-      }  
+      // if (seconds_ten_tick)
+      // {
+      //   seconds_ten_tick = false; // we've used it up
+      //   Serial.print("'");
+      // } 
+      // if (minute_tick)
+      // {
+      //   minute_tick = false;  // we've used it up
+      //   Serial.println();     // keep periods from piling up on one line
+      // }  
     
 
 }
