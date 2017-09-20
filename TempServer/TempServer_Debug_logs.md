@@ -1,4 +1,9 @@
 # TempServer
+
+## Switching to use of Ethernet2 vs Ethernet library
+Ethernet is just not reliable. Switching to Ethernet2.
+See the [TempServer Ethernet2 logs](https://github.com/systronix/W5500_Test/blob/with_ethernet2/TempServer/TempServer_Ethernet2_logs.md)
+
 ## 2017 Aug 01 
 ### Restart from lockup
 Sending TyQt reset starts operation again but it starts off very oddly by immediately connecting on all three available sockets:
