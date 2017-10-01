@@ -1,8 +1,43 @@
 # TempServer with Ethernet2
+## 2017 Sep 30
+Here all sockets should be closed. Four are held open.
+172.58.36.197 and .219 are TMobile near LA, can only trace back as far as ae19.mpr3.sjc7.us.zip.zayo.com [64.125.30.76]
+124.133.200.65 is near Jinan, China:
+	inetnum: 124.128.0.0 - 124.135.255.255
+	netname: UNICOM-SD
+	descr: China Unicom Shandong province network
+	descr: China Unicom
+
+What's odd is that one held open is my LAN.
+```
+	Sent all of body
+	    ----
+	client stopped
+	    Socket(0) SnSr=Establ SnMR=TCP IP=172.58.36.197 Port=52566 MAC=20:CF:30:B8:3D:ED
+	    Socket(1) SnSr=Establ SnMR=TCP IP=124.133.200.65 Port=57032 MAC=20:CF:30:B8:3D:ED
+	    Socket(2) SnSr=Establ SnMR=TCP IP=172.58.36.197 Port=29228 MAC=20:CF:30:B8:3D:ED
+	    Socket(3) SnSr=Establ SnMR=TCP IP=172.58.36.219 Port=46419 MAC=20:CF:30:B8:3D:ED
+	    Socket(4) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=55773 MAC=20:CF:30:B8:3D:ED
+	    Socket(5) SnSr=Closed SnMR=TCP IP=192.168.1.1 Port=55772 MAC=20:CF:30:B8:3D:ED
+	    Socket(6) SnSr=Closed SnMR=TCP IP=192.168.1.1 Port=55624 MAC=20:CF:30:B8:3D:ED
+	    Socket(7) SnSr=Closed SnMR=TCP IP=192.168.1.1 Port=61721 MAC=20:CF:30:B8:3D:ED
+	364847 http requests, 0.48 per sec, 62 timeouts
+```
 ## 2017 Sep 19 - more probes from malicious sites
 
 185.100.87.190 from Romania
-67.177.36.6
+
+..@ 14613 sec, Got new client, Temp is 23.500 C
+From 139.162.79.87, port 54504
+    Socket(0) SnSr=Listen SnMR=TCP
+    Socket(1) SnSr=0x16   SnMR=TCP IP=139.162.112.248 Port=59565 MAC=20:CF:30:B8:3D:ED
+    Socket(2) SnSr=Closed SnMR=TCP IP=192.168.1.1 Port=54105 MAC=20:CF:30:B8:3D:ED
+    Socket(3) SnSr=Establ SnMR=TCP IP=139.162.79.87 Port=54504 MAC=20:CF:30:B8:3D:ED
+    Socket(4) SnSr=Closed SnMR=TCP IP=192.168.1.1 Port=51710 MAC=20:CF:30:B8:3D:ED
+    Socket(5) SnSr=Closed SnMR=Close IP=0.0.0.0 Port=0 MAC=FF:FF:FF:FF:FF:FF
+    Socket(6) SnSr=Closed SnMR=Close IP=0.0.0.0 Port=0 MAC=FF:FF:FF:FF:FF:FF
+    Socket(7) SnSr=Closed SnMR=Close IP=0.0.0.0 Port=0 MAC=FF:FF:FF:FF:FF:FF
+The client at 139.162.79.87 Port=54504 then sent a large number of nulls and an endless stream of exclamation marks until a timeout in TempServer closed the connection.
 
 ## 2017 Aug 24 - e-mail 'attack' from Brazil
 According to CBL Lookup this IP is infected or NATting for an infected computer, emitting SPAM. It's been requesting and getting a connection to TempServer for a few days now, it just holds the connection open and seems to do nothing more... so it's not a very smart bot. I need to get a port mirror going and sniff this with Wireshark for more details. Also I should add a timeout to close the port if there's no request for some time.
