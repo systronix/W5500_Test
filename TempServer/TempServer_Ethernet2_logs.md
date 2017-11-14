@@ -1,13 +1,148 @@
 # TempServer with Ethernet2
 
 ## 2017 Nov 14
+Here after a fresh reset with one FF connection. Really odd!
+Teensy Temperature Server
+Build 18:27:20 Aug  7 2017
+
+```
+	......@ 56 sec, Got new client, Temp is 22.688 C
+	From 192.168.1.1, port 52771
+	    Socket(0) SnSr=0x16   SnMR=TCP IP=192.168.1.1 Port=52756 MAC=20:CF:30:B8:3D:ED
+	    Socket(1) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=52771 MAC=20:CF:30:B8:3D:ED
+	    Socket(2) SnSr=0x16   SnMR=TCP IP=192.168.1.1 Port=52735 MAC=20:CF:30:B8:3D:ED
+	    Socket(3) SnSr=0x16   SnMR=TCP IP=192.168.1.1 Port=52768 MAC=20:CF:30:B8:3D:ED
+	    Socket(4) SnSr=0x16   SnMR=TCP IP=192.168.1.1 Port=52750 MAC=20:CF:30:B8:3D:ED
+	    Socket(5) SnSr=Listen SnMR=TCP
+	    Socket(6) SnSr=Closed SnMR=Close IP=0.0.0.0 Port=0 MAC=FF:FF:FF:FF:FF:FF
+	    Socket(7) SnSr=Closed SnMR=Close IP=0.0.0.0 Port=0 MAC=FF:FF:FF:FF:FF:FF
+	GET / HTTP/1.1
+	Host: systronix.hopto.org:8080
+	User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:55.0) Gecko/20100101 Firefox/55.0
+	Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+	Accept-Language: en-US,en;q=0.5
+	Accept-Encoding: gzip, deflate
+	Connection: keep-alive
+	Upgrade-Insecure-Requests: 1
+	Cache-Control: max-age=0
+
+	Request is complete
+	Sending Response...
+	Sent 48
+	Sent head
+	Sent body header and build
+	Sent temperature
+	Sent all of body
+	    ----
+	client stopped
+	    Socket(0) SnSr=0x16   SnMR=TCP IP=192.168.1.1 Port=52756 MAC=20:CF:30:B8:3D:ED
+	    Socket(1) SnSr=Closed SnMR=TCP IP=192.168.1.1 Port=52771 MAC=20:CF:30:B8:3D:ED
+	    Socket(2) SnSr=0x16   SnMR=TCP IP=192.168.1.1 Port=52735 MAC=20:CF:30:B8:3D:ED
+	    Socket(3) SnSr=0x16   SnMR=TCP IP=192.168.1.1 Port=52768 MAC=20:CF:30:B8:3D:ED
+	    Socket(4) SnSr=0x16   SnMR=TCP IP=192.168.1.1 Port=52750 MAC=20:CF:30:B8:3D:ED
+	    Socket(5) SnSr=Listen SnMR=TCP
+	    Socket(6) SnSr=Closed SnMR=Close IP=0.0.0.0 Port=0 MAC=FF:FF:FF:FF:FF:FF
+	    Socket(7) SnSr=Closed SnMR=Close IP=0.0.0.0 Port=0 MAC=FF:FF:FF:FF:FF:FF
+	8 http requests, 0.14 per sec, 0 timeouts
+	9 sec max w/o client
+	--------
+	...
+```
+Then some recovery after a few more cycles:
+```
+	.........@ 189 sec, Got new client, Temp is 22.688 C
+	From 192.168.1.1, port 52902
+	    Socket(0) SnSr=Listen SnMR=TCP
+	    Socket(1) SnSr=Closed SnMR=TCP IP=192.168.1.1 Port=52892 MAC=20:CF:30:B8:3D:ED
+	    Socket(2) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=52902 MAC=20:CF:30:B8:3D:ED
+	    Socket(3) SnSr=Closed SnMR=TCP IP=192.168.1.1 Port=52768 MAC=20:CF:30:B8:3D:ED
+	    Socket(4) SnSr=Closed SnMR=TCP IP=192.168.1.1 Port=52750 MAC=20:CF:30:B8:3D:ED
+	    Socket(5) SnSr=Closed SnMR=TCP IP=192.168.1.1 Port=52778 MAC=20:CF:30:B8:3D:ED
+	    Socket(6) SnSr=Closed SnMR=Close IP=0.0.0.0 Port=0 MAC=FF:FF:FF:FF:FF:FF
+	    Socket(7) SnSr=Closed SnMR=Close IP=0.0.0.0 Port=0 MAC=FF:FF:FF:FF:FF:FF
+	GET / HTTP/1.1
+	Host: systronix.hopto.org:8080
+	User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:55.0) Gecko/20100101 Firefox/55.0
+	Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+	Accept-Language: en-US,en;q=0.5
+	Accept-Encoding: gzip, deflate
+	Connection: keep-alive
+	Upgrade-Insecure-Requests: 1
+	Cache-Control: max-age=0
+
+	Request is complete
+	Sending Response...
+	Sent 48
+	Sent head
+	Sent body header and build
+	Sent temperature
+	Sent all of body
+	    ----
+	client stopped
+	    Socket(0) SnSr=Listen SnMR=TCP
+	    Socket(1) SnSr=Closed SnMR=TCP IP=192.168.1.1 Port=52892 MAC=20:CF:30:B8:3D:ED
+	    Socket(2) SnSr=Closed SnMR=TCP IP=192.168.1.1 Port=52902 MAC=20:CF:30:B8:3D:ED
+	    Socket(3) SnSr=Closed SnMR=TCP IP=192.168.1.1 Port=52768 MAC=20:CF:30:B8:3D:ED
+	    Socket(4) SnSr=Closed SnMR=TCP IP=192.168.1.1 Port=52750 MAC=20:CF:30:B8:3D:ED
+	    Socket(5) SnSr=Closed SnMR=TCP IP=192.168.1.1 Port=52778 MAC=20:CF:30:B8:3D:ED
+	    Socket(6) SnSr=Closed SnMR=Close IP=0.0.0.0 Port=0 MAC=FF:FF:FF:FF:FF:FF
+	    Socket(7) SnSr=Closed SnMR=Close IP=0.0.0.0 Port=0 MAC=FF:FF:FF:FF:FF:FF
+	24 http requests, 0.13 per sec, 0 timeouts
+	26 sec max w/o client
+	--------	
+```
+Then back to badness:
+```
+	.........@ 269 sec, Got new client, Temp is 22.750 C
+	From 192.168.1.1, port 53027
+	    Socket(0) SnSr=0x16   SnMR=TCP IP=192.168.1.1 Port=53025 MAC=20:CF:30:B8:3D:ED
+	    Socket(1) SnSr=0x16   SnMR=TCP IP=192.168.1.1 Port=52993 MAC=20:CF:30:B8:3D:ED
+	    Socket(2) SnSr=0x16   SnMR=TCP IP=192.168.1.1 Port=53006 MAC=20:CF:30:B8:3D:ED
+	    Socket(3) SnSr=0x16   SnMR=TCP IP=192.168.1.1 Port=53023 MAC=20:CF:30:B8:3D:ED
+	    Socket(4) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=53027 MAC=20:CF:30:B8:3D:ED
+	    Socket(5) SnSr=Listen SnMR=TCP
+	    Socket(6) SnSr=Closed SnMR=Close IP=0.0.0.0 Port=0 MAC=FF:FF:FF:FF:FF:FF
+	    Socket(7) SnSr=Closed SnMR=Close IP=0.0.0.0 Port=0 MAC=FF:FF:FF:FF:FF:FF
+	GET / HTTP/1.1
+	Host: systronix.hopto.org:8080
+	User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:55.0) Gecko/20100101 Firefox/55.0
+	Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+	Accept-Language: en-US,en;q=0.5
+	Accept-Encoding: gzip, deflate
+	Connection: keep-alive
+	Upgrade-Insecure-Requests: 1
+	Cache-Control: max-age=0
+
+	Request is complete
+	Sending Response...
+	Sent 48
+	Sent head
+	Sent body header and build
+	Sent temperature
+	Sent all of body
+	    ----
+	client stopped
+	    Socket(0) SnSr=0x16   SnMR=TCP IP=192.168.1.1 Port=53025 MAC=20:CF:30:B8:3D:ED
+	    Socket(1) SnSr=0x16   SnMR=TCP IP=192.168.1.1 Port=52993 MAC=20:CF:30:B8:3D:ED
+	    Socket(2) SnSr=0x16   SnMR=TCP IP=192.168.1.1 Port=53006 MAC=20:CF:30:B8:3D:ED
+	    Socket(3) SnSr=0x16   SnMR=TCP IP=192.168.1.1 Port=53023 MAC=20:CF:30:B8:3D:ED
+	    Socket(4) SnSr=Closed SnMR=TCP IP=192.168.1.1 Port=53027 MAC=20:CF:30:B8:3D:ED
+	    Socket(5) SnSr=Listen SnMR=TCP
+	    Socket(6) SnSr=Closed SnMR=Close IP=0.0.0.0 Port=0 MAC=FF:FF:FF:FF:FF:FF
+	    Socket(7) SnSr=Closed SnMR=Close IP=0.0.0.0 Port=0 MAC=FF:FF:FF:FF:FF:FF
+	30 http requests, 0.11 per sec, 0 timeouts
+	42 sec max w/o client
+	--------
+```
+
+## 2017 Nov 14
 Here a code failure not seen before. This is a connection from within our LAN, yet it fails to get properly closed, using up almost all sockets. Then, client cannot connect reliably. This is an old build which ran well for a long time.
 	Teensy Temperature Server
 	Build 18:27:20 Aug  7 2017
 So what has changed?
 Recent browser updates... but does that make any sense?
 Yesterday our xfinity account was changed (faster speed, newer cable modem) but this sort of problem was happening earlier.
-
+These all with one Chrome connection.
 
 ```
 	......'
