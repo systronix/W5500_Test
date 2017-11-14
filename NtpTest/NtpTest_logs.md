@@ -3,6 +3,59 @@ Note: NTP time value is the number of msec since the epoch started. NTP epoch st
 
 ## Teensy 3.2 with WIZ850io and 2.8" touchscreen on PJRC adapter, USB power
 
+### 2017 Nov 13
+Here's what happened when the DHCP server went down in process of upgrading our Internet connection:
+
+```
+	Renew_F/S Bind_F/S Restart_F/S = 0/4508 0/0 0/1
+	@267970 maintain()=2  Renew_F/S Bind_F/S Restart_F/S = 0/4509 0/0 0/1 192.168.1.125
+	@267980 192.168.1.125
+	@267990 192.168.1.125
+	@268000 192.168.1.125
+	@268010 192.168.1.125
+	@268020 192.168.1.125
+	Renew_F/S Bind_F/S Restart_F/S = 0/4509 0/0 0/1
+	@268030 maintain()=1  Renew_F/S Bind_F/S Restart_F/S = 1/4509 0/0 0/1 0.0.0.0
+	@268100  Error! IP address: 0.0.0.0 Try restart:OK DHCP after 3398 msec
+	1
+	192.168.1.125
+	@268110 192.168.1.125
+	@268120 192.168.1.125
+	@268130 192.168.1.125
+	@268140 192.168.1.125
+	Renew_F/S Bind_F/S Restart_F/S = 1/4509 0/0 0/2
+	@268150 192.168.1.125
+	@268160 maintain()=1  Renew_F/S Bind_F/S Restart_F/S = 2/4509 0/0 0/2 192.168.1.125
+	@268220 maintain()=3 Rebind Failed! Try restsart:Fail DHCP after 61039 msec
+	0
+	 Renew_F/S Bind_F/S Restart_F/S = 2/4509 1/0 1/2 0.0.0.0
+	@268350  Error! IP address: 0.0.0.0 Try restart:Fail DHCP after 61039 msec
+	 Reset Ethernet module! HW reset count now=1
+	0
+	0.0.0.0
+	@268420  Error! IP address: 0.0.0.0 Try restart:Fail DHCP after 61039 msec
+	 Reset Ethernet module! HW reset count now=2
+	0
+	0.0.0.0
+	@268490  Error! IP address: 0.0.0.0 Try restart:OK DHCP after 57032 msec
+	1
+	192.168.1.124
+	@268550 192.168.1.124
+	@268560 192.168.1.124
+	Renew_F/S Bind_F/S Restart_F/S = 2/4509 1/0 3/3
+	@268570 192.168.1.124
+	@268580 192.168.1.124
+	@268590 192.168.1.124
+	@268600 maintain()=2  Renew_F/S Bind_F/S Restart_F/S = 2/4510 1/0 3/3 192.168.1.124
+	@268610 192.168.1.124
+	@268620 192.168.1.124
+	Renew_F/S Bind_F/S Restart_F/S = 2/4510 1/0 3/3
+	@268630 192.168.1.124
+	@268640 192.168.1.124
+	@268650 192.168.1.124
+	@268660 maintain()=2  Renew_F/S Bind_F/S Restart_F/S = 2/4511 1/0 3/3 192.168.1.124
+```
+
 ### 2017 Aug 19
 Ran for a week while unattended, however we can't know for sure if a power loss caused a system reset on this particular test system.
 Also of interest here is that at some point another socket than 0 was opened and subsequently closed. How and why?

@@ -6,6 +6,7 @@ Here a code failure not seen before. This is a connection from within our LAN, y
 	Build 18:27:20 Aug  7 2017
 So what has changed?
 Recent browser updates... but does that make any sense?
+Yesterday our xfinity account was changed (faster speed, newer cable modem) but this sort of problem was happening earlier.
 
 
 ```
