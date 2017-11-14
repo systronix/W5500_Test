@@ -1,5 +1,124 @@
 # TempServer with Ethernet2
 
+## 2017 Nov 14
+Here a code failure not seen before. This is a connection from within our LAN, yet it fails to get properly closed, using up almost all sockets. Then, client cannot connect reliably. This is an old build which ran well for a long time.
+	Teensy Temperature Server
+	Build 18:27:20 Aug  7 2017
+So what has changed?
+Recent browser updates... but does that make any sense?
+
+
+```
+	......'
+	.@ 82981 sec, Got new client, Temp is 22.750 C
+	From 192.168.1.1, port 50222
+	    Socket(0) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=61182 MAC=20:CF:30:B8:3D:ED
+	    Socket(1) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=59251 MAC=20:CF:30:B8:3D:ED
+	    Socket(2) SnSr=0x16   SnMR=TCP IP=192.168.1.1 Port=50228 MAC=20:CF:30:B8:3D:ED
+	    Socket(3) SnSr=ClsWait SnMR=TCP IP=192.168.1.1 Port=50222 MAC=20:CF:30:B8:3D:ED
+	    Socket(4) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=60507 MAC=20:CF:30:B8:3D:ED
+	    Socket(5) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=61266 MAC=20:CF:30:B8:3D:ED
+	    Socket(6) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=59611 MAC=20:CF:30:B8:3D:ED
+	    Socket(7) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=60987 MAC=20:CF:30:B8:3D:ED
+	GET /favicon.ico HTTP/1.1
+	Host: systronix.hopto.org:8080
+	Connection: keep-alive
+	User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36
+	Accept: image/webp,image/apng,image/*,*/*;q=0.8
+	Referer: http://systronix.hopto.org:8080/
+	Accept-Encoding: gzip, deflate
+	Accept-Language: en-US,en;q=0.8
+
+	Request is complete
+	Sending Response...
+	Sent 48
+	Sent head
+	Sent body header and build
+	Sent temperature
+	Sent all of body
+	    ----
+	client stopped
+	    Socket(0) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=61182 MAC=20:CF:30:B8:3D:ED
+	    Socket(1) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=59251 MAC=20:CF:30:B8:3D:ED
+	    Socket(2) SnSr=0x16   SnMR=TCP IP=192.168.1.1 Port=50228 MAC=20:CF:30:B8:3D:ED
+	    Socket(3) SnSr=Closed SnMR=TCP IP=192.168.1.1 Port=50222 MAC=20:CF:30:B8:3D:ED
+	    Socket(4) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=60507 MAC=20:CF:30:B8:3D:ED
+	    Socket(5) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=61266 MAC=20:CF:30:B8:3D:ED
+	    Socket(6) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=59611 MAC=20:CF:30:B8:3D:ED
+	    Socket(7) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=60987 MAC=20:CF:30:B8:3D:ED
+	392 http requests, 0.00 per sec, 1 timeouts
+	16510 sec max w/o client
+	--------
+
+	..........'..........'..........'..........'.....@ 82245 sec, Got new client, Temp is 22.688 C
+	From 46.174.191.31, port 51138
+	    Socket(0) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=61182 MAC=20:CF:30:B8:3D:ED
+	    Socket(1) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=59251 MAC=20:CF:30:B8:3D:ED
+	    Socket(2) SnSr=Listen SnMR=TCP
+	    Socket(3) SnSr=Establ SnMR=TCP IP=46.174.191.31 Port=51138 MAC=20:CF:30:B8:3D:ED
+	    Socket(4) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=60507 MAC=20:CF:30:B8:3D:ED
+	    Socket(5) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=61266 MAC=20:CF:30:B8:3D:ED
+	    Socket(6) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=59611 MAC=20:CF:30:B8:3D:ED
+	    Socket(7) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=60987 MAC=20:CF:30:B8:3D:ED
+	GET / HTTP/1.0
+	User-Agent: User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36
+
+	Request is complete
+	Sending Response...
+	Sent 48
+	Sent head
+	Sent body header and build
+	Sent temperature
+	Sent all of body
+	    ----
+	client stopped
+	    Socket(0) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=61182 MAC=20:CF:30:B8:3D:ED
+	    Socket(1) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=59251 MAC=20:CF:30:B8:3D:ED
+	    Socket(2) SnSr=Listen SnMR=TCP
+	    Socket(3) SnSr=Closed SnMR=TCP IP=46.174.191.31 Port=51138 MAC=20:CF:30:B8:3D:ED
+	    Socket(4) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=60507 MAC=20:CF:30:B8:3D:ED
+	    Socket(5) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=61266 MAC=20:CF:30:B8:3D:ED
+	    Socket(6) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=59611 MAC=20:CF:30:B8:3D:ED
+	    Socket(7) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=60987 MAC=20:CF:30:B8:3D:ED
+	388 http requests, 0.00 per sec, 1 timeouts
+	16510 sec max w/o client
+
+	...
+
+	..........'..........'..........'..........'.....@ 82245 sec, Got new client, Temp is 22.688 C
+	From 46.174.191.31, port 51138
+	    Socket(0) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=61182 MAC=20:CF:30:B8:3D:ED
+	    Socket(1) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=59251 MAC=20:CF:30:B8:3D:ED
+	    Socket(2) SnSr=Listen SnMR=TCP
+	    Socket(3) SnSr=Establ SnMR=TCP IP=46.174.191.31 Port=51138 MAC=20:CF:30:B8:3D:ED
+	    Socket(4) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=60507 MAC=20:CF:30:B8:3D:ED
+	    Socket(5) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=61266 MAC=20:CF:30:B8:3D:ED
+	    Socket(6) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=59611 MAC=20:CF:30:B8:3D:ED
+	    Socket(7) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=60987 MAC=20:CF:30:B8:3D:ED
+	GET / HTTP/1.0
+	User-Agent: User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36
+
+	Request is complete
+	Sending Response...
+	Sent 48
+	Sent head
+	Sent body header and build
+	Sent temperature
+	Sent all of body
+	    ----
+	client stopped
+	    Socket(0) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=61182 MAC=20:CF:30:B8:3D:ED
+	    Socket(1) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=59251 MAC=20:CF:30:B8:3D:ED
+	    Socket(2) SnSr=Listen SnMR=TCP
+	    Socket(3) SnSr=Closed SnMR=TCP IP=46.174.191.31 Port=51138 MAC=20:CF:30:B8:3D:ED
+	    Socket(4) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=60507 MAC=20:CF:30:B8:3D:ED
+	    Socket(5) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=61266 MAC=20:CF:30:B8:3D:ED
+	    Socket(6) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=59611 MAC=20:CF:30:B8:3D:ED
+	    Socket(7) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=60987 MAC=20:CF:30:B8:3D:ED
+	388 http requests, 0.00 per sec, 1 timeouts
+	16510 sec max w/o client
+```
+
 ## 2017 Oct 01
 
 https://www.abuseipdb.com/check/45.63.20.41 Vultr Holdings LLC, vultr.com, NYC, NY. Reported for web and email spam

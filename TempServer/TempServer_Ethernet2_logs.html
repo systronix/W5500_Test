@@ -1,0 +1,1583 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><style>body {
+  max-width: 980px;
+  border: 1px solid #ddd;
+  outline: 1300px solid #fff;
+  margin: 16px auto;
+}
+
+body .markdown-body
+{
+  padding: 45px;
+}
+
+@font-face {
+  font-family: fontawesome-mini;
+  src: url(data:font/woff;charset=utf-8;base64,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) format('woff');
+}
+
+@font-face {
+  font-family: octicons-anchor;
+  src: url(data:font/woff;charset=utf-8;base64,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) format('woff');
+}
+
+.markdown-body {
+  font-family: sans-serif;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  color: #333333;
+  overflow: hidden;
+  font-family: "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  word-wrap: break-word;
+}
+
+.markdown-body a {
+  background: transparent;
+}
+
+.markdown-body a:active,
+.markdown-body a:hover {
+  outline: 0;
+}
+
+.markdown-body b,
+.markdown-body strong {
+  font-weight: bold;
+}
+
+.markdown-body mark {
+  background: #ff0;
+  color: #000;
+  font-style: italic;
+  font-weight: bold;
+}
+
+.markdown-body sub,
+.markdown-body sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+.markdown-body sup {
+  top: -0.5em;
+}
+.markdown-body sub {
+  bottom: -0.25em;
+}
+
+.markdown-body h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+
+.markdown-body img {
+  border: 0;
+}
+
+.markdown-body hr {
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  height: 0;
+}
+
+.markdown-body pre {
+  overflow: auto;
+}
+
+.markdown-body code,
+.markdown-body kbd,
+.markdown-body pre,
+.markdown-body samp {
+  font-family: monospace, monospace;
+  font-size: 1em;
+}
+
+.markdown-body input {
+  color: inherit;
+  font: inherit;
+  margin: 0;
+}
+
+.markdown-body html input[disabled] {
+  cursor: default;
+}
+
+.markdown-body input {
+  line-height: normal;
+}
+
+.markdown-body input[type="checkbox"] {
+  box-sizing: border-box;
+  padding: 0;
+}
+
+.markdown-body table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.markdown-body td,
+.markdown-body th {
+  padding: 0;
+}
+
+.markdown-body .codehilitetable {
+  border: 0;
+  border-spacing: 0;
+}
+
+.markdown-body .codehilitetable tr {
+  border: 0;
+}
+
+.markdown-body .codehilitetable pre,
+.markdown-body .codehilitetable div.codehilite {
+  margin: 0;
+}
+
+.markdown-body .linenos,
+.markdown-body .code,
+.markdown-body .codehilitetable td {
+  border: 0;
+  padding: 0;
+}
+
+.markdown-body td:not(.linenos) .linenodiv {
+  padding: 0 !important;
+}
+
+.markdown-body .code {
+  width: 100%;
+}
+
+.markdown-body .linenos div pre,
+.markdown-body .linenodiv pre,
+.markdown-body .linenodiv {
+  border: 0;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  -webkit-border-top-left-radius: 3px;
+  -webkit-border-bottom-left-radius: 3px;
+  -moz-border-radius-topleft: 3px;
+  -moz-border-radius-bottomleft: 3px;
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
+
+.markdown-body .code div pre,
+.markdown-body .code div {
+  border: 0;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  -webkit-border-top-right-radius: 3px;
+  -webkit-border-bottom-right-radius: 3px;
+  -moz-border-radius-topright: 3px;
+  -moz-border-radius-bottomright: 3px;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+
+.markdown-body * {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.markdown-body input {
+  font: 13px Helvetica, arial, freesans, clean, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
+  line-height: 1.4;
+}
+
+.markdown-body a {
+  color: #4183c4;
+  text-decoration: none;
+}
+
+.markdown-body a:hover,
+.markdown-body a:focus,
+.markdown-body a:active {
+  text-decoration: underline;
+}
+
+.markdown-body hr {
+  height: 0;
+  margin: 15px 0;
+  overflow: hidden;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.markdown-body hr:before,
+.markdown-body hr:after {
+  display: table;
+  content: " ";
+}
+
+.markdown-body hr:after {
+  clear: both;
+}
+
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  line-height: 1.1;
+}
+
+.markdown-body h1 {
+  font-size: 30px;
+}
+
+.markdown-body h2 {
+  font-size: 21px;
+}
+
+.markdown-body h3 {
+  font-size: 16px;
+}
+
+.markdown-body h4 {
+  font-size: 14px;
+}
+
+.markdown-body h5 {
+  font-size: 12px;
+}
+
+.markdown-body h6 {
+  font-size: 11px;
+}
+
+.markdown-body blockquote {
+  margin: 0;
+}
+
+.markdown-body ul,
+.markdown-body ol {
+  padding: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.markdown-body ol ol,
+.markdown-body ul ol {
+  list-style-type: lower-roman;
+}
+
+.markdown-body ul ul ol,
+.markdown-body ul ol ol,
+.markdown-body ol ul ol,
+.markdown-body ol ol ol {
+  list-style-type: lower-alpha;
+}
+
+.markdown-body dd {
+  margin-left: 0;
+}
+
+.markdown-body code,
+.markdown-body pre,
+.markdown-body samp {
+  font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  font-size: 12px;
+}
+
+.markdown-body pre {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.markdown-body kbd {
+  background-color: #e7e7e7;
+  background-image: -moz-linear-gradient(#fefefe, #e7e7e7);
+  background-image: -webkit-linear-gradient(#fefefe, #e7e7e7);
+  background-image: linear-gradient(#fefefe, #e7e7e7);
+  background-repeat: repeat-x;
+  border-radius: 2px;
+  border: 1px solid #cfcfcf;
+  color: #000;
+  padding: 3px 5px;
+  line-height: 10px;
+  font: 11px Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  display: inline-block;
+}
+
+.markdown-body>*:first-child {
+  margin-top: 0 !important;
+}
+
+.markdown-body>*:last-child {
+  margin-bottom: 0 !important;
+}
+
+.markdown-body .headeranchor-link {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  display: block;
+  padding-right: 6px;
+  padding-left: 30px;
+  margin-left: -30px;
+}
+
+.markdown-body .headeranchor-link:focus {
+  outline: none;
+}
+
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+  position: relative;
+  margin-top: 1em;
+  margin-bottom: 16px;
+  font-weight: bold;
+  line-height: 1.4;
+}
+
+.markdown-body h1 .headeranchor,
+.markdown-body h2 .headeranchor,
+.markdown-body h3 .headeranchor,
+.markdown-body h4 .headeranchor,
+.markdown-body h5 .headeranchor,
+.markdown-body h6 .headeranchor {
+  display: none;
+  color: #000;
+  vertical-align: middle;
+}
+
+.markdown-body h1:hover .headeranchor-link,
+.markdown-body h2:hover .headeranchor-link,
+.markdown-body h3:hover .headeranchor-link,
+.markdown-body h4:hover .headeranchor-link,
+.markdown-body h5:hover .headeranchor-link,
+.markdown-body h6:hover .headeranchor-link {
+  height: 1em;
+  padding-left: 8px;
+  margin-left: -30px;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.markdown-body h1:hover .headeranchor-link .headeranchor,
+.markdown-body h2:hover .headeranchor-link .headeranchor,
+.markdown-body h3:hover .headeranchor-link .headeranchor,
+.markdown-body h4:hover .headeranchor-link .headeranchor,
+.markdown-body h5:hover .headeranchor-link .headeranchor,
+.markdown-body h6:hover .headeranchor-link .headeranchor {
+  display: inline-block;
+}
+
+.markdown-body h1 {
+  padding-bottom: 0.3em;
+  font-size: 2.25em;
+  line-height: 1.2;
+  border-bottom: 1px solid #eee;
+}
+
+.markdown-body h2 {
+  padding-bottom: 0.3em;
+  font-size: 1.75em;
+  line-height: 1.225;
+  border-bottom: 1px solid #eee;
+}
+
+.markdown-body h3 {
+  font-size: 1.5em;
+  line-height: 1.43;
+}
+
+.markdown-body h4 {
+  font-size: 1.25em;
+}
+
+.markdown-body h5 {
+  font-size: 1em;
+}
+
+.markdown-body h6 {
+  font-size: 1em;
+  color: #777;
+}
+
+.markdown-body p,
+.markdown-body blockquote,
+.markdown-body ul,
+.markdown-body ol,
+.markdown-body dl,
+.markdown-body table,
+.markdown-body pre,
+.markdown-body .admonition {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.markdown-body hr {
+  height: 4px;
+  padding: 0;
+  margin: 16px 0;
+  background-color: #e7e7e7;
+  border: 0 none;
+}
+
+.markdown-body ul,
+.markdown-body ol {
+  padding-left: 2em;
+}
+
+.markdown-body ul ul,
+.markdown-body ul ol,
+.markdown-body ol ol,
+.markdown-body ol ul {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.markdown-body li>p {
+  margin-top: 16px;
+}
+
+.markdown-body dl {
+  padding: 0;
+}
+
+.markdown-body dl dt {
+  padding: 0;
+  margin-top: 16px;
+  font-size: 1em;
+  font-style: italic;
+  font-weight: bold;
+}
+
+.markdown-body dl dd {
+  padding: 0 16px;
+  margin-bottom: 16px;
+}
+
+.markdown-body blockquote {
+  padding: 0 15px;
+  color: #777;
+  border-left: 4px solid #ddd;
+}
+
+.markdown-body blockquote>:first-child {
+  margin-top: 0;
+}
+
+.markdown-body blockquote>:last-child {
+  margin-bottom: 0;
+}
+
+.markdown-body table {
+  display: block;
+  width: 100%;
+  overflow: auto;
+  word-break: normal;
+  word-break: keep-all;
+}
+
+.markdown-body table th {
+  font-weight: bold;
+}
+
+.markdown-body table th,
+.markdown-body table td {
+  padding: 6px 13px;
+  border: 1px solid #ddd;
+}
+
+.markdown-body table tr {
+  background-color: #fff;
+  border-top: 1px solid #ccc;
+}
+
+.markdown-body table tr:nth-child(2n) {
+  background-color: #f8f8f8;
+}
+
+.markdown-body img {
+  max-width: 100%;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.markdown-body code,
+.markdown-body samp {
+  padding: 0;
+  padding-top: 0.2em;
+  padding-bottom: 0.2em;
+  margin: 0;
+  font-size: 85%;
+  background-color: rgba(0,0,0,0.04);
+  border-radius: 3px;
+}
+
+.markdown-body code:before,
+.markdown-body code:after {
+  letter-spacing: -0.2em;
+  content: "\00a0";
+}
+
+.markdown-body pre>code {
+  padding: 0;
+  margin: 0;
+  font-size: 100%;
+  word-break: normal;
+  white-space: pre;
+  background: transparent;
+  border: 0;
+}
+
+.markdown-body .codehilite {
+  margin-bottom: 16px;
+}
+
+.markdown-body .codehilite pre,
+.markdown-body pre {
+  padding: 16px;
+  overflow: auto;
+  font-size: 85%;
+  line-height: 1.45;
+  background-color: #f7f7f7;
+  border-radius: 3px;
+}
+
+.markdown-body .codehilite pre {
+  margin-bottom: 0;
+  word-break: normal;
+}
+
+.markdown-body pre {
+  word-wrap: normal;
+}
+
+.markdown-body pre code {
+  display: inline;
+  max-width: initial;
+  padding: 0;
+  margin: 0;
+  overflow: initial;
+  line-height: inherit;
+  word-wrap: normal;
+  background-color: transparent;
+  border: 0;
+}
+
+.markdown-body pre code:before,
+.markdown-body pre code:after {
+  content: normal;
+}
+
+/* Admonition */
+.markdown-body .admonition {
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  position: relative;
+  border-radius: 3px;
+  border: 1px solid #e0e0e0;
+  border-left: 6px solid #333;
+  padding: 10px 10px 10px 30px;
+}
+
+.markdown-body .admonition table {
+  color: #333;
+}
+
+.markdown-body .admonition p {
+  padding: 0;
+}
+
+.markdown-body .admonition-title {
+  font-weight: bold;
+  margin: 0;
+}
+
+.markdown-body .admonition>.admonition-title {
+  color: #333;
+}
+
+.markdown-body .attention>.admonition-title {
+  color: #a6d796;
+}
+
+.markdown-body .caution>.admonition-title {
+  color: #d7a796;
+}
+
+.markdown-body .hint>.admonition-title {
+  color: #96c6d7;
+}
+
+.markdown-body .danger>.admonition-title {
+  color: #c25f77;
+}
+
+.markdown-body .question>.admonition-title {
+  color: #96a6d7;
+}
+
+.markdown-body .note>.admonition-title {
+  color: #d7c896;
+}
+
+.markdown-body .admonition:before,
+.markdown-body .attention:before,
+.markdown-body .caution:before,
+.markdown-body .hint:before,
+.markdown-body .danger:before,
+.markdown-body .question:before,
+.markdown-body .note:before {
+  font: normal normal 16px fontawesome-mini;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  line-height: 1.5;
+  color: #333;
+  position: absolute;
+  left: 0;
+  top: 0;
+  padding-top: 10px;
+  padding-left: 10px;
+}
+
+.markdown-body .admonition:before {
+  content: "\f056\00a0";
+  color: 333;
+}
+
+.markdown-body .attention:before {
+  content: "\f058\00a0";
+  color: #a6d796;
+}
+
+.markdown-body .caution:before {
+  content: "\f06a\00a0";
+  color: #d7a796;
+}
+
+.markdown-body .hint:before {
+  content: "\f05a\00a0";
+  color: #96c6d7;
+}
+
+.markdown-body .danger:before {
+  content: "\f057\00a0";
+  color: #c25f77;
+}
+
+.markdown-body .question:before {
+  content: "\f059\00a0";
+  color: #96a6d7;
+}
+
+.markdown-body .note:before {
+  content: "\f040\00a0";
+  color: #d7c896;
+}
+
+.markdown-body .admonition::after {
+  content: normal;
+}
+
+.markdown-body .attention {
+  border-left: 6px solid #a6d796;
+}
+
+.markdown-body .caution {
+  border-left: 6px solid #d7a796;
+}
+
+.markdown-body .hint {
+  border-left: 6px solid #96c6d7;
+}
+
+.markdown-body .danger {
+  border-left: 6px solid #c25f77;
+}
+
+.markdown-body .question {
+  border-left: 6px solid #96a6d7;
+}
+
+.markdown-body .note {
+  border-left: 6px solid #d7c896;
+}
+
+.markdown-body .admonition>*:first-child {
+  margin-top: 0 !important;
+}
+
+.markdown-body .admonition>*:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* progress bar*/
+.markdown-body .progress {
+  display: block;
+  width: 300px;
+  margin: 10px 0;
+  height: 24px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  background-color: #ededed;
+  position: relative;
+  box-shadow: inset -1px 1px 3px rgba(0, 0, 0, .1);
+}
+
+.markdown-body .progress-label {
+  position: absolute;
+  text-align: center;
+  font-weight: bold;
+  width: 100%; margin: 0;
+  line-height: 24px;
+  color: #333;
+  text-shadow: 1px 1px 0 #fefefe, -1px -1px 0 #fefefe, -1px 1px 0 #fefefe, 1px -1px 0 #fefefe, 0 1px 0 #fefefe, 0 -1px 0 #fefefe, 1px 0 0 #fefefe, -1px 0 0 #fefefe, 1px 1px 2px #000;
+  -webkit-font-smoothing: antialiased !important;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.markdown-body .progress-bar {
+  height: 24px;
+  float: left;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  background-color: #96c6d7;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .5), inset 0 -1px 0 rgba(0, 0, 0, .1);
+  background-size: 30px 30px;
+  background-image: -webkit-linear-gradient(
+    135deg, rgba(255, 255, 255, .4) 27%,
+    transparent 27%,
+    transparent 52%, rgba(255, 255, 255, .4) 52%,
+    rgba(255, 255, 255, .4) 77%,
+    transparent 77%, transparent
+  );
+  background-image: -moz-linear-gradient(
+    135deg,
+    rgba(255, 255, 255, .4) 27%, transparent 27%,
+    transparent 52%, rgba(255, 255, 255, .4) 52%,
+    rgba(255, 255, 255, .4) 77%, transparent 77%,
+    transparent
+  );
+  background-image: -ms-linear-gradient(
+    135deg,
+    rgba(255, 255, 255, .4) 27%, transparent 27%,
+    transparent 52%, rgba(255, 255, 255, .4) 52%,
+    rgba(255, 255, 255, .4) 77%, transparent 77%,
+    transparent
+  );
+  background-image: -o-linear-gradient(
+    135deg,
+    rgba(255, 255, 255, .4) 27%, transparent 27%,
+    transparent 52%, rgba(255, 255, 255, .4) 52%,
+    rgba(255, 255, 255, .4) 77%, transparent 77%,
+    transparent
+  );
+  background-image: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, .4) 27%, transparent 27%,
+    transparent 52%, rgba(255, 255, 255, .4) 52%,
+    rgba(255, 255, 255, .4) 77%, transparent 77%,
+    transparent
+  );
+}
+
+.markdown-body .progress-100plus .progress-bar {
+  background-color: #a6d796;
+}
+
+.markdown-body .progress-80plus .progress-bar {
+  background-color: #c6d796;
+}
+
+.markdown-body .progress-60plus .progress-bar {
+  background-color: #d7c896;
+}
+
+.markdown-body .progress-40plus .progress-bar {
+  background-color: #d7a796;
+}
+
+.markdown-body .progress-20plus .progress-bar {
+  background-color: #d796a6;
+}
+
+.markdown-body .progress-0plus .progress-bar {
+  background-color: #c25f77;
+}
+
+.markdown-body .candystripe-animate .progress-bar{
+  -webkit-animation: animate-stripes 3s linear infinite;
+  -moz-animation: animate-stripes 3s linear infinite;
+  animation: animate-stripes 3s linear infinite;
+}
+
+@-webkit-keyframes animate-stripes {
+  0% {
+    background-position: 0 0;
+  }
+
+  100% {
+    background-position: 60px 0;
+  }
+}
+
+@-moz-keyframes animate-stripes {
+  0% {
+    background-position: 0 0;
+  }
+
+  100% {
+    background-position: 60px 0;
+  }
+}
+
+@keyframes animate-stripes {
+  0% {
+    background-position: 0 0;
+  }
+
+  100% {
+    background-position: 60px 0;
+  }
+}
+
+.markdown-body .gloss .progress-bar {
+  box-shadow:
+    inset 0 4px 12px rgba(255, 255, 255, .7),
+    inset 0 -12px 0 rgba(0, 0, 0, .05);
+}
+
+/* Multimarkdown Critic Blocks */
+.markdown-body .critic_mark {
+  background: #ff0;
+}
+
+.markdown-body .critic_delete {
+  color: #c82829;
+  text-decoration: line-through;
+}
+
+.markdown-body .critic_insert {
+  color: #718c00 ;
+  text-decoration: underline;
+}
+
+.markdown-body .critic_comment {
+  color: #8e908c;
+  font-style: italic;
+}
+
+.markdown-body .headeranchor {
+  font: normal normal 16px octicons-anchor;
+  line-height: 1;
+  display: inline-block;
+  text-decoration: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.headeranchor:before {
+  content: '\f05c';
+}
+
+.markdown-body .task-list-item {
+  list-style-type: none;
+}
+
+.markdown-body .task-list-item+.task-list-item {
+  margin-top: 3px;
+}
+
+.markdown-body .task-list-item input {
+  margin: 0 4px 0.25em -20px;
+  vertical-align: middle;
+}
+
+/* Media */
+@media only screen and (min-width: 480px) {
+  .markdown-body {
+    font-size:14px;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .markdown-body {
+    font-size:16px;
+  }
+}
+
+@media print {
+  .markdown-body * {
+    background: transparent !important;
+    color: black !important;
+    filter:none !important;
+    -ms-filter: none !important;
+  }
+
+  .markdown-body {
+    font-size:12pt;
+    max-width:100%;
+    outline:none;
+    border: 0;
+  }
+
+  .markdown-body a,
+  .markdown-body a:visited {
+    text-decoration: underline;
+  }
+
+  .markdown-body .headeranchor-link {
+    display: none;
+  }
+
+  .markdown-body a[href]:after {
+    content: " (" attr(href) ")";
+  }
+
+  .markdown-body abbr[title]:after {
+    content: " (" attr(title) ")";
+  }
+
+  .markdown-body .ir a:after,
+  .markdown-body a[href^="javascript:"]:after,
+  .markdown-body a[href^="#"]:after {
+    content: "";
+  }
+
+  .markdown-body pre {
+    white-space: pre;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  .markdown-body pre,
+  .markdown-body blockquote {
+    border: 1px solid #999;
+    padding-right: 1em;
+    page-break-inside: avoid;
+  }
+
+  .markdown-body .progress,
+  .markdown-body .progress-bar {
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+  }
+
+  .markdown-body .progress {
+    border: 1px solid #ddd;
+  }
+
+  .markdown-body .progress-bar {
+    height: 22px;
+    border-right: 1px solid #ddd;
+  }
+
+  .markdown-body tr,
+  .markdown-body img {
+    page-break-inside: avoid;
+  }
+
+  .markdown-body img {
+    max-width: 100% !important;
+  }
+
+  .markdown-body p,
+  .markdown-body h2,
+  .markdown-body h3 {
+    orphans: 3;
+    widows: 3;
+  }
+
+  .markdown-body h2,
+  .markdown-body h3 {
+    page-break-after: avoid;
+  }
+}
+</style><title>TempServer_Ethernet2_logs</title></head><body><article class="markdown-body"><h1 id="tempserver-with-ethernet2"><a name="user-content-tempserver-with-ethernet2" href="#tempserver-with-ethernet2" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>TempServer with Ethernet2</h1>
+<h2 id="2017-nov-14"><a name="user-content-2017-nov-14" href="#2017-nov-14" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>2017 Nov 14</h2>
+<p>Here a code failure not seen before. This is a connection from within our LAN, yet it fails to get properly closed, using up almost all sockets. Then, client cannot connect reliably. This is an old build which ran well for a long time.</p>
+<pre><code>    ......'
+    .@ 82981 sec, Got new client, Temp is 22.750 C
+    From 192.168.1.1, port 50222
+        Socket(0) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=61182 MAC=20:CF:30:B8:3D:ED
+        Socket(1) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=59251 MAC=20:CF:30:B8:3D:ED
+        Socket(2) SnSr=0x16   SnMR=TCP IP=192.168.1.1 Port=50228 MAC=20:CF:30:B8:3D:ED
+        Socket(3) SnSr=ClsWait SnMR=TCP IP=192.168.1.1 Port=50222 MAC=20:CF:30:B8:3D:ED
+        Socket(4) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=60507 MAC=20:CF:30:B8:3D:ED
+        Socket(5) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=61266 MAC=20:CF:30:B8:3D:ED
+        Socket(6) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=59611 MAC=20:CF:30:B8:3D:ED
+        Socket(7) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=60987 MAC=20:CF:30:B8:3D:ED
+    GET /favicon.ico HTTP/1.1
+    Host: systronix.hopto.org:8080
+    Connection: keep-alive
+    User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36
+    Accept: image/webp,image/apng,image/*,*/*;q=0.8
+    Referer: http://systronix.hopto.org:8080/
+    Accept-Encoding: gzip, deflate
+    Accept-Language: en-US,en;q=0.8
+
+    Request is complete
+    Sending Response...
+    Sent 48
+    Sent head
+    Sent body header and build
+    Sent temperature
+    Sent all of body
+        ----
+    client stopped
+        Socket(0) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=61182 MAC=20:CF:30:B8:3D:ED
+        Socket(1) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=59251 MAC=20:CF:30:B8:3D:ED
+        Socket(2) SnSr=0x16   SnMR=TCP IP=192.168.1.1 Port=50228 MAC=20:CF:30:B8:3D:ED
+        Socket(3) SnSr=Closed SnMR=TCP IP=192.168.1.1 Port=50222 MAC=20:CF:30:B8:3D:ED
+        Socket(4) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=60507 MAC=20:CF:30:B8:3D:ED
+        Socket(5) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=61266 MAC=20:CF:30:B8:3D:ED
+        Socket(6) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=59611 MAC=20:CF:30:B8:3D:ED
+        Socket(7) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=60987 MAC=20:CF:30:B8:3D:ED
+    392 http requests, 0.00 per sec, 1 timeouts
+    16510 sec max w/o client
+    --------
+
+    ..........'..........'..........'..........'.....@ 82245 sec, Got new client, Temp is 22.688 C
+    From 46.174.191.31, port 51138
+        Socket(0) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=61182 MAC=20:CF:30:B8:3D:ED
+        Socket(1) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=59251 MAC=20:CF:30:B8:3D:ED
+        Socket(2) SnSr=Listen SnMR=TCP
+        Socket(3) SnSr=Establ SnMR=TCP IP=46.174.191.31 Port=51138 MAC=20:CF:30:B8:3D:ED
+        Socket(4) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=60507 MAC=20:CF:30:B8:3D:ED
+        Socket(5) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=61266 MAC=20:CF:30:B8:3D:ED
+        Socket(6) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=59611 MAC=20:CF:30:B8:3D:ED
+        Socket(7) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=60987 MAC=20:CF:30:B8:3D:ED
+    GET / HTTP/1.0
+    User-Agent: User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36
+
+    Request is complete
+    Sending Response...
+    Sent 48
+    Sent head
+    Sent body header and build
+    Sent temperature
+    Sent all of body
+        ----
+    client stopped
+        Socket(0) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=61182 MAC=20:CF:30:B8:3D:ED
+        Socket(1) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=59251 MAC=20:CF:30:B8:3D:ED
+        Socket(2) SnSr=Listen SnMR=TCP
+        Socket(3) SnSr=Closed SnMR=TCP IP=46.174.191.31 Port=51138 MAC=20:CF:30:B8:3D:ED
+        Socket(4) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=60507 MAC=20:CF:30:B8:3D:ED
+        Socket(5) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=61266 MAC=20:CF:30:B8:3D:ED
+        Socket(6) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=59611 MAC=20:CF:30:B8:3D:ED
+        Socket(7) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=60987 MAC=20:CF:30:B8:3D:ED
+    388 http requests, 0.00 per sec, 1 timeouts
+    16510 sec max w/o client
+
+    ...
+
+    ..........'..........'..........'..........'.....@ 82245 sec, Got new client, Temp is 22.688 C
+    From 46.174.191.31, port 51138
+        Socket(0) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=61182 MAC=20:CF:30:B8:3D:ED
+        Socket(1) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=59251 MAC=20:CF:30:B8:3D:ED
+        Socket(2) SnSr=Listen SnMR=TCP
+        Socket(3) SnSr=Establ SnMR=TCP IP=46.174.191.31 Port=51138 MAC=20:CF:30:B8:3D:ED
+        Socket(4) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=60507 MAC=20:CF:30:B8:3D:ED
+        Socket(5) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=61266 MAC=20:CF:30:B8:3D:ED
+        Socket(6) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=59611 MAC=20:CF:30:B8:3D:ED
+        Socket(7) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=60987 MAC=20:CF:30:B8:3D:ED
+    GET / HTTP/1.0
+    User-Agent: User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36
+
+    Request is complete
+    Sending Response...
+    Sent 48
+    Sent head
+    Sent body header and build
+    Sent temperature
+    Sent all of body
+        ----
+    client stopped
+        Socket(0) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=61182 MAC=20:CF:30:B8:3D:ED
+        Socket(1) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=59251 MAC=20:CF:30:B8:3D:ED
+        Socket(2) SnSr=Listen SnMR=TCP
+        Socket(3) SnSr=Closed SnMR=TCP IP=46.174.191.31 Port=51138 MAC=20:CF:30:B8:3D:ED
+        Socket(4) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=60507 MAC=20:CF:30:B8:3D:ED
+        Socket(5) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=61266 MAC=20:CF:30:B8:3D:ED
+        Socket(6) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=59611 MAC=20:CF:30:B8:3D:ED
+        Socket(7) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=60987 MAC=20:CF:30:B8:3D:ED
+    388 http requests, 0.00 per sec, 1 timeouts
+    16510 sec max w/o client
+</code></pre>
+
+<h2 id="2017-oct-01"><a name="user-content-2017-oct-01" href="#2017-oct-01" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>2017 Oct 01</h2>
+<p><a href="https://www.abuseipdb.com/check/45.63.20.41">https://www.abuseipdb.com/check/45.63.20.41</a> Vultr Holdings LLC, vultr.com, NYC, NY. Reported for web and email spam<br />
+185.102.219.23 Datadelivery s.r.o. Germany superhosting.cz, reported for Port Scan and Brute-Force attacks.</p>
+<pre><code>
+</code></pre>
+
+<h2 id="2017-sep-30"><a name="user-content-2017-sep-30" href="#2017-sep-30" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>2017 Sep 30</h2>
+<p>Here all sockets should be closed. Four are held open.<br />
+172.58.36.197 and .219 are TMobile near LA, can only trace back as far as ae19.mpr3.sjc7.us.zip.zayo.com [64.125.30.76]<br />
+124.133.200.65 is near Jinan, China:<br />
+    inetnum: 124.128.0.0 - 124.135.255.255<br />
+    netname: UNICOM-SD<br />
+    descr: China Unicom Shandong province network<br />
+    descr: China Unicom</p>
+<p>What&rsquo;s odd is that one held open is my LAN.<br />
+<pre><code>    Sent all of body
+        ----
+    client stopped
+        Socket(0) SnSr=Establ SnMR=TCP IP=172.58.36.197 Port=52566 MAC=20:CF:30:B8:3D:ED
+        Socket(1) SnSr=Establ SnMR=TCP IP=124.133.200.65 Port=57032 MAC=20:CF:30:B8:3D:ED
+        Socket(2) SnSr=Establ SnMR=TCP IP=172.58.36.197 Port=29228 MAC=20:CF:30:B8:3D:ED
+        Socket(3) SnSr=Establ SnMR=TCP IP=172.58.36.219 Port=46419 MAC=20:CF:30:B8:3D:ED
+        Socket(4) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=55773 MAC=20:CF:30:B8:3D:ED
+        Socket(5) SnSr=Closed SnMR=TCP IP=192.168.1.1 Port=55772 MAC=20:CF:30:B8:3D:ED
+        Socket(6) SnSr=Closed SnMR=TCP IP=192.168.1.1 Port=55624 MAC=20:CF:30:B8:3D:ED
+        Socket(7) SnSr=Closed SnMR=TCP IP=192.168.1.1 Port=61721 MAC=20:CF:30:B8:3D:ED
+    364847 http requests, 0.48 per sec, 62 timeouts
+</code></pre></p>
+<h2 id="2017-sep-19-more-probes-from-malicious-sites"><a name="user-content-2017-sep-19-more-probes-from-malicious-sites" href="#2017-sep-19-more-probes-from-malicious-sites" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>2017 Sep 19 - more probes from malicious sites</h2>
+<p>185.100.87.190 from Romania</p>
+<p>..@ 14613 sec, Got new client, Temp is 23.500 C<br />
+From 139.162.79.87, port 54504<br />
+    Socket(0) SnSr=Listen SnMR=TCP<br />
+    Socket(1) SnSr=0x16   SnMR=TCP IP=139.162.112.248 Port=59565 MAC=20:CF:30:B8:3D:ED<br />
+    Socket(2) SnSr=Closed SnMR=TCP IP=192.168.1.1 Port=54105 MAC=20:CF:30:B8:3D:ED<br />
+    Socket(3) SnSr=Establ SnMR=TCP IP=139.162.79.87 Port=54504 MAC=20:CF:30:B8:3D:ED<br />
+    Socket(4) SnSr=Closed SnMR=TCP IP=192.168.1.1 Port=51710 MAC=20:CF:30:B8:3D:ED<br />
+    Socket(5) SnSr=Closed SnMR=Close IP=0.0.0.0 Port=0 MAC=FF:FF:FF:FF:FF:FF<br />
+    Socket(6) SnSr=Closed SnMR=Close IP=0.0.0.0 Port=0 MAC=FF:FF:FF:FF:FF:FF<br />
+    Socket(7) SnSr=Closed SnMR=Close IP=0.0.0.0 Port=0 MAC=FF:FF:FF:FF:FF:FF<br />
+The client at 139.162.79.87 Port=54504 then sent a large number of nulls and an endless stream of exclamation marks until a timeout in TempServer closed the connection.</p>
+<h2 id="2017-aug-24-e-mail-attack-from-brazil"><a name="user-content-2017-aug-24-e-mail-attack-from-brazil" href="#2017-aug-24-e-mail-attack-from-brazil" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>2017 Aug 24 - e-mail &lsquo;attack&rsquo; from Brazil</h2>
+<p>According to CBL Lookup this IP is infected or NATting for an infected computer, emitting SPAM. It&rsquo;s been requesting and getting a connection to TempServer for a few days now, it just holds the connection open and seems to do nothing more&hellip; so it&rsquo;s not a very smart bot. I need to get a port mirror going and sniff this with Wireshark for more details. Also I should add a timeout to close the port if there&rsquo;s no request for some time.<br />
+<pre><code>    IP=179.220.112.223 Port=39849
+</code></pre><br />
+According to APNIC WHOIS, this belongs to Claro, S.A., in Sao Paulo. They list no abuse email (maybe they don&rsquo;t have Internet?) or phone contact, just a street address.</p>
+<h2 id="2017-aug-19-malice-aforethought-from-china-and-germany"><a name="user-content-2017-aug-19-malice-aforethought-from-china-and-germany" href="#2017-aug-19-malice-aforethought-from-china-and-germany" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>2017 Aug 19 - Malice Aforethought from China and Germany</h2>
+<p>Finally some interesting malicious probes.<br />
+IP addresses looked up with <a href="https://whois.icann.org/en">icann whois</a> which you can <a href="https://whois.icann.org/en/about-whois">learn about here</a>, where<br />
+it is stated that &ldquo;Any entity that wants to become a registrar must earn ICANN accreditation.&rdquo; But there are five <a href="https://en.wikipedia.org/wiki/Regional_Internet_registry">Regional Internet Registries</a> (RIRs) which are components of the Internet Number Registry System (IANA). Each maintains their own whois database, apparently not all linked to ICANN. So you may have to search all five to find specific whois data for a given IP. As an interesting aside, four of the five RIRs have exhausted IPV4 addresses - APNIC as early as 2011.</p>
+<p>120.194.X.X is from Beijing, China<br />
+This is registered in Asia Pacific Network Information Centre (APNIC). APNIC is the Regional Internet Registry<br />
+for the Asia Pacific region, with <a href="http://wq.apnic.net/apnic-bin/whois.pl">apnic whois</a><br />
+which shows China Mobile Communications Corporation as the owner, with an abuse contact. I&rsquo;ll try that.<br />
+120.194.54.186 is a known infection site for IoT DDOS attacks using Hajime, Wopbot, <a href="https://f5.com/labs/articles/threat-intelligence/ddos/mirai-the-iot-bot-that-took-down-krebs-and-launched-a-tbps-attack-on-ovh-22422">Mirai</a> or similar malware</p>
+<p>37.201.4.100 is a known <a href="https://news.sophos.com/en-us/2016/06/08/sophoslabs-vawtrak-v2-analysis/">Vawtrak</a> or NeverQuest or Snifula banking trojan infection site <br />
+This is registered to Unitymedia Group in Koeln, Germany. They have abuse email and phone contact information.</p>
+<p>You can look up details on these or other IP addresses at the <a href="https://www.abuseat.org/lookup.cgi">CBL abuseat site</a><br />
+<pre><code>...@ 230864 sec, Got new client, Temp is 24.875 C
+From 192.168.1.194, port 61775
+    Socket(0) SnSr=Establ SnMR=TCP IP=192.168.1.194 Port=61775 MAC=6C:62:6D:C3:34:4B
+    Socket(1) SnSr=Listen SnMR=TCP
+    Socket(2) SnSr=Closed SnMR=TCP IP=192.168.1.194 Port=60005 MAC=6C:62:6D:C3:34:4B
+    Socket(3) SnSr=Closed SnMR=TCP IP=67.177.36.6 Port=23953 MAC=20:CF:30:B8:3D:ED
+    Socket(4) SnSr=Closed SnMR=TCP IP=37.201.4.100 Port=20015 MAC=20:CF:30:B8:3D:ED
+    Socket(5) SnSr=Closed SnMR=TCP IP=120.194.54.186 Port=46043 MAC=20:CF:30:B8:3D:ED
+    Socket(6) SnSr=Closed SnMR=TCP IP=120.194.54.186 Port=46050 MAC=20:CF:30:B8:3D:ED
+    Socket(7) SnSr=Closed SnMR=TCP IP=120.194.54.186 Port=46070 MAC=20:CF:30:B8:3D:ED
+</code></pre></p>
+<h2 id="those-duplicated-requests-are-for-faviconico"><a name="user-content-those-duplicated-requests-are-for-faviconico" href="#those-duplicated-requests-are-for-faviconico" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Those &ldquo;duplicated&rdquo; requests are for favicon.ico</h2>
+<p>Doh! Thanks to @drmartin for <a href="https://forum.pjrc.com/threads/43761-Ethernet-library-socket-issues?p=150145&amp;viewfull=1#post150145">his answer</a> on the PJRC forum.<br />
+Chrome does a GET of the main page from TempServer, then immediately another GET for favico.ico, which you can see in the logs:<br />
+<pre><code>    GET /favicon.ico HTTP/1.1
+</code></pre><br />
+Chrome does this for every keep-alive refresh.<br />
+Firefox only does it the first time, which seems the more sensible approach.<br />
+My too-simple example doesn&rsquo;t parse out different types of requests, it serves the temperature page to any and all requests&hellip; so it currently sends another temperature<br />
+page to the favicon requester. Something else to improve.</p>
+<h3 id="serving-a-faviconico"><a name="user-content-serving-a-faviconico" href="#serving-a-faviconico" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Serving a favicon.ico</h3>
+<p>It&rsquo;s possible to server the favicon from a uSD card <a href="https://forum.arduino.cc/index.php?topic=337723.15">according to this post</a> so there&rsquo;s a future task.</p>
+<h2 id="2017-aug-06"><a name="user-content-2017-aug-06" href="#2017-aug-06" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>2017 Aug 06</h2>
+<p>One Firefox client. Note there are not the duplicated requests, just one every 5 seconds.<br />
+I am also outputting remote hardware address (should be remote MAC) but it never changes. Something broken there, not sure where.</p>
+<pre><code>.'....@ 71374 sec, Got new client, Temp is 25.812 C
+From 192.168.1.1, port 58616
+    Socket(0) SnSr=Listen SnMR=TCP
+    Socket(1) SnSr=Establ SnMR=TCP IP=172.58.33.184 Port=48913 MAC=20:CF:30:B8:3D:ED
+    Socket(2) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=58616 MAC=20:CF:30:B8:3D:ED
+    Socket(3) SnSr=Closed SnMR=TCP IP=66.249.84.44 Port=61837 MAC=20:CF:30:B8:3D:ED
+    Socket(4) SnSr=Closed SnMR=TCP IP=192.168.1.1 Port=54327 MAC=20:CF:30:B8:3D:ED
+    Socket(5) SnSr=Closed SnMR=TCP IP=173.185.52.214 Port=60486 MAC=20:CF:30:B8:3D:ED
+    Socket(6) SnSr=Closed SnMR=Close IP=0.0.0.0 Port=0 MAC=FF:FF:FF:FF:FF:FF
+    Socket(7) SnSr=Closed SnMR=Close IP=0.0.0.0 Port=0 MAC=FF:FF:FF:FF:FF:FF
+    ----
+    Socket(0) SnSr=Listen SnMR=TCP
+    Socket(1) SnSr=Establ SnMR=TCP IP=172.58.33.184 Port=48913 MAC=20:CF:30:B8:3D:ED
+    Socket(2) SnSr=Closed SnMR=TCP IP=192.168.1.1 Port=58616 MAC=20:CF:30:B8:3D:ED
+    Socket(3) SnSr=Closed SnMR=TCP IP=66.249.84.44 Port=61837 MAC=20:CF:30:B8:3D:ED
+    Socket(4) SnSr=Closed SnMR=TCP IP=192.168.1.1 Port=54327 MAC=20:CF:30:B8:3D:ED
+    Socket(5) SnSr=Closed SnMR=TCP IP=173.185.52.214 Port=60486 MAC=20:CF:30:B8:3D:ED
+    Socket(6) SnSr=Closed SnMR=Close IP=0.0.0.0 Port=0 MAC=FF:FF:FF:FF:FF:FF
+    Socket(7) SnSr=Closed SnMR=Close IP=0.0.0.0 Port=0 MAC=FF:FF:FF:FF:FF:FF
+--------
+
+......'@ 71380 sec, Got new client, Temp is 25.812 C
+From 192.168.1.1, port 58623
+    Socket(0) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=58623 MAC=20:CF:30:B8:3D:ED
+    Socket(1) SnSr=Establ SnMR=TCP IP=172.58.33.184 Port=48913 MAC=20:CF:30:B8:3D:ED
+    Socket(2) SnSr=Listen SnMR=TCP
+    Socket(3) SnSr=Closed SnMR=TCP IP=66.249.84.44 Port=61837 MAC=20:CF:30:B8:3D:ED
+    Socket(4) SnSr=Closed SnMR=TCP IP=192.168.1.1 Port=54327 MAC=20:CF:30:B8:3D:ED
+    Socket(5) SnSr=Closed SnMR=TCP IP=173.185.52.214 Port=60486 MAC=20:CF:30:B8:3D:ED
+    Socket(6) SnSr=Closed SnMR=Close IP=0.0.0.0 Port=0 MAC=FF:FF:FF:FF:FF:FF
+    Socket(7) SnSr=Closed SnMR=Close IP=0.0.0.0 Port=0 MAC=FF:FF:FF:FF:FF:FF
+    ----
+    Socket(0) SnSr=Closed SnMR=TCP IP=192.168.1.1 Port=58623 MAC=20:CF:30:B8:3D:ED
+    Socket(1) SnSr=Establ SnMR=TCP IP=172.58.33.184 Port=48913 MAC=20:CF:30:B8:3D:ED
+    Socket(2) SnSr=Listen SnMR=TCP
+    Socket(3) SnSr=Closed SnMR=TCP IP=66.249.84.44 Port=61837 MAC=20:CF:30:B8:3D:ED
+    Socket(4) SnSr=Closed SnMR=TCP IP=192.168.1.1 Port=54327 MAC=20:CF:30:B8:3D:ED
+    Socket(5) SnSr=Closed SnMR=TCP IP=173.185.52.214 Port=60486 MAC=20:CF:30:B8:3D:ED
+    Socket(6) SnSr=Closed SnMR=Close IP=0.0.0.0 Port=0 MAC=FF:FF:FF:FF:FF:FF
+    Socket(7) SnSr=Closed SnMR=Close IP=0.0.0.0 Port=0 MAC=FF:FF:FF:FF:FF:FF
+--------
+
+.....@ 71385 sec, Got new client, Temp is 25.812 C
+From 192.168.1.1, port 58630
+    Socket(0) SnSr=Listen SnMR=TCP
+    Socket(1) SnSr=Establ SnMR=TCP IP=172.58.33.184 Port=48913 MAC=20:CF:30:B8:3D:ED
+    Socket(2) SnSr=Establ SnMR=TCP IP=192.168.1.1 Port=58630 MAC=20:CF:30:B8:3D:ED
+    Socket(3) SnSr=Closed SnMR=TCP IP=66.249.84.44 Port=61837 MAC=20:CF:30:B8:3D:ED
+    Socket(4) SnSr=Closed SnMR=TCP IP=192.168.1.1 Port=54327 MAC=20:CF:30:B8:3D:ED
+    Socket(5) SnSr=Closed SnMR=TCP IP=173.185.52.214 Port=60486 MAC=20:CF:30:B8:3D:ED
+    Socket(6) SnSr=Closed SnMR=Close IP=0.0.0.0 Port=0 MAC=FF:FF:FF:FF:FF:FF
+    Socket(7) SnSr=Closed SnMR=Close IP=0.0.0.0 Port=0 MAC=FF:FF:FF:FF:FF:FF
+    ----
+    Socket(0) SnSr=Listen SnMR=TCP
+    Socket(1) SnSr=Establ SnMR=TCP IP=172.58.33.184 Port=48913 MAC=20:CF:30:B8:3D:ED
+    Socket(2) SnSr=Closed SnMR=TCP IP=192.168.1.1 Port=58630 MAC=20:CF:30:B8:3D:ED
+    Socket(3) SnSr=Closed SnMR=TCP IP=66.249.84.44 Port=61837 MAC=20:CF:30:B8:3D:ED
+    Socket(4) SnSr=Closed SnMR=TCP IP=192.168.1.1 Port=54327 MAC=20:CF:30:B8:3D:ED
+    Socket(5) SnSr=Closed SnMR=TCP IP=173.185.52.214 Port=60486 MAC=20:CF:30:B8:3D:ED
+    Socket(6) SnSr=Closed SnMR=Close IP=0.0.0.0 Port=0 MAC=FF:FF:FF:FF:FF:FF
+    Socket(7) SnSr=Closed SnMR=Close IP=0.0.0.0 Port=0 MAC=FF:FF:FF:FF:FF:FF
+--------
+</code></pre>
+<h2 id="2017-aug-05"><a name="user-content-2017-aug-05" href="#2017-aug-05" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>2017 Aug 05</h2>
+<p>Finally we have the ability to track socket use (or abuse) by remote IP. This seems so useful it&rsquo;s surprising this did not already exist in the library.<br />
+It&rsquo;s added to printSocketStatus() in socket.cpp. It outputs the socket &lsquo;n&rsquo; DIPR (Destination IP Address) register.</p>
+<p>In the Tempserver.ino code, this is a key line:<br />
+    EthernetClient client = server.available();<br />
+Here server is an instance of EthernetServer. EthernetServer.available() returns an EthernetClient object. Prior to returning a client instance (coming from a device) making an http request, by accessing the Tempserver URL, EthernetServer.available() executes EthernetServer.accept() and EthernetServer.begin(). Those functions attempt to be sure one socket is listening, and if the current connection-request-socket is Established or Close_wait, it returns the client reference as a usable connection.<br />
+This means that a Close_wait mode socket gets &ldquo;recycled&rdquo; for server-to-client communication. If I understand the TCP socket state diagram, this may be a violation of socket use??? This is because a Close_wait socket has been requested to be closed by the client (with a FIN), and the client cannot make any more use of it other than to wait for the server to send a FIN/ACK and the client to ACK that, a total of three steps.</p>
+<h3 id="behavior-on-clean-server-startup"><a name="user-content-behavior-on-clean-server-startup" href="#behavior-on-clean-server-startup" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Behavior on clean Server startup</h3>
+<pre><code>Teensy Temperature Server
+Build 15:53:54 Aug  5 2017
+689 msec to start serial
+Teensy3 128-bit UniqueID int array: E4A10000-8E620024-003A300B-32624E45
+USB Serialnumber: 1772780 
+Teensy MAC Address: 04:E9:E5:02:B4:7E 
+Server at 192.168.1.10
+    Socket(0) SnSr=Closed SnMR=Close IP=0.0.0.0
+    Socket(1) SnSr=Closed SnMR=Close IP=0.0.0.0
+    Socket(2) SnSr=Closed SnMR=Close IP=0.0.0.0
+    Socket(3) SnSr=Closed SnMR=Close IP=0.0.0.0
+Start listening:
+    Socket(0) SnSr=Listen SnMR=TCP IP=0.0.0.0
+    Socket(1) SnSr=Closed SnMR=Close IP=0.0.0.0
+    Socket(2) SnSr=Closed SnMR=Close IP=0.0.0.0
+    Socket(3) SnSr=Closed SnMR=Close IP=0.0.0.0
+</code></pre>
+<p>So we are listening on socket 0. Their has been no connection made yet so the destination IP is 0.0.0.0</p>
+<pre><code>TMP102 Sensor at 0x48
+SetCFG=0x80 SetCFG=0x150 
+Setup Complete!
+Send V/v to toggle verbose, h/H to toggle hush/silent, s/S socket status
+.@ 3 sec, Got new client, Temp is 29.812 C
+</code></pre>
+<p>Then a client requests and receives a new connection, on socket 0, and listening automatically moves to another available socket.<br />
+Socket 0 is now the Established connection with client at 66.249.84.44</p>
+<pre><code>From 66.249.84.44, port 60160
+    Socket(0) SnSr=Establ SnMR=TCP IP=66.249.84.44
+    Socket(1) SnSr=Listen SnMR=TCP IP=0.0.0.0
+    Socket(2) SnSr=Closed SnMR=Close IP=0.0.0.0
+    Socket(3) SnSr=Closed SnMR=Close IP=0.0.0.0
+    Socket(4) SnSr=Closed SnMR=Close IP=0.0.0.0
+    Socket(5) SnSr=Closed SnMR=Close IP=0.0.0.0
+    Socket(6) SnSr=Closed SnMR=Close IP=0.0.0.0
+    Socket(7) SnSr=Closed SnMR=Close IP=0.0.0.0
+GET / HTTP/1.1
+Host: systronix.hopto.org:8080
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8
+Accept-Encoding: gzip,deflate
+Accept-Language: en-US,en;q=0.8
+Cache-Control: max-age=0
+Forwarded: for="[2607:fb90:a4a4:d1b7:4e36:e8d7:d1ec:969]"
+Save-Data: on
+Scheme: http
+Upgrade-Insecure-Requests: 1
+Via: 1.1 Chrome-Compression-Proxy
+X-Forwarded-For: 2607:fb90:a4a4:d1b7:4e36:e8d7:d1ec:969
+Connection: Keep-alive
+User-Agent: Mozilla/5.0 (Linux; Android 5.1; Z955A Build/LMY47O) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Mobile Safari/537.36
+
+Request is complete
+Sending Response...
+Sent 48
+Sent head
+Sent body header and build
+Sent temperature
+Sent all of body
+done
+client stopped
+    Socket(0) SnSr=Closed SnMR=TCP IP=66.249.84.44
+    Socket(1) SnSr=Listen SnMR=TCP IP=0.0.0.0
+    Socket(2) SnSr=Closed SnMR=Close IP=0.0.0.0
+    Socket(3) SnSr=Closed SnMR=Close IP=0.0.0.0
+    Socket(4) SnSr=Closed SnMR=Close IP=0.0.0.0
+    Socket(5) SnSr=Closed SnMR=Close IP=0.0.0.0
+    Socket(6) SnSr=Closed SnMR=Close IP=0.0.0.0
+    Socket(7) SnSr=Closed SnMR=Close IP=0.0.0.0
+1 http requests, 0.33 per sec, 0 timeouts
+1 sec max w/o client
+--------
+</code></pre>
+<p>Then socket 0 gets Closed, and listening continues on socket 1.<br />
+So we expect any new connection to Establish on socket 1.<br />
+Bingo: a new client request arrives, but wait another connection from the same client? Why?<br />
+The client should refresh only every 5 seconds. Why this immediate other request?</p>
+<p>Now the new request is accepted on the listening socket 1 and listening moves to the next available closed socket, which happens<br />
+to be socket 0, because the algorithm uses: for (int sock = 0; sock &lt; MAX_SOCK_NUM; sock++) so the lowest Closed socket will<br />
+become the new Listener.</p>
+<pre><code>.@ 4 sec, Got new client, Temp is 29.812 C
+From 66.249.84.44, port 37992
+    Socket(0) SnSr=Listen SnMR=TCP IP=66.249.84.44
+    Socket(1) SnSr=Establ SnMR=TCP IP=66.249.84.44
+    Socket(2) SnSr=Closed SnMR=Close IP=0.0.0.0
+    Socket(3) SnSr=Closed SnMR=Close IP=0.0.0.0
+    Socket(4) SnSr=Closed SnMR=Close IP=0.0.0.0
+    Socket(5) SnSr=Closed SnMR=Close IP=0.0.0.0
+    Socket(6) SnSr=Closed SnMR=Close IP=0.0.0.0
+    Socket(7) SnSr=Closed SnMR=Close IP=0.0.0.0
+GET /favicon.ico HTTP/1.1
+Host: systronix.hopto.org:8080
+Accept: image/webp,image/apng,image/*,*/*;q=0.8
+Accept-Encoding: gzip,deflate
+Accept-Language: en-US,en;q=0.8
+Forwarded: for="[2607:fb90:a4a4:d1b7:4e36:e8d7:d1ec:969]"
+Referer: http://systronix.hopto.org:8080/
+Save-Data: on
+Scheme: http
+Via: 1.1 Chrome-Compression-Proxy
+X-Forwarded-For: 2607:fb90:a4a4:d1b7:4e36:e8d7:d1ec:969
+Connection: Keep-alive
+User-Agent: Mozilla/5.0 (Linux; Android 5.1; Z955A Build/LMY47O) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Mobile Safari/537.36
+
+Request is complete
+Sending Response...
+Sent 48
+Sent head
+Sent body header and build
+Sent temperature
+Sent all of body
+done
+client stopped
+    Socket(0) SnSr=Listen SnMR=TCP IP=66.249.84.44
+    Socket(1) SnSr=Closed SnMR=TCP IP=66.249.84.44
+    Socket(2) SnSr=Closed SnMR=Close IP=0.0.0.0
+    Socket(3) SnSr=Closed SnMR=Close IP=0.0.0.0
+    Socket(4) SnSr=Closed SnMR=Close IP=0.0.0.0
+    Socket(5) SnSr=Closed SnMR=Close IP=0.0.0.0
+    Socket(6) SnSr=Closed SnMR=Close IP=0.0.0.0
+    Socket(7) SnSr=Closed SnMR=Close IP=0.0.0.0
+2 http requests, 0.50 per sec, 0 timeouts
+1 sec max w/o client
+--------
+</code></pre>
+<p>Now, 5 seconds later comes a new request. I trimmmed out the response details</p>
+<pre><code>.....@ 9 sec, Got new client, Temp is 29.812 C
+From 66.249.84.46, port 36700
+    Socket(0) SnSr=Establ SnMR=TCP IP=66.249.84.46
+    Socket(1) SnSr=Listen SnMR=TCP IP=66.249.84.44
+done
+client stopped
+    Socket(0) SnSr=Closed SnMR=TCP IP=66.249.84.46
+    Socket(1) SnSr=Listen SnMR=TCP IP=66.249.84.44
+3 http requests, 0.33 per sec, 0 timeouts
+5 sec max w/o client
+--------
+</code></pre>
+<p>But here is the unexpected duplicate request:</p>
+<pre><code>.'@ 10 sec, Got new client, Temp is 29.812 C
+From 66.249.84.42, port 63243
+    Socket(0) SnSr=Listen SnMR=TCP IP=66.249.84.46
+    Socket(1) SnSr=Establ SnMR=TCP IP=66.249.84.42
+done
+client stopped
+    Socket(0) SnSr=Listen SnMR=TCP IP=66.249.84.46
+    Socket(1) SnSr=Closed SnMR=TCP IP=66.249.84.42
+    Socket(2) SnSr=Closed SnMR=Close IP=0.0.0.0
+    Socket(3) SnSr=Closed SnMR=Close IP=0.0.0.0
+    Socket(4) SnSr=Closed SnMR=Close IP=0.0.0.0
+    Socket(5) SnSr=Closed SnMR=Close IP=0.0.0.0
+    Socket(6) SnSr=Closed SnMR=Close IP=0.0.0.0
+    Socket(7) SnSr=Closed SnMR=Close IP=0.0.0.0
+4 http requests, 0.40 per sec, 0 timeouts
+5 sec max w/o client
+</code></pre>
+<p>After running for a while:</p>
+<pre><code>.....@ 3946 sec, Got new client, Temp is 28.188 C
+From 67.177.36.6, port 53035
+    Socket(0) SnSr=Listen SnMR=TCP IP=67.177.36.6
+    Socket(1) SnSr=Establ SnMR=TCP IP=67.177.36.6
+    Socket(2) SnSr=Closed SnMR=TCP IP=67.177.36.6
+done
+    Socket(0) SnSr=Listen SnMR=TCP IP=67.177.36.6
+    Socket(1) SnSr=Closed SnMR=TCP IP=67.177.36.6
+    Socket(2) SnSr=Closed SnMR=TCP IP=67.177.36.6
+</code></pre>
+<p>What now? An &ldquo;extra&rdquo; socket got used? Scroll back through the logs to see where:</p>
+<pre><code>..........'..........'..........'..........'...@ 2323 sec, Got new client, Temp is 28.688 C
+From 66.102.6.10, port 36622
+    Socket(0) SnSr=Listen SnMR=TCP IP=66.249.84.42
+    Socket(1) SnSr=Establ SnMR=TCP IP=66.102.6.10
+    Socket(0) SnSr=Listen SnMR=TCP IP=66.249.84.42
+    Socket(1) SnSr=Closed SnMR=TCP IP=66.102.6.10
+--------
+</code></pre>
+<p>OK, so after the above response, listening on 0</p>
+<pre><code>@ 2323 sec, Got new client, Temp is 28.688 C
+From 66.102.6.14, port 38444
+    Socket(0) SnSr=Establ SnMR=TCP IP=66.102.6.14
+    Socket(1) SnSr=Listen SnMR=TCP IP=66.102.6.10
+    Socket(0) SnSr=Closed SnMR=TCP IP=66.102.6.14
+    Socket(1) SnSr=Listen SnMR=TCP IP=66.102.6.10
+--------
+</code></pre>
+<p>Now listening on 1. The most recent request was handled on socket 0, then closed.</p>
+<pre><code>.......'..........'
+..........'..........'..........'..........'..........'..........'
+..........'..........'..........'..........'..........'..........'
+..........'..........'..........'..........'....@ 2504 sec, Got new client, Temp is 28.688 C
+From 67.177.36.6, port 52403
+    Socket(0) SnSr=Establ SnMR=TCP IP=67.177.36.6
+    Socket(1) SnSr=Establ SnMR=TCP IP=67.177.36.6
+    Socket(2) SnSr=Listen SnMR=TCP IP=0.0.0.0
+</code></pre>
+<p>We were listening on 1, so socket 1 makes the new connection with 67.177.36.6<br />
+But wait! Socket 0 which was closed is now also Established with 67.177.36.6?</p>
+<pre><code>    Socket(0) SnSr=Establ SnMR=TCP IP=67.177.36.6
+    Socket(1) SnSr=Closed SnMR=TCP IP=67.177.36.6
+    Socket(2) SnSr=Listen SnMR=TCP IP=0.0.0.0
+--------
+</code></pre>
+<p>Socket 1 gets used and closed. Socket 2 is still listening. But why is socket 0 still open?</p>
+<pre><code>@ 2504 sec, Got new client, Temp is 28.688 C
+From 67.177.36.6, port 52404
+    Socket(0) SnSr=Establ SnMR=TCP IP=67.177.36.6
+    Socket(1) SnSr=Closed SnMR=TCP IP=67.177.36.6
+    Socket(2) SnSr=Listen SnMR=TCP IP=0.0.0.0
+    Socket(0) SnSr=Closed SnMR=TCP IP=67.177.36.6
+    Socket(1) SnSr=Closed SnMR=TCP IP=67.177.36.6
+    Socket(2) SnSr=Listen SnMR=TCP IP=0.0.0.0
+--------
+</code></pre>
+<p>Here what seems to have happened is that 67.177.36.6 has a new request, and lo and behold, socket 0 is already open at that remote IP, so it gets used.<br />
+Afterwards, socekt 0 gets closed (finally!)<br />
+We&rsquo;d expect the next request to get handled by the listening socket 2, and it does:<br />
+.....@ 2509 sec, Got new client, Temp is 28.688 C<br />
+From 67.177.36.6, port 52405<br />
+    Socket(0) SnSr=Listen SnMR=TCP IP=67.177.36.6<br />
+    Socket(1) SnSr=Closed SnMR=TCP IP=67.177.36.6<br />
+    Socket(2) SnSr=Establ SnMR=TCP IP=67.177.36.6</p>
+<h2 id="2017-aug-4"><a name="user-content-2017-aug-4" href="#2017-aug-4" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>2017 Aug 4</h2>
+<p>From a day ago, Ethernet2 is the library in use, not Ethernet.</p>
+<h3 id="typical-request-and-response"><a name="user-content-typical-request-and-response" href="#typical-request-and-response" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Typical request and response</h3>
+<pre><code>@ 62487 sec, Got new client, Temp is 26.062 C
+From 67.177.36.6, port 30615
+    Socket(0) SnSr = Establ SnMR = TCP
+    Socket(1) SnSr = Establ SnMR = TCP
+    Socket(2) SnSr = Establ SnMR = TCP
+    Socket(3) SnSr = 0x16   SnMR = TCP
+    Socket(4) SnSr = Listen SnMR = TCP
+    Socket(5) SnSr = Closed SnMR = TCP
+    Socket(6) SnSr = Establ SnMR = TCP
+    Socket(7) SnSr = Closed SnMR = TCP
+Sending Response...
+done
+    Socket(0) SnSr = Establ SnMR = TCP
+    Socket(1) SnSr = Establ SnMR = TCP
+    Socket(2) SnSr = Establ SnMR = TCP
+    Socket(3) SnSr = 0x16   SnMR = TCP
+    Socket(4) SnSr = Listen SnMR = TCP
+    Socket(5) SnSr = Closed SnMR = TCP
+    Socket(6) SnSr = Closed SnMR = TCP
+    Socket(7) SnSr = Closed SnMR = TCP
+--------
+
+@ 62487 sec, Got new client, Temp is 26.062 C
+From 66.102.6.12, port 34431
+    Socket(0) SnSr = Establ SnMR = TCP
+    Socket(1) SnSr = Establ SnMR = TCP
+    Socket(2) SnSr = Establ SnMR = TCP
+    Socket(3) SnSr = 0x16   SnMR = TCP
+    Socket(4) SnSr = Establ SnMR = TCP
+    Socket(5) SnSr = Listen SnMR = TCP
+    Socket(6) SnSr = Closed SnMR = TCP
+    Socket(7) SnSr = Closed SnMR = TCP
+Sending Response...
+done
+    Socket(0) SnSr = Establ SnMR = TCP
+    Socket(1) SnSr = Establ SnMR = TCP
+    Socket(2) SnSr = Establ SnMR = TCP
+    Socket(3) SnSr = 0x16   SnMR = TCP
+    Socket(4) SnSr = Closed SnMR = TCP
+    Socket(5) SnSr = Listen SnMR = TCP
+    Socket(6) SnSr = Closed SnMR = TCP
+    Socket(7) SnSr = Closed SnMR = TCP
+--------
+
+..@ 62489 sec, Got new client, Temp is 26.062 C
+From 172.58.36.162, port 50062
+    Socket(0) SnSr = Establ SnMR = TCP
+    Socket(1) SnSr = Establ SnMR = TCP
+    Socket(2) SnSr = Establ SnMR = TCP
+    Socket(3) SnSr = 0x16   SnMR = TCP
+    Socket(4) SnSr = Listen SnMR = TCP
+    Socket(5) SnSr = Establ SnMR = TCP
+    Socket(6) SnSr = Closed SnMR = TCP
+    Socket(7) SnSr = Closed SnMR = TCP
+Sending Response...
+done
+    Socket(0) SnSr = Establ SnMR = TCP
+    Socket(1) SnSr = Establ SnMR = TCP
+    Socket(2) SnSr = Establ SnMR = TCP
+    Socket(3) SnSr = 0x16   SnMR = TCP
+    Socket(4) SnSr = 0x16   SnMR = TCP
+    Socket(5) SnSr = Closed SnMR = TCP
+    Socket(6) SnSr = Closed SnMR = TCP
+    Socket(7) SnSr = Closed SnMR = TCP
+--------
+
+.'@ 62490 sec, Got new client, Temp is 26.062 C
+From 172.58.36.162, port 61935
+    Socket(0) SnSr = Establ SnMR = TCP
+    Socket(1) SnSr = Establ SnMR = TCP
+    Socket(2) SnSr = Establ SnMR = TCP
+    Socket(3) SnSr = 0x16   SnMR = TCP
+    Socket(4) SnSr = Establ SnMR = TCP
+    Socket(5) SnSr = Listen SnMR = TCP
+    Socket(6) SnSr = Closed SnMR = TCP
+    Socket(7) SnSr = Closed SnMR = TCP
+Sending Response...
+</code></pre></article></body></html>
