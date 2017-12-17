@@ -1,5 +1,91 @@
 # DhcpStressTest_T3 
 
+### 2017 Dec 17
+After running for months unattended I have started to pay attention again. Renewals are failing
+but rebinding or restarting recovers... mostly... it's been so long since I have looked at the code,
+I need to refresh my mind on how it works. But even with a failed restart @121620 it eventually recovers.
+
+Also errors seem to occur in clusters, with long periods of reliable operation between. What would explain this?
+Is the DHCP server busy? It would be interesting to have multiple clients running and logging simultaneously
+and see if they all fail at the same times.
+
+```
+	@118060 192.168.1.124
+	@118070 maintain()=1  Renew_F/S Bind_F/S Restart_F/S = 5/1979 0/4 0/1 192.168.1.124
+	@118130 maintain()=4  Renew_F/S Bind_F/S Restart_F/S = 5/1979 0/5 0/1 192.168.1.124
+
+	@120410 maintain()=1  Renew_F/S Bind_F/S Restart_F/S = 6/2017 0/5 0/1 192.168.1.124
+	@120470 maintain()=4  Renew_F/S Bind_F/S Restart_F/S = 6/2017 0/6 0/1 192.168.1.124
+
+	@121620 maintain()=1  Renew_F/S Bind_F/S Restart_F/S = 7/2036 0/6 0/1 192.168.1.124
+	Renew_F/S Bind_F/S Restart_F/S = 7/2036 0/6 0/1
+	@121680 maintain()=3 Rebind Failed! Try restsart:Fail DHCP after 65185 msec
+	0
+	Renew_F/S Bind_F/S Restart_F/S = 7/2036 1/6 1/1 0.0.0.0
+	Renew_F/S Bind_F/S Restart_F/S = 7/2036 1/6 1/1
+	@121810  Error! IP address: 0.0.0.0 Try restart:OK DHCP after 16305 msec
+	1
+	192.168.1.124	
+
+	Renew_F/S Bind_F/S Restart_F/S = 7/2073 1/6 1/2
+	@124030 maintain()=1  Renew_F/S Bind_F/S Restart_F/S = 8/2073 1/6 1/2 192.168.1.124
+	@124100 maintain()=4  Renew_F/S Bind_F/S Restart_F/S = 8/2073 1/7 1/2 192.168.1.124
+	@124150 maintain()=2  Renew_F/S Bind_F/S Restart_F/S = 8/2074 1/7 1/2 192.168.1.124
+	@124170 192.168.1.124	
+
+	@127080 maintain()=2  Renew_F/S Bind_F/S Restart_F/S = 8/2123 1/7 1/2 192.168.1.124
+	Renew_F/S Bind_F/S Restart_F/S = 8/2123 1/7 1/2
+	@127140 maintain()=3 Rebind Failed! Try restsart:OK DHCP after 1148 msec
+	1
+	 Renew_F/S Bind_F/S Restart_F/S = 8/2123 2/7 1/3 192.168.1.124
+	Renew_F/S Bind_F/S Restart_F/S = 8/2123 2/7 1/3
+	@127270 192.168.1.124	
+
+	@129910 192.168.1.124
+	@129920 maintain()=1  Renew_F/S Bind_F/S Restart_F/S = 9/2168 2/7 1/3 192.168.1.124
+	@129980 maintain()=4  Renew_F/S Bind_F/S Restart_F/S = 9/2168 2/8 1/3 192.168.1.124	
+
+	@130630 192.168.1.124
+	@130640 maintain()=1  Renew_F/S Bind_F/S Restart_F/S = 10/2178 2/8 1/3 192.168.1.124
+	@130700 maintain()=4  Renew_F/S Bind_F/S Restart_F/S = 10/2178 2/9 1/3 192.168.1.124
+	@130710 192.168.1.124
+
+	@131170 192.168.1.124
+	@131180 maintain()=1  Renew_F/S Bind_F/S Restart_F/S = 11/2185 2/9 1/3 192.168.1.124
+	@131250 maintain()=4  Renew_F/S Bind_F/S Restart_F/S = 11/2185 2/10 1/3 192.168.1.124
+	@131260 192.168.1.124
+
+	@145980 192.168.1.124
+	Renew_F/S Bind_F/S Restart_F/S = 11/2432 2/10 1/3
+	@145990 192.168.1.124
+	@146000 maintain()=1  Renew_F/S Bind_F/S Restart_F/S = 12/2432 2/10 1/3 192.168.1.124
+	@146070 192.168.1.124
+
+	@172000  Error! IP address: 0.0.0.0 Try restart:OK DHCP after 6151 msec
+	1
+	192.168.1.124
+	@172010 192.168.1.124
+	@172020 192.168.1.124
+	Renew_F/S Bind_F/S Restart_F/S = 12/2432 2/10 1/4
+	@172030 192.168.1.124
+
+	@172050 192.168.1.124
+	@172060 maintain()=2  Renew_F/S Bind_F/S Restart_F/S = 12/2433 2/10 1/4 192.168.1.124
+	@172070 192.168.1.124
+
+	@172290 192.168.1.124
+	@172300 maintain()=2  Renew_F/S Bind_F/S Restart_F/S = 12/2437 2/10 1/4 192.168.1.124
+	@172340 maintain()=2  Renew_F/S Bind_F/S Restart_F/S = 12/2438 2/10 1/4 192.168.1.124
+	@172350 192.168.1.124
+
+	<Note huge time here where operation is stable>
+
+	@336730 192.168.1.124
+	@336740 maintain()=2  Renew_F/S Bind_F/S Restart_F/S = 12/5178 2/10 1/4 192.168.1.124
+	@336750 192.168.1.124
+
+```
+
 ### 2017 Jul 05
 Had been running fine for weeks, WIZ850io. Sometimes would get a bad IP address, but then recover:
 ```
