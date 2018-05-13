@@ -16,7 +16,7 @@ SdFat sd;
 //---------------------------< u S D _ L O G _ E V E N T >----------------------------------------------------
 //
 // This function is derived from the same-name function in SALT_logging.cpp.  This function does not convert
-// UTC time to local time; log floders and log files are differently named to distinguish them from SALT logs
+// UTC time to local time; log folders and log files are differently named to distinguish them from SALT logs
 //
 // Makes a file name from the tm (UTC) time struct and then attempts to open that file.  If the file does
 // not exist, a new file of that name is created.  Creates an ISO 8601 timestamp from the tm time struct.
